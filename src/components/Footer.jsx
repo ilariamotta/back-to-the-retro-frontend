@@ -16,6 +16,12 @@ export default function Footer() {
           </ul>
         </div>
         <div>
+          <h3 className="text-lg font-semibold text-white mb-4">Contacts</h3>
+          <ul className="space-y-2">
+            <li>backtotheretro@gmail.com</li>
+            <li>Via Milano 42, Roma</li>
+            <li>02 123 4567</li>
+          </ul>
         </div>
       </div>
     </footer>
