@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-gray-300 py-10 mt-12">
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 className="text-lg font-semibold text-white mb-4">Links</h3>
+          <h3 className="text-lg font-semibold text-[#ffd21f] mb-4">Links</h3>
           <ul className="space-y-2">
             <li><Link to={'/'} className="hover:text-white transition">Home</Link></li>
             <li><Link to={'/videogames'} className="hover:text-white transition">Videogames</Link></li>
@@ -16,12 +16,18 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-white mb-4">Contacts</h3>
+          <h3 className="text-lg font-semibold text-[#ffd21f] mb-4">Contacts</h3>
           <ul className="space-y-2">
             <li>backtotheretro@gmail.com</li>
             <li>Via Milano 42, Roma</li>
             <li>02 123 4567</li>
           </ul>
+        </div>
+          <div className="flex flex-col justify-end ">
+          <h3 className="text-lg font-semibold text-[#ff006e] mb-4">Back To The Retro</h3>
+          <p className="text-sm text-gray">
+            Copyright © 2026 Back To The Retro
+          </p>
         </div>
       </div>
     </footer>
