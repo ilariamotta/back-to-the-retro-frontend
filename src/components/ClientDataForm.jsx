@@ -37,6 +37,7 @@ export default function ClientDataForm() {
           <input
             type="text"
             name="client_name"
+            placeholder="Mario"
             value={formData.client_name}
             onChange={handleChange}
             className="mt-1 w-full border rounded-md p-2" />
@@ -46,6 +47,7 @@ export default function ClientDataForm() {
           <input
             type="text"
             name="client_surname"
+            placeholder="Rossi"
             value={formData.client_surname}
             onChange={handleChange}
             className="mt-1 w-full border rounded-md p-2" />
@@ -57,6 +59,7 @@ export default function ClientDataForm() {
           <input
             type="email"
             name="email"
+            placeholder="mariorossi@gmail.com"
             value={formData.email}
             onChange={handleChange}
             className="mt-1 w-full border rounded-md p-2" />
@@ -64,8 +67,9 @@ export default function ClientDataForm() {
         <div>
           <label className="block text-sm font-medium text-gray-700">Phone Number</label>
           <input
-            type="text"
+            type="tel"
             name="phone_number"
+            placeholder="345-1234-567"
             value={formData.phone_number}
             onChange={handleChange}
             className="mt-1 w-full border rounded-md p-2" />
@@ -78,6 +82,7 @@ export default function ClientDataForm() {
           <input
             type="text"
             name="billing_address"
+            placeholder="Via Milano 1"
             value={formData.billing_address}
             onChange={handleChange}
             className="mt-1 w-full border rounded-md p-2" />
@@ -88,6 +93,7 @@ export default function ClientDataForm() {
             <input
               type="text"
               name="billing_city"
+              placeholder="Roma"
               value={formData.billing_city}
               onChange={handleChange}
               className="mt-1 w-full border rounded-md p-2" />
@@ -97,6 +103,7 @@ export default function ClientDataForm() {
             <input
               type="text"
               name="billing_postal_code"
+              placeholder="20145"
               value={formData.billing_postal_code}
               onChange={handleChange}
               className="mt-1 w-full border rounded-md p-2" />
@@ -110,6 +117,7 @@ export default function ClientDataForm() {
           <input
             type="text"
             name="shipping_address"
+            placeholder="Via Milano 1"
             value={formData.shipping_address}
             onChange={handleChange}
             className="mt-1 w-full border rounded-md p-2" />
@@ -120,6 +128,7 @@ export default function ClientDataForm() {
             <input
               type="text"
               name="shipping_city"
+              placeholder="Roma"
               value={formData.shipping_city}
               onChange={handleChange}
               className="mt-1 w-full border rounded-md p-2" />
@@ -129,6 +138,7 @@ export default function ClientDataForm() {
             <input
               type="text"
               name="shipping_postal_code"
+              placeholder="20145"
               value={formData.shipping_postal_code}
               onChange={handleChange}
               className="mt-1 w-full border rounded-md p-2" />
