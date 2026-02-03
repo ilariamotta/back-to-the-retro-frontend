@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-2xl font-bold text-[#ff006e]">Back To The Retro</h3>
+            <h3 className="text-2xl font-bold text-[#ff006e] drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">Back To The Retro</h3>
             <p className="text-[#ffd21f] text-xs mb-4">Classic Games Revival</p>
             <p className="text-sm text-gray mb-4">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate pariatur, labore sequi similique amet quas cumque repellendus ex possimus!
