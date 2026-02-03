@@ -1,12 +1,19 @@
-import { useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import AppLayout from './layouts/AppLayout'
 import './index.css'
+import Home from './pages/Home'
+
 
 function App() {
   return (
     <>
-   <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route element={<Home />} path="/" />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
