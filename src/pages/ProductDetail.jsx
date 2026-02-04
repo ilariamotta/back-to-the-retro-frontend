@@ -1,16 +1,46 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import Button from "../components/Button";
 
 export default function ProductDetail() {
+
+  const { slug } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    axios.get(`http://localhost:3000/retro/api/products/${slug}`)
+      .then((response) => {
+        setProduct(response.data.response || response.data);
+      })
+      .catch((error) => {
+        console.error("Errore nel recupero prodotto", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [slug]);
+
+  if (loading) {
+    return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Loading...</div>;
+  }
+
+  if (!product) {
+    return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Prodotto non trovato</div>;
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {/* DETTAGLI PAGINA */}
       <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-        <span className="cursor-pointer hover:text-zinc-900">Ritorna al negozio</span>
+        <span className="cursor-pointer hover:text-zinc-900">Ritorna alla Home</span>
         <span className="text-zinc-300">/</span>
-        <span className="cursor-pointer hover:text-zinc-900">Videogames</span>
+        <span className="cursor-pointer hover:text-zinc-900">{product.category_id}</span>
         <span className="text-zinc-300">/</span>
         <span className="font-medium text-zinc-900">
-          Pokémon Crystal Version - Boxed
+          {product.name}
         </span>
       </div>
 
@@ -22,8 +52,8 @@ export default function ProductDetail() {
             {/* Immagine principale */}
             <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
               <img
-                src="https://via.placeholder.com/1200x900.png?text=Main+Image"
-                alt="products.cover_image HERE"
+                src="/images/placeholder_img.jpg"
+                alt={product.name}
                 className="aspect-[4/3] w-full object-cover"
               />
             </div>
@@ -32,8 +62,8 @@ export default function ProductDetail() {
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
                 <img
-                  src="https://via.placeholder.com/1200x900.png?text=Second+Image"
-                  alt="images.name HERE"
+                  src="/images/placeholder_img.jpg"
+                  alt={product.name}
                   className="aspect-[4/3] w-full object-cover" />
               </div>
               <div className="flex items-center justify-center rounded-2xl border border-dashed border-zinc-300 bg-white text-sm text-zinc-500">
@@ -48,36 +78,36 @@ export default function ProductDetail() {
           <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
             {/* Titolo */}
             <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#2a2f45]">
-              products.name
+              {product.name}
             </h1>
 
             {/* Prezzo */}
             <div className="mt-4 flex flex-wrap items-end gap-3">
-              <p className="text-4xl font-extrabold text-[#6C2BD9]">€ products.price</p>
+              <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product.price}</p>
             </div>
 
             {/* Stock */}
             <div className="mt-4 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-[#00D084]" />
               <p className="text-sm font-semibold text-[#00D084]">
-                products.stock_available in stock
+                {product.stock} in stock
               </p>
             </div>
 
             {/* Descrizione */}
             <p className="mt-4 text-sm leading-relaxed text-zinc-600">
-              products.description
+              {product.description}
             </p>
 
             {/* Altre info */}
             <div className="mt-4 grid grid-cols-2 gap-3 text-sm my-4">
               <div className="rounded-xl border bg-zinc-50 px-3 py-2">
                 <p className="text-xs text-zinc-500">Piattaforma</p>
-                <p className="font-semibold text-zinc-900">products.platform_id</p>
+                <p className="font-semibold text-zinc-900">{product.platform}</p>
               </div>
               <div className="rounded-xl border bg-zinc-50 px-3 py-2">
                 <p className="text-xs text-zinc-500">Brand</p>
-                <p className="font-semibold text-zinc-900">products.brand</p>
+                <p className="font-semibold text-zinc-900">{product.brand}</p>
               </div>
             </div>
 
@@ -88,9 +118,9 @@ export default function ProductDetail() {
             </button>
             {/*acquista */}
             <button type="button" className=" w-full  my-2 rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold tracking-wide text-[#06251c] transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99]">
-            ACQUISTALO ORA!
+              ACQUISTALO ORA!
             </button>
-{/* wishlist */}
+            {/* wishlist */}
             <button type="button" className="w-full my-2 rounded-2xl border-2 border-[#FF006E] bg-transparent px-5 py-4 text-sm tracking-wide text-[#FF006E] transition-all duration-300 hover:bg-[#FF006E]/10 hover:shadow-[0_0_20px_rgba(255,0,110,0.45)] hover:scale-[1.02] active:scale-[0.98]">
               Aggiungilo ai tuoi preferiti ♡
             </button>
