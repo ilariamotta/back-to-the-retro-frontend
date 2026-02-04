@@ -8,7 +8,7 @@ export default function Consoles() {
 
     useEffect(() => {
         axios.get(`${addressIndex}retro/api/products?categories=Console`).then((resp) => {
-            const risposta = resp.data.results;
+            const risposta = resp.data.results || resp.data.result || [];
             setProducts(risposta);
         });
     }, []);
@@ -25,13 +25,15 @@ export default function Consoles() {
                 {/* TITOLO */}
                 <h1 className="text-3xl font-bold text-start text-[#ff006e] mt-8 mb-6 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">CONSOLE</h1>
                 {/* GRIGLIA PRODOTTI */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                    {products.map((p) => {
-                        return (
-                            <ProductCard product={p} key={p.id} />
-                        )
-                    })}
-                </div>
+                {products !== undefined ?
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+                        {products.map((p) => {
+                            return (
+                                <ProductCard product={p} key={p.id} />
+                            )
+                        })}
+                    </div>
+                    : <p>No products available</p>}
             </div>
         </div>
     );
