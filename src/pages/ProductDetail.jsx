@@ -13,7 +13,9 @@ export default function ProductDetail() {
     setLoading(true);
     axios.get(`http://localhost:3000/retro/api/products/${slug}`)
       .then((response) => {
-        setProduct(response.data.response || response.data);
+        console.log(response);
+        
+        setProduct(response.data.result);
       })
       .catch((error) => {
         console.error("Errore nel recupero prodotto", error);
@@ -22,6 +24,9 @@ export default function ProductDetail() {
         setLoading(false);
       });
   }, [slug]);
+
+  console.log(product);
+  
 
   if (loading) {
     return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Loading...</div>;
@@ -37,7 +42,7 @@ export default function ProductDetail() {
       <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
         <span className="cursor-pointer hover:text-zinc-900">Ritorna alla Home</span>
         <span className="text-zinc-300">/</span>
-        <span className="cursor-pointer hover:text-zinc-900">{product.category_id}</span>
+        <span className="cursor-pointer hover:text-zinc-900">{product.category_name}</span>
         <span className="text-zinc-300">/</span>
         <span className="font-medium text-zinc-900">
           {product.name}
@@ -78,36 +83,36 @@ export default function ProductDetail() {
           <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
             {/* Titolo */}
             <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#2a2f45]">
-              {product.name}
+              {product[0].name}
             </h1>
 
             {/* Prezzo */}
             <div className="mt-4 flex flex-wrap items-end gap-3">
-              <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product.price}</p>
+              <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product[0].price}</p>
             </div>
 
             {/* Stock */}
             <div className="mt-4 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-[#00D084]" />
               <p className="text-sm font-semibold text-[#00D084]">
-                {product.stock} in stock
+                {product[0].stock} in stock
               </p>
             </div>
 
             {/* Descrizione */}
             <p className="mt-4 text-sm leading-relaxed text-zinc-600">
-              {product.description}
+              {product[0].description}
             </p>
 
             {/* Altre info */}
             <div className="mt-4 grid grid-cols-2 gap-3 text-sm my-4">
               <div className="rounded-xl border bg-zinc-50 px-3 py-2">
                 <p className="text-xs text-zinc-500">Piattaforma</p>
-                <p className="font-semibold text-zinc-900">{product.platform}</p>
+                <p className="font-semibold text-zinc-900">{product[0].platform_name}</p>
               </div>
               <div className="rounded-xl border bg-zinc-50 px-3 py-2">
                 <p className="text-xs text-zinc-500">Brand</p>
-                <p className="font-semibold text-zinc-900">{product.brand}</p>
+                <p className="font-semibold text-zinc-900">{product[0].platform_brand}</p>
               </div>
             </div>
 
