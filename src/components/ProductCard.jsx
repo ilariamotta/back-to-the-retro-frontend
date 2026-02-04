@@ -1,16 +1,16 @@
 import Button from "./Button";
+import placeholder from "../../public/images/placeholder_img.jpg"
 
 export default function ProductCard({product}) {
   
 
-    // const imgSrc =
-        // image || "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
+
     
     return (
         <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#211a1d] shadow-sm transition hover:shadow-lg hover:scale-[1.01]">
             {/* IMMAGINE */}
             <div className="relative">
-                {/* <img src={imgSrc} alt={product.name} className="h-65 w-full object-cover transition duration-300 group-hover:scale-105" /> */}
+                 <img src={placeholder} alt={product.name} className="h-65 w-full object-cover transition duration-300 group-hover:scale-105" /> 
                 {/* ANIMAZIONE OVERLAY */}
                 <div className="pointer-events-none absolute inset-0 from-black/40 via-black/0 to-black/0" />
             </div>
