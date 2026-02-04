@@ -33,7 +33,7 @@ export default function Home() {
                   {products.map((p)=>{
                     return (
                         <>
-                            <ProductCard product={p}/>
+                            <ProductCard product={p} key={p.id}/>
                         </>
                     )
                   })}
