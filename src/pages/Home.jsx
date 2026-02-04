@@ -10,9 +10,9 @@ export default function Home() {
 
     const addressIndex = import.meta.env.VITE_BACKEND_URL;
     const [products, setProducts] = useState([]);
-
+    
     useEffect(() => {
-        axios.get("http://localhost:3000/retro/api/products").then((resp) => {
+        axios.get(`${addressIndex}retro/api/products`).then((resp) => {
             const risposta = resp.data.results
             setProducts(risposta)
         })
