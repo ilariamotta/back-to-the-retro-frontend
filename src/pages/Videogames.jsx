@@ -10,7 +10,6 @@ export default function Videogames() {
         axios.get(`${addressIndex}retro/api/products?categories=Videogiochi`).then((resp) => {
             const risposta = resp.data.results;
             setProducts(risposta);
-            console.log(resp.data.results);
         });
     }, []);
     return (

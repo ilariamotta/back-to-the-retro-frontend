@@ -10,7 +10,6 @@ export default function Consoles() {
         axios.get(`${addressIndex}retro/api/products?categories=Console`).then((resp) => {
             const risposta = resp.data.results;
             setProducts(risposta);
-            console.log(resp.data.results);
         });
     }, []);
     return (
