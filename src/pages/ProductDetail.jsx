@@ -15,7 +15,7 @@ export default function ProductDetail() {
       .then((response) => {
         console.log(response);
         
-        setProduct(response.data.result);
+        setProduct(response.data.results || response.data.result || null);
       })
       .catch((error) => {
         console.error("Errore nel recupero prodotto", error);
