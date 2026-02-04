@@ -57,7 +57,7 @@ export default function ProductDetail() {
             {/* Immagine principale */}
             <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
               <img
-                src="/images/placeholder_img.jpg"
+                src="/images/placeholder_img.png"
                 alt={product.name}
                 className="aspect-[4/3] w-full object-cover"
               />
@@ -67,7 +67,7 @@ export default function ProductDetail() {
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
                 <img
-                  src="/images/placeholder_img.jpg"
+                  src="/images/placeholder_img.png"
                   alt={product.name}
                   className="aspect-[4/3] w-full object-cover" />
               </div>
