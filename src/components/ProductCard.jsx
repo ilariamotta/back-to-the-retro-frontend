@@ -1,16 +1,20 @@
 import Button from "./Button";
-import placeholder from "../../public/images/placeholder_img.jpg"
+import placeholder from "../../public/images/placeholder_img.png"
+import { useNavigate } from "react-router-dom";
 
-export default function ProductCard({product}) {
-  
+export default function ProductCard({ product }) {
 
+    const navigate = useNavigate()
+    function details () {
+        navigate(`/products/${product.slug}`)
+        
+    }
 
-    
     return (
         <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#211a1d] shadow-sm transition hover:shadow-lg hover:scale-[1.01]">
             {/* IMMAGINE */}
             <div className="relative">
-                 <img src={placeholder} alt={product.name} className="h-65 w-full object-cover transition duration-300 group-hover:scale-105" /> 
+                <img src={placeholder} alt={product.name} className="h-65 w-full object-cover transition duration-300 group-hover:scale-105" />
                 {/* ANIMAZIONE OVERLAY */}
                 <div className="pointer-events-none absolute inset-0 from-black/40 via-black/0 to-black/0" />
             </div>
@@ -22,9 +26,9 @@ export default function ProductCard({product}) {
                     {product.name}</h3>
 
                 {/* descrizione */}
-                    <p className="mb-3 line-clamp-2 text-sm text-zinc-300">
-                        {product.description}
-                    </p>
+                <p className="mb-3 line-clamp-2 text-sm text-zinc-300">
+                    {product.description}
+                </p>
 
                 {/* prezzo */}
                 <div className="flex items-center justify-between">
@@ -32,8 +36,11 @@ export default function ProductCard({product}) {
                         €{product.price}
                     </p>
 
-                    <Button text="Dettagli"
-                        className="relative rounded-xl border border-[#00BFFF]/70 px-4 py-2 text-xs font-semibold text-[#00BFFF] bg-transparent transition-all duration-300 ease-out hover:border-[#00BFFF] hover:bg-[#00BFFF]/10 hover:shadow-[0_0_16px_rgba(0,191,255,0.45)] hover:scale-[1.04] active:scale-[0.97]" />
+                    <button
+                        onClick={details}
+                        className="relative rounded-xl border border-[#00BFFF]/70 px-4 py-2 text-xs font-semibold text-[#00BFFF] bg-transparent transition-all duration-300 ease-out hover:border-[#00BFFF] hover:bg-[#00BFFF]/10 hover:shadow-[0_0_16px_rgba(0,191,255,0.45)] hover:scale-[1.04] active:scale-[0.97]">
+                        DETTAGLI
+                    </button>
                 </div>
             </div>
         </div>
