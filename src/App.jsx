@@ -16,9 +16,9 @@ function App() {
           <Route element={<AppLayout />}>
             <Route element={<Home />} path="/" />
             <Route element={<ProductDetail />} path="/products/:slug"/>
-            <Route element={<Videogames />} path="/videogames"/>
-            <Route element={<Consoles />} path="/consoles"/>
-            <Route element={<Accessories />} path="/accessories"/>
+            <Route element={<Videogames />} path="/categories/videogames"/>
+            <Route element={<Consoles />} path="/categories/consoles"/>
+            <Route element={<Accessories />} path="/categories/accessories"/>
           </Route>
         </Routes>
       </BrowserRouter>

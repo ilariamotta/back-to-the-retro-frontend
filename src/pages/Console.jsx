@@ -1,6 +1,17 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 
 export default function Consoles() {
+    const addressIndex = import.meta.env.VITE_BACKEND_URL;
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        axios.get(`${addressIndex}retro/api/products?categories=Console`).then((resp) => {
+            const risposta = resp.data.results;
+            setProducts(risposta);
+        });
+    }, []);
     return (
         <div className="space-y-10">
             {/* CONTAINER */}
@@ -15,7 +26,11 @@ export default function Consoles() {
                 <h1 className="text-3xl font-bold text-start text-[#ff006e] mt-8 mb-6 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">CONSOLE</h1>
                 {/* GRIGLIA PRODOTTI */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                    {/* {products.map((p) => <ProductCard key={p.id} product={p} />)} */}
+                    {products.map((p) => {
+                        return (
+                            <ProductCard product={p} key={p.id} />
+                        )
+                    })}
                 </div>
             </div>
         </div>
