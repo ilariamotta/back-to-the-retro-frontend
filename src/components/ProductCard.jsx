@@ -1,40 +1,35 @@
 import Button from "./Button";
 
-export default function ProductCard({ product = {} }) {
-    const {
-        name = "Prodotto",
-        description = "",
-        price = 0,
-        image,
-    } = product;
+export default function ProductCard({product}) {
+  
 
-    const imgSrc =
-        image || "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
-
+    // const imgSrc =
+        // image || "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
+    
     return (
         <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#211a1d] shadow-sm transition hover:shadow-lg hover:scale-[1.01]">
             {/* IMMAGINE */}
             <div className="relative">
-                <img src={imgSrc} alt={name} className="h-65 w-full object-cover transition duration-300 group-hover:scale-105" />
+                {/* <img src={imgSrc} alt={product.name} className="h-65 w-full object-cover transition duration-300 group-hover:scale-105" /> */}
                 {/* ANIMAZIONE OVERLAY */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0" />
+                <div className="pointer-events-none absolute inset-0 from-black/40 via-black/0 to-black/0" />
             </div>
 
-            {/* CONTENTO */}
+            {/* CONTENUTO */}
             <div className="p-4">
                 {/* titolo prodotto */}
                 <h3 className="mb-1 line-clamp-2 text-base font-semibold text-[#ff006e]">
-                    {name}</h3>
+                    {product.name}</h3>
 
                 {/* descrizione */}
                     <p className="mb-3 line-clamp-2 text-sm text-zinc-300">
-                        {description}
+                        {product.description}
                     </p>
 
                 {/* prezzo */}
                 <div className="flex items-center justify-between">
                     <p className="text-lg font-bold text-[#ffd21f]">
-                        €{price?.toFixed(2)}
+                        €{product.price}
                     </p>
 
                     <Button text="Dettagli"
