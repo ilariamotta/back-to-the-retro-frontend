@@ -38,16 +38,16 @@ export default function Footer() {
         </div>
         <div className="border-t border-[#ff006e] my-8"></div>
         <div className="flex justify-center space-x-6 text-2xl">
-          <Link to={'/'} className="hover:text-white transition">
+          <Link to={'/'} className="hover:text-[#00BFFF] transition">
             <FaFacebookF />
           </Link>
-          <Link to={'/'} className="hover:text-white transition">
+          <Link to={'/'} className="hover:text-[#ff006e] transition">
             <FaInstagram />
           </Link>
-          <Link to={'/'} className="hover:text-white transition">
+          <Link to={'/'} className="hover:text-[#07C3ED] transition">
             <FaTwitter />
           </Link>
-          <Link to={'/'} className="hover:text-white transition">
+          <Link to={'/'} className="hover:text-[#df1515] transition">
             <FaYoutube />
           </Link>
         </div>
