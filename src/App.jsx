@@ -3,6 +3,9 @@ import AppLayout from './layouts/AppLayout'
 import './index.css'
 import Home from './pages/Home'
 import ProductDetail from './pages/ProductDetail' 
+import Videogames from './pages/Videogames'
+import Consoles from './pages/Console'
+import Accessories from './pages/Accessories'
 
 
 function App() {
@@ -13,6 +16,9 @@ function App() {
           <Route element={<AppLayout />}>
             <Route element={<Home />} path="/" />
             <Route element={<ProductDetail />} path="/products/:id"/>
+            <Route element={<Videogames />} path="/videogames"/>
+            <Route element={<Consoles />} path="/consoles"/>
+            <Route element={<Accessories />} path="/accessories"/>
           </Route>
         </Routes>
       </BrowserRouter>
