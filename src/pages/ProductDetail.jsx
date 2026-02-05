@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
 
@@ -14,7 +14,7 @@ export default function ProductDetail() {
     axios.get(`http://localhost:3000/retro/api/products/${slug}`)
       .then((response) => {
         console.log(response);
-        
+
         setProduct(response.data.results || response.data.result || null);
       })
       .catch((error) => {
@@ -26,7 +26,7 @@ export default function ProductDetail() {
   }, [slug]);
 
   console.log(product);
-  
+
 
   if (loading) {
     return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Loading...</div>;
@@ -40,12 +40,12 @@ export default function ProductDetail() {
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {/* DETTAGLI PAGINA */}
       <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-        <span className="cursor-pointer hover:text-zinc-900">Ritorna alla Home</span>
+        <NavLink to="/" className="cursor-pointer hover:text-zinc-900">Ritorna alla Home</NavLink>
         <span className="text-zinc-300">/</span>
-        <span className="cursor-pointer hover:text-zinc-900">{product.category_name}</span>
+        <span className="cursor-pointer hover:text-zinc-900">{product[0].category}</span>
         <span className="text-zinc-300">/</span>
         <span className="font-medium text-zinc-900">
-          {product.name}
+          {product[0].name}
         </span>
       </div>
 
@@ -58,7 +58,7 @@ export default function ProductDetail() {
             <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
               <img
                 src="/images/placeholder_img.png"
-                alt={product.name}
+                alt={product[0].name}
                 className="aspect-[4/3] w-full object-cover"
               />
             </div>
@@ -103,16 +103,17 @@ export default function ProductDetail() {
             <p className="mt-4 text-sm leading-relaxed text-zinc-600">
               {product[0].description}
             </p>
-
+            <p className="">Stato: <span className="">{product[0].state}</span></p>
+            <p>{product[0].state_description}</p>
             {/* Altre info */}
             <div className="mt-4 grid grid-cols-2 gap-3 text-sm my-4">
               <div className="rounded-xl border bg-zinc-50 px-3 py-2">
                 <p className="text-xs text-zinc-500">Piattaforma</p>
-                <p className="font-semibold text-zinc-900">{product[0].platform_name}</p>
+                <p className="font-semibold text-zinc-900">{product[0].platform}</p>
               </div>
               <div className="rounded-xl border bg-zinc-50 px-3 py-2">
                 <p className="text-xs text-zinc-500">Brand</p>
-                <p className="font-semibold text-zinc-900">{product[0].platform_brand}</p>
+                <p className="font-semibold text-zinc-900">{product[0].brand}</p>
               </div>
             </div>
 
