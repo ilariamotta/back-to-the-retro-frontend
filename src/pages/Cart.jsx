@@ -2,7 +2,33 @@ import CartItem from "../components/CartItem";
 import { useCart } from "../context/CartContext";
 
 export default function Cart() {
+
+    const [totalAmount, setTotalAmount] = useState(0);
+
+useEffect(() => {
+    function calculateTotal() {
+    let total = 0;
+    const shippingCost = 6.00;
+
     const {cart} = useCart();
+
+   
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+    });
+
+    if (total > 100) {
+        return total; // CONDIZIONE SPEDIZIONE GRATUITA
+    }
+    
+    return total + shippingCost;
+}
+    setTotalAmount(calculateTotal());
+}, [cart]);
+
+
+const {cart} = useCart();
+
     return (
         // CONTAINER
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -32,16 +58,16 @@ export default function Cart() {
                         <div className="space-y-3 text-sm">
                             <div className="flex justify-between">
                                 <span>Subtotale</span>
-                                <span className="font-bold">€ 59.99</span>
+                                <span className="font-bold">€ {totalAmount}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span>Spedizione</span>
-                                <span className="font-bold">€ 6.99</span>
+                                <span className="font-bold">€ 6.00</span>
                             </div>
                             <div className="h-px bg-zinc-200" />
                             <div className="flex justify-between text-lg">
                                 <span>Totale</span>
-                                <span className="font-extrabold text-[#6C2BD9]">€ inserire totasle</span>
+                                <span className="font-extrabold text-[#6C2BD9]">€ {totalAmount}</span>
                             </div>
                         </div>
 
