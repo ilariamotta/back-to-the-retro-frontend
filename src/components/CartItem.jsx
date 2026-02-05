@@ -1,10 +1,7 @@
-export default function CartItemCard({item}) {
-    // const item = {
-    //     name: "Prodotto",
-    //     price: 0,
-    //     image: "/images/placeholder_img.png",
-    //     qty: 1,
-    // }
+import { useCart } from "../context/CartContext";
+
+export default function CartItemCard({ item }) {
+    const {removeFromCart} = useCart();
 
     return (
         <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm py-5 my-3">
@@ -23,19 +20,21 @@ export default function CartItemCard({item}) {
 
                 {/* Bottone rimuovi */}
                 <button
-                    type="button" className="
-            shrink-0
-            rounded-2xl
-            border-2 border-[#FF006E]
-            bg-transparent
-            px-4 py-3
-            text-xs font-extrabold tracking-wide
-            text-[#FF006E]
-            transition-all duration-300
-            hover:bg-[#FF006E]/10
-            hover:shadow-[0_0_16px_rgba(255,0,110,0.35)]
-            active:scale-[0.99]
-          ">
+                    type="button" 
+                    className="
+                    shrink-0
+                    rounded-2xl
+                    border-2 border-[#FF006E]
+                    bg-transparent
+                    px-4 py-3
+                    text-xs font-extrabold tracking-wide
+                    text-[#FF006E]
+                    transition-all duration-300
+                    hover:bg-[#FF006E]/10
+                    hover:shadow-[0_0_16px_rgba(255,0,110,0.35)]
+                    active:scale-[0.99]
+                    "
+                    onClick={() => removeFromCart(item.slug)}>
                     Rimuovi
                 </button>
             </div>

@@ -19,8 +19,8 @@ export function CartProvider({ children }) {
     });
   };
 
-  const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = (slug) => {
+    setCart((prev) => prev.filter((item) => item.slug !== slug));
   };
 
   return (
