@@ -17,13 +17,16 @@ export default function CartItemCard({ item }) {
                     <p className="mt-1 text-lg font-extrabold text-[#6C2BD9]">€ {Number(item.price).toFixed(2)}</p>
                 </div>
                 {/* QUANTITA' */}
-                <div className="flex items-center gap-2"> 
-                    <button onClick={() => decreaseQuantity(item.slug)} className="px-2 py-1 rounded-lg bg-[#ffd21f]" > - </button> 
-                    <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-bold text-zinc-700"> {item.quantity} </span> 
-                    <button onClick={() => increaseQuantity(item.slug)} className="px-2 py-1 rounded-lg bg-[#ffd21f] font-bold" > + </button> </div>
+                <div className="flex items-center gap-2">
+                    <button onClick={() => decreaseQuantity(item.slug)}
+                        className="px-2 py-1 rounded-lg bg-[#ffd21f]" > - </button>
+                    <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-bold text-zinc-700"> {item.quantity} </span>
+                    <button onClick={() => increaseQuantity(item.slug)}
+                        disabled={item.quantity >= item.stock}
+                        className="px-2 py-1 rounded-lg bg-[#ffd21f] font-bold" > + </button> </div>
                 {/* Bottone rimuovi */}
                 <button
-                    type="button" 
+                    type="button"
                     className="
                     shrink-0
                     rounded-2xl
