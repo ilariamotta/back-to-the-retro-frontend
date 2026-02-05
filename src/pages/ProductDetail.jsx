@@ -8,10 +8,10 @@ export default function ProductDetail() {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const backPort = import.meta.env.VITE_BACKEND_PORT
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:3000/retro/api/products/${slug}`)
+    axios.get(`http://localhost:${backPort}/retro/api/products/${slug}`)
       .then((response) => {
         console.log(response);
 
