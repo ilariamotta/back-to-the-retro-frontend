@@ -31,9 +31,9 @@ export default function Home() {
                 <h1 className="text-3xl font-bold text-start text-[#ff006e] mt-8 mb-6 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">I NOSTRI PRODOTTI</h1>
                 {/* GRIGLIA PRODOTTI */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                    {products.map((p) => {
+                    {products.map((p, index) => {
                         return (
-                            <ProductCard product={p} key={p.id} />
+                            <ProductCard product={p} key={index} />
                         )
                     })}
                 </div>
