@@ -8,6 +8,7 @@ import Consoles from './pages/Console'
 import Accessories from './pages/Accessories'
 import { CartProvider } from './context/CartContext'
 import Cart from './pages/Cart'
+import CheckoutPage from './pages/CheckoutPage'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               <Route element={<Consoles />} path="/categories/consoles" />
               <Route element={<Accessories />} path="/categories/accessories" />
               <Route element={<Cart />} path="/carrello" />
+              <Route element={<CheckoutPage />} path="/checkout" />
             </Route>
           </Routes>
         </BrowserRouter>
