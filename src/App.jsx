@@ -6,6 +6,7 @@ import ProductDetail from './pages/ProductDetail'
 import Videogames from './pages/Videogames'
 import Consoles from './pages/Console'
 import Accessories from './pages/Accessories'
+import Cart from './pages/Cart'
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route element={<Videogames />} path="/categories/videogames"/>
             <Route element={<Consoles />} path="/categories/consoles"/>
             <Route element={<Accessories />} path="/categories/accessories"/>
+            <Route element={<Cart />} path="/carrello"/>
           </Route>
         </Routes>
       </BrowserRouter>
