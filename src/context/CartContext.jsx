@@ -23,8 +23,30 @@ export function CartProvider({ children }) {
     setCart((prev) => prev.filter((item) => item.slug !== slug));
   };
 
+  const increaseQuantity = (slug) => {
+  setCart(prev =>
+    prev.map(item =>
+      item.slug === slug
+        ? { ...item, quantity: item.quantity + 1 }
+        : item
+    )
+  );
+};
+
+const decreaseQuantity = (slug) => {
+  setCart(prev =>
+    prev
+      .map(item =>
+        item.slug === slug
+          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+          : item
+      )
+  );
+};
+
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,7 +1,7 @@
 import { useCart } from "../context/CartContext";
 
 export default function CartItemCard({ item }) {
-    const {removeFromCart} = useCart();
+    const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
 
     return (
         <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm py-5 my-3">
@@ -16,8 +16,11 @@ export default function CartItemCard({ item }) {
                     <p className="truncate text-base font-extrabold text-[#2a2f45]">{item.name}</p>
                     <p className="mt-1 text-lg font-extrabold text-[#6C2BD9]">€ {Number(item.price).toFixed(2)}</p>
                 </div>
-                {/* QUANTITA' */}<span className="rounded-full bg-zinc-100 px-2 py-1 text-xs font-bold text-zinc-700">x{item.quantity}</span>
-
+                {/* QUANTITA' */}
+                <div className="flex items-center gap-2"> 
+                    <button onClick={() => decreaseQuantity(item.slug)} className="px-2 py-1 rounded-lg bg-[#ffd21f]" > - </button> 
+                    <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-bold text-zinc-700"> {item.quantity} </span> 
+                    <button onClick={() => increaseQuantity(item.slug)} className="px-2 py-1 rounded-lg bg-[#ffd21f] font-bold" > + </button> </div>
                 {/* Bottone rimuovi */}
                 <button
                     type="button" 
