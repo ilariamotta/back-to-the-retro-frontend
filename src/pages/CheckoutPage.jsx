@@ -1,6 +1,41 @@
 import ClientDataForm from "../components/ClientDataForm";
+import { NavLink } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useEffect, useState } from "react";
 
 export default function CheckoutPage() {
+
+// const {cart} = useCart();
+// const [totalAmount, setTotalAmount] = useState(0);
+
+// useEffect(() => {
+//     function calculateTotal() {
+//     let total = 0;
+//     const shippingCost = 6.00;
+
+//     const {cart} = useCart();
+
+   
+//     cart.forEach(item => {
+//         total += item.price * item.quantity;
+//     });
+
+//     if (total > 100) {
+//         return total; // CONDIZIONE SPEDIZIONE GRATUITA
+//     }
+
+//     const finalTotal = total > 100 ? total : total + shippingCost;
+//     setTotalAmount(finalTotal);
+    
+//     return total + shippingCost;
+// }
+//     setTotalAmount(calculateTotal());
+// }, [cart]);
+
+
+
+
+
     return (
         <>
             {/* CONTAINER */}
@@ -10,9 +45,9 @@ export default function CheckoutPage() {
                     <div><h1 className="text-3xl font-extrabold tracking-tight text-[#2a2f45]">Checkout</h1>
                         <p className="mt-1 text-sm text-zinc-600">Inserisci i dati e conferma il tuo ordine.</p>
                     </div>
-
-                    <button type="button" className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50">
-                        ← Torna al carrello</button>
+                    <button className="mt-4 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50">
+                        <NavLink to="/cart">← Torna al carrello</NavLink>
+                    </button>
                 </div>
 
                 {/* LAYOUT BOX CHECKOUT */}
@@ -37,20 +72,11 @@ export default function CheckoutPage() {
 
                             {/* RIGHE CALCOLI */}
                             <div className="mt-4 space-y-3 text-sm">
-                                <div className="flex justify-between">
-                                    <span className="text-zinc-600">Subtotale</span>
-                                    <span className="font-bold text-zinc-900">€ 59.99</span>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    <span className="text-zinc-600">Spedizione</span>
-                                    <span className="font-bold text-zinc-900">€ 6.99</span>
-                                </div>
-                                <div className="h-px bg-zinc-200" />
                                 <div className="flex justify-between text-base">
                                     <span className="text-zinc-600">Totale</span>
                                     <span className="font-extrabold text-[#6C2BD9]">
-                                        € 66.98</span>
+                                        {/* € {totalAmount.toFixed(2)}  */}
+                                        </span>
                                 </div>
                             </div>
 
@@ -69,8 +95,7 @@ export default function CheckoutPage() {
                   hover:brightness-110
                   hover:shadow-[0_0_20px_rgba(0,208,132,0.45)]
                   active:scale-[0.99]
-                "
-                                >
+                ">
                                     Conferma l'ordine
                                 </button>
 
