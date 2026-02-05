@@ -7,6 +7,7 @@ import Videogames from './pages/Videogames'
 import Consoles from './pages/Console'
 import Accessories from './pages/Accessories'
 import { CartProvider } from './context/CartContext'
+import Cart from './pages/Cart'
 
 
 function App() {
@@ -25,6 +26,18 @@ function App() {
           </Routes>
         </BrowserRouter>
       </CartProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route element={<Home />} path="/" />
+            <Route element={<ProductDetail />} path="/products/:slug"/>
+            <Route element={<Videogames />} path="/categories/videogames"/>
+            <Route element={<Consoles />} path="/categories/consoles"/>
+            <Route element={<Accessories />} path="/categories/accessories"/>
+            <Route element={<Cart />} path="/carrello"/>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
