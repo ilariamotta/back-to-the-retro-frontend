@@ -22,22 +22,11 @@ function App() {
               <Route element={<Videogames />} path="/categories/videogames" />
               <Route element={<Consoles />} path="/categories/consoles" />
               <Route element={<Accessories />} path="/categories/accessories" />
+              <Route element={<Cart />} path="/carrello" />
             </Route>
           </Routes>
         </BrowserRouter>
       </CartProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route element={<Home />} path="/" />
-            <Route element={<ProductDetail />} path="/products/:slug"/>
-            <Route element={<Videogames />} path="/categories/videogames"/>
-            <Route element={<Consoles />} path="/categories/consoles"/>
-            <Route element={<Accessories />} path="/categories/accessories"/>
-            <Route element={<Cart />} path="/carrello"/>
-          </Route>
-        </Routes>
-      </BrowserRouter>
     </>
   )
 }
