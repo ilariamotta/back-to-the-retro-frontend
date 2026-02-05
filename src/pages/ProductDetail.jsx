@@ -68,7 +68,7 @@ export default function ProductDetail() {
               <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
                 <img
                   src="/images/placeholder_img.png"
-                  alt={product.name}
+                  alt={product[0].name}
                   className="aspect-[4/3] w-full object-cover" />
               </div>
               <div className="flex items-center justify-center rounded-2xl border border-dashed border-zinc-300 bg-white text-sm text-zinc-500">
