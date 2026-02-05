@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
+import { useCart } from "../context/CartContext";
 
 export default function ProductDetail() {
+  const { addToCart, cart } = useCart();
 
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const backPort = import.meta.env.VITE_BACKEND_PORT
+
+  useEffect(() => { console.log("Cart updated:", cart); }, [cart]);
+
   useEffect(() => {
     setLoading(true);
     axios.get(`http://localhost:${backPort}/retro/api/products/${slug}`)
@@ -119,7 +124,10 @@ export default function ProductDetail() {
 
             {/* BOTTONI */}
             {/* carrello */}
-            <button type="button" className="w-full my-2 rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold tracking-wide text-[#1a1400] shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)] active:scale-[0.99]">
+            <button
+              type="button"
+              className="w-full my-2 rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold tracking-wide text-[#1a1400] shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)] active:scale-[0.99]"
+              onClick={() => addToCart(product[0])}>
               Aggiungilo al carrello! 🛒
             </button>
             {/*acquista */}
