@@ -1,6 +1,7 @@
 import CartItem from "../components/CartItem";
 import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 export default function Cart() {
     const { cart } = useCart();
@@ -66,7 +67,7 @@ export default function Cart() {
                         {/* BOTTONI */}
                         <div className="mt-6 space-y-3">
                             <button className="w-full rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold text-[#06251c] hover:brightness-110">
-                                Procedi al checkout
+                                <NavLink to="/checkout">Procedi al checkout</NavLink>
                             </button>
                             <button className="w-full rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold text-[#1a1400] hover:brightness-110">
                                 Acquista ora!

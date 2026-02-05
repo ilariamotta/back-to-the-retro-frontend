@@ -5,32 +5,28 @@ import { useEffect, useState } from "react";
 
 export default function CheckoutPage() {
 
-// const {cart} = useCart();
-// const [totalAmount, setTotalAmount] = useState(0);
+const {cart} = useCart();
+const [totalAmount, setTotalAmount] = useState(0);
 
-// useEffect(() => {
-//     function calculateTotal() {
-//     let total = 0;
-//     const shippingCost = 6.00;
-
-//     const {cart} = useCart();
+useEffect(() => {
+    function calculateTotal() {
+    let total = 0;
+    const shippingCost = 6.00;
 
    
-//     cart.forEach(item => {
-//         total += item.price * item.quantity;
-//     });
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+    });
 
-//     if (total > 100) {
-//         return total; // CONDIZIONE SPEDIZIONE GRATUITA
-//     }
+    if (total > 100) {
+        return total; // CONDIZIONE SPEDIZIONE GRATUITA
+    }
+  
+    return total + shippingCost;
+}
+    setTotalAmount(calculateTotal());
+}, [cart]);
 
-//     const finalTotal = total > 100 ? total : total + shippingCost;
-//     setTotalAmount(finalTotal);
-    
-//     return total + shippingCost;
-// }
-//     setTotalAmount(calculateTotal());
-// }, [cart]);
 
 
 
@@ -75,7 +71,7 @@ export default function CheckoutPage() {
                                 <div className="flex justify-between text-base">
                                     <span className="text-zinc-600">Totale</span>
                                     <span className="font-extrabold text-[#6C2BD9]">
-                                        {/* € {totalAmount.toFixed(2)}  */}
+                                        € {totalAmount.toFixed(2)}
                                         </span>
                                 </div>
                             </div>
