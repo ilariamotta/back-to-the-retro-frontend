@@ -42,7 +42,7 @@ useEffect(() => {
                         <p className="mt-1 text-sm text-zinc-600">Inserisci i dati e conferma il tuo ordine.</p>
                     </div>
                     <button className="mt-4 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50">
-                        <NavLink to="/cart">← Torna al carrello</NavLink>
+                        <NavLink to="/carrello">← Torna al carrello</NavLink>
                     </button>
                 </div>
 
