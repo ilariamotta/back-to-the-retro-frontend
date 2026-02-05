@@ -1,6 +1,8 @@
 import CartItem from "../components/CartItem";
+import { useCart } from "../context/CartContext";
 
 export default function Cart() {
+    const {cart} = useCart();
     return (
         // CONTAINER
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -16,9 +18,11 @@ export default function Cart() {
                 {/* BOX PRODOTTI */}
                 <div className="lg:col-span-8">
                     {/* CARD PRODOTTO */}
-                    <CartItem />
-                    <CartItem />
-                    <CartItem />
+                    {cart.map((item, index) => {
+                        return (
+                            <CartItem item={item} key={index}/>
+                        )
+                    })}
                 </div>
 
                 {/* RIEPILOGO A DESTRA */}

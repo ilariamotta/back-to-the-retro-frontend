@@ -1,10 +1,10 @@
-export default function CartItemCard() {
-    const item = {
-        name: "Prodotto",
-        price: 0,
-        image: "/images/placeholder_img.png",
-        qty: 1,
-    }
+export default function CartItemCard({item}) {
+    // const item = {
+    //     name: "Prodotto",
+    //     price: 0,
+    //     image: "/images/placeholder_img.png",
+    //     qty: 1,
+    // }
 
     return (
         <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm py-5 my-3">
@@ -19,7 +19,7 @@ export default function CartItemCard() {
                     <p className="truncate text-base font-extrabold text-[#2a2f45]">{item.name}</p>
                     <p className="mt-1 text-lg font-extrabold text-[#6C2BD9]">€ {Number(item.price).toFixed(2)}</p>
                 </div>
-                {/* QUANTITA' */}<span className="rounded-full bg-zinc-100 px-2 py-1 text-xs font-bold text-zinc-700">x{item.qty}</span>
+                {/* QUANTITA' */}<span className="rounded-full bg-zinc-100 px-2 py-1 text-xs font-bold text-zinc-700">x{item.quantity}</span>
 
                 {/* Bottone rimuovi */}
                 <button

@@ -27,9 +27,9 @@ export default function Accessories() {
                 {/* GRIGLIA PRODOTTI */}
                 {products !== undefined ? 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                    {products.map((p) => {
+                    {products.map((p, index) => {
                         return (
-                            <ProductCard product={p} key={p.id} />
+                            <ProductCard product={p} key={index} />
                         )
                     })}
                 </div>
