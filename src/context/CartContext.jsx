@@ -25,7 +25,7 @@ export function CartProvider({ children }) {
         );
       }
 
-      return [...prev, { ...product, quantity: 1, stock: product.stock }];
+      return [...prev, { ...product, id: product.id, quantity: 1, stock: product.stock }];
     });
   };
 
@@ -57,10 +57,13 @@ export function CartProvider({ children }) {
     );
   };
 
+  const clearCart = () => {
+    setCart([]);
+  };
 
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   );

@@ -10,13 +10,15 @@ export default function ProductDetail() {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const backPort = import.meta.env.VITE_BACKEND_PORT
+  const BACKEND = import.meta.env.VITE_BACKEND_URL
+    ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
+    : `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 3000}`;
 
   useEffect(() => { console.log("Cart updated:", cart); }, [cart]);
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:${backPort}/retro/api/products/${slug}`)
+    axios.get(`${BACKEND}/retro/api/products/${slug}`)
       .then((response) => {
         console.log(response);
 
@@ -124,12 +126,23 @@ export default function ProductDetail() {
 
             {/* BOTTONI */}
             {/* carrello */}
+
             <button
               type="button"
               className="w-full my-2 rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold tracking-wide text-[#1a1400] shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)] active:scale-[0.99]"
-              onClick={() => addToCart(product[0])}>
+              onClick={() => addToCart({
+                id: product[0].id,                    // Deve esistere!
+                slug: product[0].slug,
+                name: product[0].name,
+                price: product[0].price,
+                stock: product[0].stock,
+              })}
+            >
               Aggiungilo al carrello! 🛒
             </button>
+
+
+
             {/*acquista */}
             <button type="button" className=" w-full  my-2 rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold tracking-wide text-[#06251c] transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99]">
               ACQUISTALO ORA!
