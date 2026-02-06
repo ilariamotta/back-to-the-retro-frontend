@@ -1,20 +1,28 @@
-const placeholder = "/images/placeholder_img.png";
 import { useNavigate } from "react-router-dom";
-
+import { getProductImageUrl } from "../utils/imageUtils";
 
 export default function ProductCard({ product }) {
 
     const navigate = useNavigate()
     function details() {
         navigate(`/products/${product.slug}`)
-
     }
+
+    // Gestione errore caricamento immagine
+    const handleImageError = (e) => {
+        e.target.src = "/images/placeholder_img.png";
+    };
 
     return (
         <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#211a1d] shadow-sm transition hover:shadow-lg hover:scale-[1.01]">
             {/* IMMAGINE */}
             <div className="relative">
-                <img src={placeholder} alt={product.name} className="h-65 w-full object-cover transition duration-300 group-hover:scale-105" />
+                <img
+                    src={getProductImageUrl(product.cover_image)}
+                    alt={product.name}
+                    className="h-65 w-full object-cover transition duration-300 group-hover:scale-105"
+                    onError={handleImageError}
+                />
                 {/* ANIMAZIONE OVERLAY */}
                 <div className="pointer-events-none absolute inset-0 from-black/40 via-black/0 to-black/0" />
             </div>

@@ -3,6 +3,7 @@ import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
 import { useCart } from "../context/CartContext";
+import { getProductImageUrl } from "../utils/imageUtils";
 
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
@@ -34,6 +35,10 @@ export default function ProductDetail() {
 
   console.log(product);
 
+  // Gestione errore caricamento immagine
+  const handleImageError = (e) => {
+    e.target.src = "/images/placeholder_img.png";
+  };
 
   if (loading) {
     return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Loading...</div>;
@@ -64,9 +69,10 @@ export default function ProductDetail() {
             {/* Immagine principale */}
             <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
               <img
-                src="/images/placeholder_img.png"
+                src={getProductImageUrl(product[0].cover_image)}
                 alt={product[0].name}
                 className="aspect-[4/3] w-full object-cover"
+                onError={handleImageError}
               />
             </div>
 
@@ -74,9 +80,11 @@ export default function ProductDetail() {
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
                 <img
-                  src="/images/placeholder_img.png"
+                  src={getProductImageUrl(product[0].cover_image)}
                   alt={product[0].name}
-                  className="aspect-[4/3] w-full object-cover" />
+                  className="aspect-[4/3] w-full object-cover"
+                  onError={handleImageError}
+                />
               </div>
               <div className="flex items-center justify-center rounded-2xl border border-dashed border-zinc-300 bg-white text-sm text-zinc-500">
                 Slot immagine
@@ -131,11 +139,12 @@ export default function ProductDetail() {
               type="button"
               className="w-full my-2 rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold tracking-wide text-[#1a1400] shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)] active:scale-[0.99]"
               onClick={() => addToCart({
-                id: product[0].id,                    // Deve esistere!
+                id: product[0].id,
                 slug: product[0].slug,
                 name: product[0].name,
                 price: product[0].price,
                 stock: product[0].stock,
+                cover_image: product[0].cover_image,
               })}
             >
               Aggiungilo al carrello! 🛒

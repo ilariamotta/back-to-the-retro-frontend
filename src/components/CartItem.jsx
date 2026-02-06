@@ -1,7 +1,13 @@
 import { useCart } from "../context/CartContext";
+import { getProductImageUrl } from "../utils/imageUtils";
 
 export default function CartItemCard({ item }) {
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
+
+    // Gestione errore caricamento immagine
+    const handleImageError = (e) => {
+        e.target.src = "/images/placeholder_img.png";
+    };
 
     return (
         <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm py-5 my-3">
@@ -9,9 +15,10 @@ export default function CartItemCard({ item }) {
                 {/* Immagine */}
                 <div className="h-20 w-24 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
                     <img
-                        src={item.cover_image || item.image || "/images/placeholder_img.png"}
+                        src={getProductImageUrl(item.cover_image)}
                         alt={item.name}
                         className="h-full w-full object-cover"
+                        onError={handleImageError}
                     />
                 </div>
 
