@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Cart() {
-    const { cart } = useCart();
+    const { cart, clearCart } = useCart();
     const [subTotal, setSubtotal] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     useEffect(() => {
@@ -69,8 +69,11 @@ export default function Cart() {
                             <button className="w-full rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold text-[#06251c] hover:brightness-110">
                                 <NavLink to="/checkout">Procedi al checkout</NavLink>
                             </button>
-                            <button className="w-full rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold text-[#1a1400] hover:brightness-110">
-                                Acquista ora!
+                            <button
+                                className="w-full rounded-2xl bg-[#bb1717] px-5 py-4 text-sm font-extrabold text-[#1a1400] hover:brightness-110"
+                                onClick={() => { clearCart() }}
+                            >
+                                Svuota il carrello
                             </button>
                         </div>
                     </div>
