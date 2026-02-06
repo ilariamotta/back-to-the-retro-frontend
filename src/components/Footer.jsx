@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube, FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -29,10 +29,19 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-[#ffd21f] mb-4">Contacts</h3>
-            <ul className="space-y-2">
-              <li>backtotheretro@gmail.com</li>
-              <li>Via Milano 42, Roma</li>
-              <li>02 123 4567</li>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-center gap-3">
+                <FaEnvelope className="text-[#ff006e] text-lg" />
+                backToTheRetro4@gmail.com
+              </li>
+              <li className="flex items-center gap-3">
+                <FaMapMarkerAlt className="text-[#ffd21f] text-lg" />
+                Via Milano 42, Roma
+              </li>
+              <li className="flex items-center gap-3">
+                <FaPhoneAlt className="text-[#07C3ED] text-lg" />
+                02 123 4567
+              </li>
             </ul>
           </div>
         </div>
