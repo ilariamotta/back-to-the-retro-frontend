@@ -9,6 +9,7 @@ import Accessories from './pages/Accessories'
 import { CartProvider } from './context/CartContext'
 import Cart from './pages/Cart'
 import CheckoutPage from './pages/CheckoutPage'
+import SearchPage from './pages/SearchPage'
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
               <Route element={<Accessories />} path="/categories/accessories" />
               <Route element={<Cart />} path="/carrello" />
               <Route element={<CheckoutPage />} path="/checkout" />
+              <Route element={<SearchPage />} path="/search" />
             </Route>
           </Routes>
         </BrowserRouter>

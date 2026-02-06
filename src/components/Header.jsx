@@ -1,37 +1,42 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { FaRegHeart } from "react-icons/fa";
+import { FiShoppingCart } from "react-icons/fi";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { FaSearch } from "react-icons/fa";
+
 
 // LINK PAGINE
 const navLinks = [
     { title: "Home", path: "/" },
-    { title: "Prodotti", path: "/products" },
+    // { title: "Prodotti", path: "/products" },
     {
         title: "Categorie",
         path: "/categories",
-        dropdown: [
-            { title: "Videogiochi", path: "/categories/videogames" },
-            { title: "Console", path: "/categories/consoles" },
-            { title: "Accessori", path: "/categories/accessories" },
-        ],
+        // dropdown: [
+        //     { title: "Videogiochi", path: "/categories/videogames" },
+        //     { title: "Console", path: "/categories/consoles" },
+        //     { title: "Accessori", path: "/categories/accessories" },
+        // ],
     },
     {
         title: "Brand",
         path: "/brands",
-        dropdown: [
-            { title: "Nintendo", path: "/brands/nintendo" },
-            { title: "Sony", path: "/brands/sony" },
-            { title: "Microsoft", path: "/brands/microsoft" },
-        ],
+        // dropdown: [
+        //     { title: "Nintendo", path: "/brands/nintendo" },
+        //     { title: "Sony", path: "/brands/sony" },
+        //     { title: "Microsoft", path: "/brands/microsoft" },
+        // ],
     },
     {
         title: "Piattaforma",
         path: "/platforms",
-        dropdown: [
-            { title: "PC", path: "/platforms/pc" },
-            { title: "PlayStation", path: "/platforms/playstation" },
-            { title: "Xbox", path: "/platforms/xbox" },
-            { title: "Nintendo", path: "/platforms/nintendo" },
-        ],
+        // dropdown: [
+        //     { title: "PC", path: "/platforms/pc" },
+        //     { title: "PlayStation", path: "/platforms/playstation" },
+        //     { title: "Xbox", path: "/platforms/xbox" },
+        //     { title: "Nintendo", path: "/platforms/nintendo" },
+        // ],
     },
 ];
 
@@ -136,11 +141,18 @@ export default function Header() {
                     {/* RIGHT */}
                     <div className="flex items-center gap-2 ml-auto">
                         <NavLink
+                            to="/search"
+                            className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
+                            title="Cerca"
+                        >
+                            <FaSearch size={16} />
+                        </NavLink>
+                        <NavLink
                             to="/wishlist"
                             className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
                             title="Wishlist"
                         >
-                            ♡
+                            <FaRegHeart size={16} />
                         </NavLink>
 
                         <NavLink
@@ -148,7 +160,7 @@ export default function Header() {
                             className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
                             title="Carrello"
                         >
-                            🛒
+                            <FiShoppingCart size={16} />
                         </NavLink>
 
                         <button
@@ -157,7 +169,7 @@ export default function Header() {
                             onClick={() => setMobileOpen((v) => !v)}
                             aria-label="Apri menu"
                         >
-                            ☰
+                            <GiHamburgerMenu size={18} />
                         </button>
                     </div>
                 </div>
@@ -176,6 +188,11 @@ export default function Header() {
                                     />
                                 ))}
                                 <div className="my-2 h-px bg-white/10" />
+                                <MobileNavButton
+                                    to="/search"
+                                    label="Cerca"
+                                    onClick={() => setMobileOpen(false)}
+                                />
                                 <MobileNavButton
                                     to="/wishlist"
                                     label="Wishlist"
