@@ -3,6 +3,17 @@ import axios from "axios";
 import SearchGames from "../components/SearchBar";
 import ProductCard from "../components/ProductCard";
 
+
+
+function normalize(text = "") {
+  return String(text)
+    .toLowerCase()
+    .normalize("NFD")                 // separa lettere e accenti
+    .replace(/[\u0300-\u036f]/g, "")  // rimuove accenti
+    .trim();
+}
+
+
 export default function SearchPage() {
   const addressIndex = import.meta.env.VITE_BACKEND_URL;
 
@@ -19,12 +30,12 @@ export default function SearchPage() {
 
   const querySearch = query.trim().toLowerCase();
 
- const filtered = querySearch
+const filtered = querySearch
   ? products.filter((product) => {
-      const name = (product?.name || "").toLowerCase();
-      const platform = (product?.platform || product?.platforms || "").toLowerCase();
-      const category = (product?.category || "").toLowerCase();
-      const brand = (product?.brand || "").toLowerCase();
+      const name = normalize((product?.name || "").toLowerCase());
+      const platform = normalize((product?.platform || product?.platforms || "").toLowerCase());
+      const category = normalize((product?.category || "").toLowerCase());
+      const brand = normalize((product?.brand || "").toLowerCase());
 
       return (
         name.includes(querySearch) ||
