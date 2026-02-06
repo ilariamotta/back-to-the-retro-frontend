@@ -3,12 +3,12 @@ import { useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { FaSearch } from "react-icons/fa";
 
 
 // LINK PAGINE
 const navLinks = [
     { title: "Home", path: "/" },
-    { title: "Cerca il tuo prodotto", path: "/search" },
     // { title: "Prodotti", path: "/products" },
     {
         title: "Categorie",
@@ -141,6 +141,13 @@ export default function Header() {
                     {/* RIGHT */}
                     <div className="flex items-center gap-2 ml-auto">
                         <NavLink
+                            to="/search"
+                            className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
+                            title="Cerca"
+                        >
+                            <FaSearch size={16} />
+                        </NavLink>
+                        <NavLink
                             to="/wishlist"
                             className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
                             title="Wishlist"
@@ -181,6 +188,11 @@ export default function Header() {
                                     />
                                 ))}
                                 <div className="my-2 h-px bg-white/10" />
+                                <MobileNavButton
+                                    to="/search"
+                                    label="Cerca"
+                                    onClick={() => setMobileOpen(false)}
+                                />
                                 <MobileNavButton
                                     to="/wishlist"
                                     label="Wishlist"
