@@ -8,6 +8,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 // LINK PAGINE
 const navLinks = [
     { title: "Home", path: "/" },
+    { title: "Cerca il tuo prodotto", path: "/search" },
     // { title: "Prodotti", path: "/products" },
     {
         title: "Categorie",
