@@ -3,6 +3,7 @@ import axios from "axios";
 import HeroBento from "../components/HeroBento";
 import ProductCard from "../components/ProductCard";
 import { useState, useEffect } from "react";
+import SearchGames from "../components/SearchBar";
 
 
 
@@ -22,9 +23,11 @@ export default function Home() {
     
     
     return (
-        <div className="space-y-10">
+        <div className="space-y-4">
+            {/* SEARCH BAR */}
+        <SearchGames items={products} />
             {/* CONTAINER */}
-            <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8">
+            <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
                 {/* BENTOBOX */}
                 <HeroBento />
                 {/* TITOLO */}
