@@ -4,7 +4,7 @@ import axios from "axios";
 import Button from "../components/Button";
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
-
+import { useWish } from "../context/WhishListContext";
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
 
@@ -33,7 +33,7 @@ export default function ProductDetail() {
       });
   }, [slug]);
 
-  console.log(product);
+
 
   // Gestione errore caricamento immagine
   const handleImageError = (e) => {
@@ -107,7 +107,7 @@ export default function ProductDetail() {
               <p>
                 {/* prezzo originale  */}
                 <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#ffe417] line-through" : "hidden"}>€ {product[0].price}</span><br />
-                
+
                 <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>€ {product[0].price - product[0].discounted_price}</span>
               </p>
             </div>
@@ -162,8 +162,19 @@ export default function ProductDetail() {
             <button type="button" className=" w-full  my-2 rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold tracking-wide text-[#06251c] transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99]">
               ACQUISTALO ORA!
             </button>
+            
             {/* wishlist */}
-            <button type="button" className="w-full my-2 rounded-2xl border-2 border-[#FF006E] bg-transparent px-5 py-4 text-sm tracking-wide text-[#FF006E] transition-all duration-300 hover:bg-[#FF006E]/10 hover:shadow-[0_0_20px_rgba(255,0,110,0.45)] hover:scale-[1.02] active:scale-[0.98]">
+            <button
+              onClick={() => addToWish({
+                id: product[0].id,
+                slug: product[0].slug,
+                name: product[0].name,
+                price: product[0].discounted_price !== null ? product[0].price - product[0].discounted_price : product[0].price,
+                stock: product[0].stock,
+                cover_image: product[0].cover_image,
+              })}
+              type="button"
+              className="w-full my-2 rounded-2xl border-2 border-[#FF006E] bg-transparent px-5 py-4 text-sm tracking-wide text-[#FF006E] transition-all duration-300 hover:bg-[#FF006E]/10 hover:shadow-[0_0_20px_rgba(255,0,110,0.45)] hover:scale-[1.02] active:scale-[0.98]">
               Aggiungilo ai tuoi preferiti ♡
             </button>
           </div>
