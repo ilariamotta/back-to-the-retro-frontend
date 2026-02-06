@@ -4,6 +4,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSearch } from "react-icons/fa";
+import { useCart } from "../context/CartContext";
 
 
 // LINK PAGINE
@@ -112,6 +113,9 @@ function MobileNavButton({ to, label, onClick }) {
 export default function Header() {
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    const { cart } = useCart();
+    const cartCount = cart.reduce((total, item) => total + item.quantity, 0 || 0);
+
     return (
         <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950">
             <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
@@ -158,10 +162,23 @@ export default function Header() {
 
                         <NavLink
                             to="/carrello"
-                            className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
+                            className="relative rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
                             title="Carrello"
-                        >
+                            >
                             <FiShoppingCart size={16} />
+
+                             {cartCount > 0 && (
+                            <span className="
+                            absolute -right-1 -top-1
+                            flex h-5 min-w-5 items-center justify-center
+                            rounded-full bg-[#FF006E]
+                            px-1 text-[11px] font-extrabold text-white
+                            shadow-[0_0_12px_rgba(255,0,110,0.55)]
+                            "
+                            >
+                            {cartCount}
+                            </span>
+                            )}
                         </NavLink>
 
                         <button
