@@ -9,6 +9,10 @@ export function CartProvider({ children }) {
     setCart((prev) => {
       const exists = prev.find((item) => item.slug === product.slug);
 
+      if (product.stock <= 0) {
+        return prev;
+      }
+
       if (exists) {
         if (exists.quantity >= product.stock) {
           return prev;
