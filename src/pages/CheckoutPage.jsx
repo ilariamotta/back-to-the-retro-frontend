@@ -1,36 +1,140 @@
 import ClientDataForm from "../components/ClientDataForm";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 
 export default function CheckoutPage() {
+    const { cart, clearCart } = useCart();
+    const navigate = useNavigate();
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [shippingCost, setShippingCost] = useState(6.00);
+    const [clientData, setClientData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-const {cart} = useCart();
-const [totalAmount, setTotalAmount] = useState(0);
+    // Calcola il totale ogni volta che il carrello cambia
+    useEffect(() => {
+        function calculateTotal() {
+            let subtotal = 0;
+            const shipping = 6.00;
 
-useEffect(() => {
-    function calculateTotal() {
-    let total = 0;
-    const shippingCost = 6.00;
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+            });
 
-   
-    cart.forEach(item => {
-        total += item.price * item.quantity;
-    });
+            if (subtotal > 100) {
+                setShippingCost(0); // Spedizione gratuita
+                return subtotal;
+            }
 
-    if (total > 100) {
-        return total; // CONDIZIONE SPEDIZIONE GRATUITA
-    }
-  
-    return total + shippingCost;
-}
-    setTotalAmount(calculateTotal());
-}, [cart]);
+            setShippingCost(shipping);
+            return subtotal + shipping;
+        }
+        setTotalAmount(calculateTotal());
+    }, [cart]);
 
+    // Funzione chiamata quando il form cambia
+    const handleFormChange = (formData) => {
+        setClientData(formData);
+    };
 
+    // Funzione per confermare l'ordine e inviare le email
+    const handleConfirmOrder = async () => {
+        // Validazione: controlla che tutti i campi siano compilati
+        if (!clientData) {
+            alert("⚠️ Compila tutti i campi del form prima di procedere!");
+            return;
+        }
 
+        const requiredFields = [
+            'client_name', 'client_surname', 'email', 'phone_number',
+            'billing_address', 'billing_city', 'billing_postal_code',
+            'shipping_address', 'shipping_city', 'shipping_postal_code'
+        ];
 
+        const missingFields = requiredFields.filter(field => !clientData[field]);
+        if (missingFields.length > 0) {
+            alert("⚠️ Compila tutti i campi obbligatori!");
+            return;
+        }
 
+        // Validazione carrello non vuoto
+        if (cart.length === 0) {
+            alert("⚠️ Il carrello è vuoto!");
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            // Prepara i dati dell'ordine
+            const orderData = {
+                // Dati cliente
+                client_name: clientData.client_name,
+                client_surname: clientData.client_surname,
+                email: clientData.email,
+                phone_number: clientData.phone_number,
+
+                // Indirizzi
+                billing_address: clientData.billing_address,
+                billing_postal_code: clientData.billing_postal_code,
+                billing_city: clientData.billing_city,
+                shipping_address: clientData.shipping_address,
+                shipping_postal_code: clientData.shipping_postal_code,
+                shipping_city: clientData.shipping_city,
+
+                // Costi
+                shipping_price: shippingCost,
+
+                // Carrello: convertiamo i prodotti nel formato che si aspetta il backend
+                cart: cart.map(item => ({
+                    product_id: item.id, // Assicurati che i prodotti abbiano l'ID
+                    quantity: item.quantity,
+                    unit_price: Math.round(item.price * 100) // Converti in centesimi
+                }))
+            };
+
+            console.log("📦 Invio ordine al backend:", orderData);
+
+            const BACKEND = import.meta.env.VITE_BACKEND_URL
+                ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
+                : "http://localhost:3000";
+
+            // Chiamata API al backend
+            const response = await fetch(`${BACKEND}/retro/api/orders/checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // ✅ SUCCESSO!
+                console.log("✅ Ordine completato:", data);
+
+                alert(`✅ Ordine #${data.orderId} completato con successo!\n\n📧 Controlla la tua email per la conferma.\n\nTotale: €${data.total.toFixed(2)}`);
+
+                // Svuota il carrello
+                clearCart();
+
+                // Reindirizza alla home o a una pagina di conferma
+                navigate('/');
+            } else {
+                // ❌ ERRORE dal backend
+                console.error("❌ Errore dal backend:", data);
+                alert(`❌ Errore: ${data.error}\n\nRiprova o contatta l'assistenza.`);
+            }
+
+        } catch (error) {
+            // ❌ ERRORE di rete o del server
+            console.error("❌ Errore durante l'invio dell'ordine:", error);
+            alert("❌ Errore di connessione. Verifica che il backend sia avviato e riprova.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <>
@@ -38,7 +142,8 @@ useEffect(() => {
             <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 {/* TITOLO PAGINA */}
                 <div className="flex flex-wrap items-end justify-between gap-3">
-                    <div><h1 className="text-3xl font-extrabold tracking-tight text-[#2a2f45]">Checkout</h1>
+                    <div>
+                        <h1 className="text-3xl font-extrabold tracking-tight text-[#2a2f45]">Checkout</h1>
                         <p className="mt-1 text-sm text-zinc-600">Inserisci i dati e conferma il tuo ordine.</p>
                     </div>
                     <button className="mt-4 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50">
@@ -53,10 +158,11 @@ useEffect(() => {
                         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                             <div className="flex items-center justify-between gap-3">
                                 <h2 className="text-lg font-semibold text-zinc-900 py-4">
-                                    Dati di spedizione</h2>
+                                    Dati di spedizione
+                                </h2>
                             </div>
-                            {/* CHECKOUT FORM */}
-                            <ClientDataForm />
+                            {/* CHECKOUT FORM - Passa la funzione handleFormChange */}
+                            <ClientDataForm onFormChange={handleFormChange} />
                         </div>
                     </div>
 
@@ -64,43 +170,80 @@ useEffect(() => {
                     <div className="lg:col-span-4">
                         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                             <h2 className="text-lg font-semibold text-zinc-900">
-                                Riepilogo ordine</h2>
+                                Riepilogo ordine
+                            </h2>
+
+                            {/* PRODOTTI NEL CARRELLO */}
+                            <div className="mt-4 space-y-2">
+                                {cart.map(item => (
+                                    <div key={item.slug} className="flex justify-between text-sm">
+                                        <span className="text-zinc-600">
+                                            {item.name} × {item.quantity}
+                                        </span>
+                                        <span className="font-medium">
+                                            €{(item.price * item.quantity).toFixed(2)}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
 
                             {/* RIGHE CALCOLI */}
-                            <div className="mt-4 space-y-3 text-sm">
-                                <div className="flex justify-between text-base">
-                                    <span className="text-zinc-600">Totale</span>
+                            <div className="mt-4 space-y-3 text-sm border-t pt-4">
+                                <div className="flex justify-between">
+                                    <span className="text-zinc-600">Subtotale</span>
+                                    <span className="font-medium">
+                                        €{(totalAmount - shippingCost).toFixed(2)}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-zinc-600">Spedizione</span>
+                                    <span className="font-medium">
+                                        {shippingCost === 0 ? 'GRATIS' : `€${shippingCost.toFixed(2)}`}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between text-base border-t pt-3">
+                                    <span className="font-semibold text-zinc-900">Totale</span>
                                     <span className="font-extrabold text-[#6C2BD9]">
-                                        € {totalAmount.toFixed(2)}
-                                        </span>
+                                        €{totalAmount.toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
 
-                            {/* BOTTONI PAGAMENTO */}
+                            {/* BOTTONE CONFERMA ORDINE */}
                             <div className="mt-6 space-y-3">
-                                {/* conferma ordine */}
                                 <button
                                     type="button"
-                                    className="
-                  w-full rounded-2xl
-                  bg-[#00D084]
-                  px-5 py-4
-                  text-sm font-extrabold tracking-wide
-                  text-[#06251c]
-                  transition-all duration-300
-                  hover:brightness-110
-                  hover:shadow-[0_0_20px_rgba(0,208,132,0.45)]
-                  active:scale-[0.99]
-                ">
-                                    Conferma l'ordine
+                                    onClick={handleConfirmOrder}
+                                    disabled={isLoading}
+                                    className={`
+                    w-full rounded-2xl
+                    px-5 py-4
+                    text-sm font-extrabold tracking-wide
+                    text-[#06251c]
+                    transition-all duration-300
+                    active:scale-[0.99]
+                    ${isLoading
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-[#00D084] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)]'
+                                        }
+                  `}
+                                >
+                                    {isLoading ? '⏳ Elaborazione...' : '✅ Conferma l\'ordine'}
                                 </button>
-
                             </div>
 
-                            {/* STRIPE? */}
+                            {/* INFO SPEDIZIONE GRATUITA */}
+                            {totalAmount - shippingCost > 100 && (
+                                <div className="mt-4 rounded-2xl bg-green-50 p-4 text-xs text-green-800">
+                                    <p className="font-semibold">🎉 Hai ottenuto la spedizione gratuita!</p>
+                                </div>
+                            )}
+
+                            {/* NOTE */}
                             <div className="mt-6 rounded-2xl bg-zinc-50 p-4 text-xs text-zinc-600">
+                                <p className="font-semibold mb-1">📧 Dopo l'ordine:</p>
                                 <p className="mt-1">
-                                    INSERIRE STRIPE??
+                                    Riceverai una email di conferma con tutti i dettagli dell'ordine.
                                 </p>
                             </div>
                         </div>
@@ -108,5 +251,5 @@ useEffect(() => {
                 </section>
             </div>
         </>
-    )
+    );
 }

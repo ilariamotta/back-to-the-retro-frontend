@@ -37,8 +37,8 @@ export default function Cart() {
             <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
                 {/* BOX PRODOTTI */}
                 <div className="lg:col-span-8">
-                    {cart.map((item, index) => (
-                        <CartItem item={item} key={index} />
+                    {cart.map((item) => (
+                        <CartItem item={item} key={item.slug} />
                     ))}
                 </div>
                 {/* RIEPILOGO */}

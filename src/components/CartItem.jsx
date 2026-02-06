@@ -8,7 +8,11 @@ export default function CartItemCard({ item }) {
             <div className="flex items-center gap-4">
                 {/* Immagine */}
                 <div className="h-20 w-24 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
-                    <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                    <img
+                        src={item.cover_image || item.image || "/images/placeholder_img.png"}
+                        alt={item.name}
+                        className="h-full w-full object-cover"
+                    />
                 </div>
 
                 {/* Nome + prezzo */}

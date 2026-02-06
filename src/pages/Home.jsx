@@ -8,19 +8,21 @@ import { useState, useEffect } from "react";
 
 export default function Home() {
 
-    const addressIndex = import.meta.env.VITE_BACKEND_URL;
+    const BACKEND = import.meta.env.VITE_BACKEND_URL
+        ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
+        : "http://localhost:3000";
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        axios.get(`${addressIndex}retro/api/products`).then((resp) => {
+        axios.get(`${BACKEND}/retro/api/products`).then((resp) => {
             const risposta = resp.data.results
             setProducts(risposta)
         })
     }, [])
 
 
-    
-    
+
+
     return (
         <div className="space-y-10">
             {/* CONTAINER */}

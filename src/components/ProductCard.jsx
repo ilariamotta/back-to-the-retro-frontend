@@ -1,13 +1,13 @@
-import Button from "./Button";
-import placeholder from "../../public/images/placeholder_img.png"
+const placeholder = "/images/placeholder_img.png";
 import { useNavigate } from "react-router-dom";
+
 
 export default function ProductCard({ product }) {
 
     const navigate = useNavigate()
-    function details () {
+    function details() {
         navigate(`/products/${product.slug}`)
-        
+
     }
 
     return (
