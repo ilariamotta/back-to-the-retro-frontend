@@ -103,7 +103,13 @@ export default function ProductDetail() {
 
             {/* Prezzo */}
             <div className="mt-4 flex flex-wrap items-end gap-3">
-              <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product[0].price}</p>
+              {/* <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product[0].price}</p> */}
+              <p>
+                {/* prezzo originale  */}
+                <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#ffe417] line-through" : "hidden"}>€ {product[0].price}</span><br />
+                
+                <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>€ {product[0].price - product[0].discounted_price}</span>
+              </p>
             </div>
 
             {/* Stock */}

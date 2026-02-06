@@ -39,10 +39,14 @@ export default function ProductCard({ product }) {
                 </p>
 
                 {/* prezzo */}
-                <div className="flex items-center justify-between">
-                    <p className="text-lg font-bold text-[#ffd21f]">
-                        €{product.price}
-                    </p>
+                <div className="flex items-center justify-between ">
+                   
+                    <p>
+                            {/* prezzo originale  */}
+                            <span className={product.discounted_price !== null ? "text-lg font-bold text-[#ffe417] line-through" : "hidden"}>€ {product.price}</span><br />
+
+                            <span className={product.discounted_price !== null ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>€ {product.price - product.discounted_price}</span>
+                    </p>    
 
                     <button
                         onClick={details}
