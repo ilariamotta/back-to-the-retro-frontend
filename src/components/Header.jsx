@@ -9,6 +9,7 @@ import { FaSearch } from "react-icons/fa";
 // LINK PAGINE
 const navLinks = [
     { title: "Home", path: "/" },
+    { title: "Prodotti", path: "/products" },
     // { title: "Prodotti", path: "/products" },
     {
         title: "Categorie",

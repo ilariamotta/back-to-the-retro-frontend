@@ -10,6 +10,7 @@ import { CartProvider } from './context/CartContext'
 import Cart from './pages/Cart'
 import CheckoutPage from './pages/CheckoutPage'
 import SearchPage from './pages/SearchPage'
+import ProductsPage from './pages/ProductsPage'
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route element={<AppLayout />}>
               <Route element={<Home />} path="/" />
+              <Route element={<ProductsPage />} path="/products" />
               <Route element={<ProductDetail />} path="/products/:slug" />
               <Route element={<Videogames />} path="/categories/videogames" />
               <Route element={<Consoles />} path="/categories/consoles" />
