@@ -1,6 +1,9 @@
 import HeroCategoryButtons from "./HeroCategoryButtons";
+import { FaGamepad } from "react-icons/fa";
+import { GiGameConsole } from "react-icons/gi";
+import { FaHeadphones } from "react-icons/fa";
 
-export default function BentoHero({imgIcon}) {
+export default function BentoHero({icon}) {
     return (
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-12">
             {/* VIDEO*/}
@@ -19,9 +22,9 @@ export default function BentoHero({imgIcon}) {
                     <p className="text text-zinc-600 font-semibold text-center">Inizia i tuoi acquisti!</p>
 
                     <div className="mt-4 grid gap-3">
-                        <HeroCategoryButtons to="/categories/videogames" label="VIDEOGIOCHI"  imgIcon="/images/icons/videogames.png"/>
-                        <HeroCategoryButtons to="/categories/consoles" label="CONSOLE" imgIcon="/images/icons/consoles.png" />
-                        <HeroCategoryButtons to="/categories/accessories" label="ACCESSORI" imgIcon="/images/icons/accessories.png" />
+                        <HeroCategoryButtons to="/categories/videogames" label="VIDEOGIOCHI"  icon={FaGamepad}/>
+                        <HeroCategoryButtons to="/categories/consoles" label="CONSOLE" icon={GiGameConsole} />
+                        <HeroCategoryButtons to="/categories/accessories" label="ACCESSORI" icon={FaHeadphones} />
                     </div>
                 </div>
             </div>
