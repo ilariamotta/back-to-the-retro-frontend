@@ -11,7 +11,6 @@ export default function CheckoutPage() {
     const [clientData, setClientData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Calcola il totale ogni volta che il carrello cambia
     useEffect(() => {
         function calculateTotal() {
             let subtotal = 0;
@@ -22,7 +21,7 @@ export default function CheckoutPage() {
             });
 
             if (subtotal > 100) {
-                setShippingCost(0); // Spedizione gratuita
+                setShippingCost(0); 
                 return subtotal;
             }
 
@@ -32,14 +31,11 @@ export default function CheckoutPage() {
         setTotalAmount(calculateTotal());
     }, [cart]);
 
-    // Funzione chiamata quando il form cambia
     const handleFormChange = (formData) => {
         setClientData(formData);
     };
 
-    // Funzione per confermare l'ordine e inviare le email
     const handleConfirmOrder = async () => {
-        // Validazione: controlla che tutti i campi siano compilati
         if (!clientData) {
             alert("⚠️ Compila tutti i campi del form prima di procedere!");
             return;
@@ -57,7 +53,6 @@ export default function CheckoutPage() {
             return;
         }
 
-        // Validazione carrello non vuoto
         if (cart.length === 0) {
             alert("⚠️ Il carrello è vuoto!");
             return;
@@ -66,7 +61,6 @@ export default function CheckoutPage() {
         setIsLoading(true);
 
         try {
-            // Prepara i dati dell'ordine
             const orderData = {
                 // Dati cliente
                 client_name: clientData.client_name,
@@ -85,11 +79,10 @@ export default function CheckoutPage() {
                 // Costi
                 shipping_price: shippingCost,
 
-                // Carrello: convertiamo i prodotti nel formato che si aspetta il backend
                 cart: cart.map(item => ({
-                    product_id: item.id, // Assicurati che i prodotti abbiano l'ID
+                    product_id: item.id, 
                     quantity: item.quantity,
-                    unit_price: Math.round(item.price * 100) // Converti in centesimi
+                    unit_price: Math.round(item.price * 100)
                 }))
             };
 
@@ -99,7 +92,6 @@ export default function CheckoutPage() {
                 ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
                 : "http://localhost:3000";
 
-            // Chiamata API al backend
             const response = await fetch(`${BACKEND}/retro/api/orders/checkout`, {
                 method: 'POST',
                 headers: {
@@ -111,24 +103,21 @@ export default function CheckoutPage() {
             const data = await response.json();
 
             if (data.success) {
-                // ✅ SUCCESSO!
                 console.log("✅ Ordine completato:", data);
 
                 alert(`✅ Ordine #${data.orderId} completato con successo!\n\n📧 Controlla la tua email per la conferma.\n\nTotale: €${data.total.toFixed(2)}`);
 
-                // Svuota il carrello
                 clearCart();
 
-                // Reindirizza alla home o a una pagina di conferma
                 navigate('/');
             } else {
-                // ❌ ERRORE dal backend
+
                 console.error("❌ Errore dal backend:", data);
                 alert(`❌ Errore: ${data.error}\n\nRiprova o contatta l'assistenza.`);
             }
 
         } catch (error) {
-            // ❌ ERRORE di rete o del server
+
             console.error("❌ Errore durante l'invio dell'ordine:", error);
             alert("❌ Errore di connessione. Verifica che il backend sia avviato e riprova.");
         } finally {
