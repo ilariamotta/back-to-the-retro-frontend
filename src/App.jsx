@@ -24,6 +24,7 @@ function App() {
             <Routes>
               <Route element={<AppLayout />}>
                 <Route element={<Home />} path="/" />
+                <Route element={<ProductsPage />} path="/products" />
                 <Route element={<ProductDetail />} path="/products/:slug" />
                 <Route element={<Videogames />} path="/categories/videogames" />
                 <Route element={<Consoles />} path="/categories/consoles" />
@@ -36,21 +37,6 @@ function App() {
             </Routes>
           </BrowserRouter>
         </StripeProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<AppLayout />}>
-              <Route element={<Home />} path="/" />
-              <Route element={<ProductsPage />} path="/products" />
-              <Route element={<ProductDetail />} path="/products/:slug" />
-              <Route element={<Videogames />} path="/categories/videogames" />
-              <Route element={<Consoles />} path="/categories/consoles" />
-              <Route element={<Accessories />} path="/categories/accessories" />
-              <Route element={<Cart />} path="/carrello" />
-              <Route element={<CheckoutPage />} path="/checkout" />
-              <Route element={<SearchPage />} path="/search" />
-            </Route>
-          </Routes>
-        </BrowserRouter>
       </CartProvider>
     </>
   )
