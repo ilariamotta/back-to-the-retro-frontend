@@ -19,9 +19,21 @@ export default function SearchPage() {
 
   const querySearch = query.trim().toLowerCase();
 
-  const filtered = querySearch
-    ? products.filter((product) => (product.name || "").toLowerCase().includes(querySearch))
-    : products;
+ const filtered = querySearch
+  ? products.filter((product) => {
+      const name = (product?.name || "").toLowerCase();
+      const platform = (product?.platform || product?.platforms || "").toLowerCase();
+      const category = (product?.category || "").toLowerCase();
+      const brand = (product?.brand || "").toLowerCase();
+
+      return (
+        name.includes(querySearch) ||
+        platform.includes(querySearch) ||
+        category.includes(querySearch) ||
+        brand.includes(querySearch)
+      );
+    })
+  : products;
 
   return (
     <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 space-y-6">
