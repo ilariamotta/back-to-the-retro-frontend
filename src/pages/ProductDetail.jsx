@@ -52,11 +52,11 @@ export default function ProductDetail() {
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {/* DETTAGLI PAGINA */}
       <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-        <NavLink to="/" className="cursor-pointer hover:text-zinc-900">Ritorna alla Home</NavLink>
-        <span className="text-zinc-300">/</span>
-        <span className="cursor-pointer hover:text-zinc-900">{product[0].category}</span>
-        <span className="text-zinc-300">/</span>
-        <span className="font-medium text-zinc-900">
+        <NavLink to="/" className="cursor-pointer hover:text-zinc-900 text-white">Ritorna alla Home</NavLink>
+        <span className="text-zinc-300 text-white">/</span>
+        <span className="cursor-pointer hover:text-zinc-900 text-white">{product[0].category}</span>
+        <span className="text-zinc-300 text-white">/</span>
+        <span className="font-medium text-zinc-900 text-white">
           {product[0].name}
         </span>
       </div>
@@ -162,7 +162,7 @@ export default function ProductDetail() {
             <button type="button" className=" w-full  my-2 rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold tracking-wide text-[#06251c] transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99]">
               ACQUISTALO ORA!
             </button>
-            
+
             {/* wishlist */}
             <button
               onClick={() => addToWish({
