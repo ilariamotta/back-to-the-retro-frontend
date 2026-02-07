@@ -8,8 +8,8 @@ export default function AppLayout() {
             <Header />
             {/* contenitore sfondo */}
             <main className="bg-pattern min-h-screen">
-            <Outlet />
-            
+        <Outlet />
+
             <Footer />
             </main>
         </>

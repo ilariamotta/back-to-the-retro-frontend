@@ -157,8 +157,8 @@ export default function CheckoutPage() {
                 {/* TITOLO PAGINA */}
                 <div className="flex flex-wrap items-end justify-between gap-3">
                     <div>
-                        <h1 className="text-3xl font-extrabold tracking-tight text-[#2a2f45]">Checkout</h1>
-                        <p className="mt-1 text-sm text-zinc-600">Inserisci i dati e conferma il tuo ordine.</p>
+                        <h1 className="text-3xl font-extrabold tracking-tight text-[#6320EE] drop-shadow-[0_0_10px_rgba(99,32,238,0.65)]">Checkout</h1>
+                        <p className="mt-1 text-sm text-white">Inserisci i dati e conferma il tuo ordine.</p>
                     </div>
                     <button className="mt-4 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm hover:bg-zinc-50">
                         <NavLink to="/carrello">← Torna al carrello</NavLink>

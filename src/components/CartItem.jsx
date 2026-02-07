@@ -1,5 +1,7 @@
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
+import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
 
 export default function CartItemCard({ item }) {
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
@@ -27,14 +29,18 @@ export default function CartItemCard({ item }) {
                     <p className="truncate text-base font-extrabold text-[#2a2f45]">{item.name}</p>
                     <p className="mt-1 text-lg font-extrabold text-[#6C2BD9]">€ {Number(item.price).toFixed(2)}</p>
                 </div>
-                {/* QUANTITA' */}
-                <div className="flex items-center gap-2">
-                    <button onClick={() => decreaseQuantity(item.slug)}
-                        className="px-2 py-1 rounded-lg bg-[#ffd21f]" > - </button>
-                    <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-bold text-zinc-700"> {item.quantity} </span>
-                    <button onClick={() => increaseQuantity(item.slug)}
-                        disabled={item.quantity >= item.stock}
-                        className="px-2 py-1 rounded-lg bg-[#ffd21f] font-bold" > + </button> </div>
+              {/* QUANTITA' */}
+            <div className="flex items-center">
+            {/* bottone meno */}
+            <button onClick={() => decreaseQuantity(item.slug)} className="h-10 w-10 flex items-center justify-center rounded-l-lg bg-[#ffd21f]" >
+            <FaMinus className="text-xs" /></button>
+            {/* quantità */}
+            <span className="h-10 min-w-10 flex items-center justify-center bg-zinc-100 px-3 text-xs font-bold text-zinc-700">{item.quantity}</span>
+            {/* bottone più */}
+            <button onClick={() => increaseQuantity(item.slug)} disabled={item.quantity >= item.stock}className="h-10 w-10 flex items-center justify-center rounded-r-lg bg-[#ffd21f]">
+            <FaPlus className="text-xs" />
+            </button>
+                </div>
                 {/* Bottone rimuovi */}
                 <button
                     type="button"

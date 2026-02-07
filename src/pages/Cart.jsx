@@ -25,10 +25,10 @@ export default function Cart() {
             {/* HEADER */}
             <div className="flex flex-wrap items-end justify-between gap-3">
                 <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight text-[#2a2f45]">
-                        Carrello
+                    <h1 className="text-3xl font-extrabold tracking-tight text-[#6320EE] drop-shadow-[0_0_10px_rgba(99,32,238,0.65)]">
+                    Carrello
                     </h1>
-                    <p className="mt-1 text-sm text-zinc-600">
+                    <p className="mt-1 text-sm text-white">
                         Riepilogo prodotti nel carrello:
                     </p>
                 </div>
