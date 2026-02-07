@@ -117,7 +117,7 @@ export default function Header() {
     const cartCount = cart.reduce((total, item) => total + item.quantity, 0 || 0);
 
     return (
-        <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950">
+        <header className="sticky top-0 z-50 bg-black">
             <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
                 {/* HEADER ROW */}
                 <div className="flex h-14 items-center">

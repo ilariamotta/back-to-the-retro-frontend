@@ -15,6 +15,7 @@ export default function Footer() {
             <p className="text-xs text-gray">
               Copyright © 2026 Back To The Retro
             </p>
+            <img className="h-20 my-6" src="/images/logo-footer.png" alt="backtoretro" />
           </div>
           <div>
             <h3 className="text-lg font-semibold text-[#ffd21f] mb-4">Links</h3>
