@@ -4,7 +4,7 @@ import axios from "axios";
 import Button from "../components/Button";
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
-import { useWish } from "../context/WhishListContext";
+
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
 
@@ -21,7 +21,8 @@ export default function ProductDetail() {
     setLoading(true);
     axios.get(`${BACKEND}/retro/api/products/${slug}`)
       .then((response) => {
-        console.log(response);
+        console.log('🔍 ProductDetail - Risposta API:', response);
+        console.log('🔍 ProductDetail - Prodotto ricevuto:', response.data.results || response.data.result);
 
         setProduct(response.data.results || response.data.result || null);
       })
@@ -33,11 +34,45 @@ export default function ProductDetail() {
       });
   }, [slug]);
 
-
-
   // Gestione errore caricamento immagine
   const handleImageError = (e) => {
     e.target.src = "/images/placeholder_img.png";
+  };
+
+  const handleAddToCart = () => {
+    if (!product || !product[0]) {
+      console.error('❌ Prodotto non disponibile');
+      return;
+    }
+
+    const finalPrice = product[0].discounted_price !== null
+      ? product[0].price - product[0].discounted_price
+      : product[0].price;
+
+    // 🔍 DEBUG
+    console.log('🔍 ProductDetail - Prodotto da aggiungere:', product[0]);
+    console.log('🔍 ProductDetail - product[0].id:', product[0].id);
+    console.log('🔍 ProductDetail - finalPrice:', finalPrice);
+    console.log('🔍 ProductDetail - finalPrice type:', typeof finalPrice);
+
+    const productToAdd = {
+      id: product[0].id,
+      slug: product[0].slug,
+      name: product[0].name,
+      price: parseFloat(finalPrice), // Converti sempre in numero
+      stock: product[0].stock,
+      cover_image: product[0].cover_image,
+    };
+
+    console.log('🔍 ProductDetail - Oggetto inviato ad addToCart:', productToAdd);
+
+    if (!product[0].id) {
+      console.error('❌ ERRORE: Prodotto senza ID!', product[0]);
+      alert('Errore: Prodotto senza ID. Ricarica la pagina.');
+      return;
+    }
+
+    addToCart(productToAdd);
   };
 
   if (loading) {
@@ -103,7 +138,6 @@ export default function ProductDetail() {
 
             {/* Prezzo */}
             <div className="mt-4 flex flex-wrap items-end gap-3">
-              {/* <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product[0].price}</p> */}
               <p>
                 {/* prezzo originale  */}
                 <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#ffe417] line-through" : "hidden"}>€ {product[0].price}</span><br />
@@ -140,42 +174,25 @@ export default function ProductDetail() {
 
             {/* BOTTONI */}
             {/* carrello */}
-
             <button
               type="button"
               className="w-full my-2 rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold tracking-wide text-[#1a1400] shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)] active:scale-[0.99]"
-              onClick={() => addToCart({
-                id: product[0].id,
-                slug: product[0].slug,
-                name: product[0].name,
-                price: product[0].discounted_price !== null ? product[0].price - product[0].discounted_price : product[0].price,
-                stock: product[0].stock,
-                cover_image: product[0].cover_image,
-              })}
+              onClick={handleAddToCart}
             >
               Aggiungilo al carrello! 🛒
             </button>
-
-
 
             {/*acquista */}
             <button type="button" className=" w-full  my-2 rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold tracking-wide text-[#06251c] transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99]">
               ACQUISTALO ORA!
             </button>
 
-            {/* wishlist */}
+            {/* wishlist - COMING SOON */}
             <button
-              onClick={() => addToWish({
-                id: product[0].id,
-                slug: product[0].slug,
-                name: product[0].name,
-                price: product[0].discounted_price !== null ? product[0].price - product[0].discounted_price : product[0].price,
-                stock: product[0].stock,
-                cover_image: product[0].cover_image,
-              })}
               type="button"
-              className="w-full my-2 rounded-2xl border-2 border-[#FF006E] bg-transparent px-5 py-4 text-sm tracking-wide text-[#FF006E] transition-all duration-300 hover:bg-[#FF006E]/10 hover:shadow-[0_0_20px_rgba(255,0,110,0.45)] hover:scale-[1.02] active:scale-[0.98]">
-              Aggiungilo ai tuoi preferiti ♡
+              disabled
+              className="w-full my-2 rounded-2xl border-2 border-gray-300 bg-gray-100 px-5 py-4 text-sm tracking-wide text-gray-400 cursor-not-allowed">
+              Wishlist - Coming Soon ♡
             </button>
           </div>
         </div>
