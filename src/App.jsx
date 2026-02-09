@@ -13,16 +13,18 @@ import CheckoutPage from './pages/CheckoutPage'
 import SearchPage from './pages/SearchPage'
 import SuccessPage from './pages/SuccessPage'
 import ProductsPage from './pages/ProductsPage'
+import { ToastProvider } from './context/ToastContext'
 import Faq from './pages/Faq'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 
 
 function App() {
   return (
-    <>
+    
       <CartProvider>
         <StripeProvider>
           <BrowserRouter>
+          <ToastProvider>
             <Routes>
               <Route element={<AppLayout />}>
                 <Route element={<Home />} path="/" />
@@ -39,10 +41,10 @@ function App() {
                 <Route element={<PrivacyPolicy />} path='/privacy' />
               </Route>
             </Routes>
+            </ToastProvider>
           </BrowserRouter>
         </StripeProvider>
       </CartProvider>
-    </>
   )
 }
 
