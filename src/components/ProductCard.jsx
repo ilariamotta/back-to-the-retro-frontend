@@ -30,7 +30,7 @@ export default function ProductCard({ product }) {
       id: product.id,
       slug: product.slug,
       name: product.name,
-      price: parseFloat(finalPrice), // Converti sempre in numero
+      price: finalPrice, // Converti sempre in numero
       stock: product.stock,
       cover_image: product.cover_image,
     };
@@ -90,7 +90,7 @@ export default function ProductCard({ product }) {
 
           {/* prezzo finale */}
           <span className={hasDiscount ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>
-            € {finalPrice.toFixed(2)}
+            € {parseFloat(finalPrice).toFixed(2)}
           </span>
 
           {/* BOTTONI: STESSA RIGA SOTTO IL PREZZO */}
