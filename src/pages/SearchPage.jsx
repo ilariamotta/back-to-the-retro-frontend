@@ -19,7 +19,7 @@ export default function SearchPage() {
 
   const [products, setProducts] = useState([]);
   const [query, setQuery] = useState("");
-  
+
 
   useEffect(() => {
     axios
@@ -30,8 +30,8 @@ export default function SearchPage() {
 
   const querySearch = query.trim().toLowerCase();
 
-const filtered = querySearch
-  ? products.filter((product) => {
+  const filtered = querySearch
+    ? products.filter((product) => {
       const name = normalize((product?.name || "").toLowerCase());
       const platform = normalize((product?.platform || product?.platforms || "").toLowerCase());
       const category = normalize((product?.category || "").toLowerCase());
@@ -44,7 +44,7 @@ const filtered = querySearch
         brand.includes(querySearch)
       );
     })
-  : products;
+    : products;
 
   return (
     <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 space-y-6">
@@ -53,15 +53,21 @@ const filtered = querySearch
 
       {/* RISULTATI */}
       <div>
-        <p className="text-xs font-semibold tracking-wider text-[#6C2BD9]">
-          RISULTATI ({filtered.length})
-        </p>
+        {filtered.length === 0 ? (
+          <h1 className="text-xl font-bold text-zinc-500">
+            Nessun prodotto trovato, ci dispiace :\
+          </h1>
+        ) : (
+          <h1 className="text-xl font-bold text-[#6C2BD9]">
+            RISULTATI ({filtered.length})
+          </h1>
+        )}
+      </div>
 
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {filtered.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
       </div>
     </div>
   );

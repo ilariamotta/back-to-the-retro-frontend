@@ -4,7 +4,7 @@ import { IoIosClose } from "react-icons/io";
 export default function SearchGames({ query = "", setQuery }) {
   return (
     <section>
-      <div className="w-full rounded-2xl border border-zinc-200 bg-white p-2 shadow-sm transition focus-within:border-[#00BFFF] focus-within:shadow-[0_0_20px_rgba(0,191,255,0.35)]">
+      <div className="w-full rounded-2xl border border-zinc-200 bg-white p-2 shadow-sm transition focus-within:border-[#6C2BD9] focus-within:shadow-[0_0_20px_rgba(108,43,217,0.35)]">
         <div className="flex items-center gap-2 rounded-xl bg-zinc-50 px-3 py-3">
           <span className="text-zinc-400">
             <FaSearch />
