@@ -7,6 +7,12 @@ export default function AnimationBar() {
     "Passione per il gaming vintage",
     "Solo prodotti originali",
   ];
+
+ function Separator() {
+  return (
+    <span className="mx-6 text-[#FFD21F] opacity-90">✦</span>
+  );
+}
     return (
         <>
         <div className="w-full border-t border-zinc-800 bg-black shadow-sm overflow-hidden">
@@ -17,6 +23,7 @@ export default function AnimationBar() {
           100% { transform: translateX(-50%); }
         }
       `}</style>
+
       {/* STRUTTURA */}
       <div className="relative">
         {/* lati*/}
@@ -25,13 +32,28 @@ export default function AnimationBar() {
 
         {/* track che scorre */}
         <div
-          className="flexwhitespace-nowrap py-3 will-change-transform" style={{animation: "ticker 18s linear infinite",}}
+          className="flex w-full whitespace-nowrap py-3 will-change-transform" style={{animation: "ticker 25s linear infinite",}}
         >
-          {/* contenuto */}
-          <div className="flex items-center gap-8 pr-8">
-            {items.map((text, index) => (
-              <span key={index} className="text-xs font-extrabold tracking-wide text-white">
-                {text}
+           {/* contenuto */}
+          <div className="flex items-center">
+            {items.map((text) => (
+              <span key={text} className="flex items-center">
+                <span className="text-xs font-extrabold tracking-wide text-white/95">
+                  {text}
+                </span>
+                <Separator />
+              </span>
+            ))}
+          </div>
+
+          {/* contenuto duplicato */}
+          <div className="flex items-center" aria-hidden="true">
+            {items.map((text) => (
+              <span key={`${text}`} className="flex items-center">
+                <span className="text-xs font-extrabold tracking-wide text-white/95">
+                  {text}
+                </span>
+                <Separator />
               </span>
             ))}
           </div>
