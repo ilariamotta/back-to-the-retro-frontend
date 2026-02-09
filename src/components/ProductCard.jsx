@@ -102,8 +102,8 @@ export default function ProductCard({ product }) {
                 showToast(
                   `${product.name} è stato aggiunto al carrello!`,
                   {
-                    link: `/products/carrello`,
-                    linkLabel: "Clicca qui per proseguire al carrello"
+                    link: `/carrello`,
+                    linkLabel: "Clicca qui per vedere il carrello!"
                   }
                 );
               }}
