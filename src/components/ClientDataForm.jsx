@@ -14,151 +14,228 @@ export default function ClientDataForm({ onFormChange }) {
     shipping_postal_code: "",
   });
 
-  const handleChange = (e) => {
-    const updatedData = {
-      ...formData,
-      [e.target.name]: e.target.value,
-    };
-    setFormData(updatedData);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
-    // Passa i dati al componente padre ogni volta che cambiano
-    if (onFormChange) {
-      onFormChange(updatedData);
+  const validateField = (name, value) => {
+    const trimmed = value.trim();
+
+    if (!trimmed) return "Campo obbligatorio";
+
+    if (
+      ["client_name", "client_surname", "billing_city", "shipping_city"]
+        .includes(name)
+    ) {
+      if (trimmed.length < 2) return "Minimo 2 caratteri";
+      return "";
     }
+
+    if (["billing_address", "shipping_address"].includes(name)) {
+      if (trimmed.length < 5) return "Indirizzo non valido";
+      return "";
+    }
+
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) return "Email non valida";
+      return "";
+    }
+
+    if (name === "phone_number") {
+      const phoneRegex = /^[\d\s\-\+\(\)]{9,}$/;
+      const cleaned = value.replace(/\s/g, "");
+      if (!phoneRegex.test(cleaned))
+        return "Telefono non valido (minimo 9 cifre)";
+      return "";
+    }
+
+    if (["billing_postal_code", "shipping_postal_code"].includes(name)) {
+      const capRegex = /^\d{5}$/;
+      const cleaned = value.replace(/\s/g, "");
+      if (!capRegex.test(cleaned)) return "CAP non valido (5 cifre)";
+      return "";
+    }
+
+    return "";
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    const updated = { ...formData, [name]: value };
+    setFormData(updated);
+
+    if (touched[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: validateField(name, value),
+      }));
+    }
+
+    onFormChange?.(updated);
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+
+    setTouched((prev) => ({ ...prev, [name]: true }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, value),
+    }));
+  };
+
+  const inputClass = (name) =>
+    `mt-1 w-full border rounded-md p-2 transition-colors ${touched[name] && errors[name]
+      ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500"
+      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+    }`;
+
+  const errorMsg = (name) =>
+    touched[name] && errors[name] && (
+      <p className="mt-1 text-sm text-red-600">❌ {errors[name]}</p>
+    );
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg space-y-6 border">
       <h2 className="text-2xl font-semibold text-gray-800">Informazioni Cliente</h2>
-
-      {/* DATI PERSONALI */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">Nome*</label>
           <input
-            type="text"
             name="client_name"
-            placeholder="Mario"
             value={formData.client_name}
             onChange={handleChange}
-            required
-            className="mt-1 w-full border rounded-md p-2" />
+            onBlur={handleBlur}
+            placeholder="Mario"
+            className={inputClass("client_name")}
+          />
+          {errorMsg("client_name")}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Cognome*</label>
           <input
-            type="text"
             name="client_surname"
-            placeholder="Rossi"
             value={formData.client_surname}
             onChange={handleChange}
-            required
-            className="mt-1 w-full border rounded-md p-2" />
+            onBlur={handleBlur}
+            placeholder="Rossi"
+            className={inputClass("client_surname")}
+          />
+          {errorMsg("client_surname")}
         </div>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">E-mail*</label>
           <input
             type="email"
             name="email"
-            placeholder="mariorossi@gmail.com"
             value={formData.email}
             onChange={handleChange}
-            required
-            className="mt-1 w-full border rounded-md p-2" />
+            onBlur={handleBlur}
+            placeholder="mariorossi@gmail.com"
+            className={inputClass("email")}
+          />
+          {errorMsg("email")}
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Telefono*</label>
           <input
             type="tel"
             name="phone_number"
-            placeholder="345-1234-567"
             value={formData.phone_number}
             onChange={handleChange}
-            required
-            className="mt-1 w-full border rounded-md p-2" />
+            onBlur={handleBlur}
+            placeholder="345-1234-567"
+            className={inputClass("phone_number")}
+          />
+          {errorMsg("phone_number")}
         </div>
       </div>
-
-      {/* INDIRIZZO FATTURAZIONE */}
       <h3 className="text-xl font-semibold text-gray-800">Indirizzo di Fatturazione</h3>
-      <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Indirizzo*</label>
+        <input
+          name="billing_address"
+          type="text"
+          value={formData.billing_address}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder="Via Milano 1"
+          className={inputClass("billing_address")}
+        />
+        {errorMsg("billing_address")}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Indirizzo*</label>
+          <label className="block text-sm font-medium text-gray-700">Città*</label>
           <input
+            name="billing_city"
             type="text"
-            name="billing_address"
-            placeholder="Via Milano 1"
-            value={formData.billing_address}
+            value={formData.billing_city}
             onChange={handleChange}
-            required
-            className="mt-1 w-full border rounded-md p-2" />
+            onBlur={handleBlur}
+            placeholder="Roma"
+            className={inputClass("billing_city")}
+          />
+          {errorMsg("billing_city")}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Città*</label>
-            <input
-              type="text"
-              name="billing_city"
-              placeholder="Roma"
-              value={formData.billing_city}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full border rounded-md p-2" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">CAP*</label>
-            <input
-              type="text"
-              name="billing_postal_code"
-              placeholder="20145"
-              value={formData.billing_postal_code}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full border rounded-md p-2" />
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">CAP*</label>
+          <input
+            name="billing_postal_code"
+            type="number"
+            value={formData.billing_postal_code}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="20145"
+            className={inputClass("billing_postal_code")}
+          />
+          {errorMsg("billing_postal_code")}
         </div>
       </div>
-
-      {/* INDIRIZZO SPEDIZIONE */}
       <h3 className="text-xl font-semibold text-gray-800">Indirizzo di Spedizione</h3>
-      <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Indirizzo*</label>
+        <input
+          name="shipping_address"
+          type="text"
+          value={formData.shipping_address}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder="Via Milano 1"
+          className={inputClass("shipping_address")}
+        />
+        {errorMsg("shipping_address")}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Indirizzo*</label>
+          <label className="block text-sm font-medium text-gray-700">Città*</label>
           <input
+            name="shipping_city"
             type="text"
-            name="shipping_address"
-            placeholder="Via Milano 1"
-            value={formData.shipping_address}
+            value={formData.shipping_city}
             onChange={handleChange}
-            required
-            className="mt-1 w-full border rounded-md p-2" />
+            onBlur={handleBlur}
+            placeholder="Roma"
+            className={inputClass("shipping_city")}
+          />
+          {errorMsg("shipping_city")}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Città*</label>
-            <input
-              type="text"
-              name="shipping_city"
-              placeholder="Roma"
-              value={formData.shipping_city}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full border rounded-md p-2" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">CAP*</label>
-            <input
-              type="text"
-              name="shipping_postal_code"
-              placeholder="20145"
-              value={formData.shipping_postal_code}
-              onChange={handleChange}
-              required
-              className="mt-1 w-full border rounded-md p-2" />
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">CAP*</label>
+          <input
+            name="shipping_postal_code"
+            type="number"
+            value={formData.shipping_postal_code}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="20145"
+            className={inputClass("shipping_postal_code")}
+          />
+          {errorMsg("shipping_postal_code")}
         </div>
       </div>
     </div>
