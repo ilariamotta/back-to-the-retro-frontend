@@ -228,15 +228,15 @@ export default function ClientDataForm({ onFormChange }) {
         </div>
       </div>
 
-      <h3 className="text-xl font-semibold text-gray-800">Indirizzo di Spedizione</h3>
-
       <button
         type="button"
         onClick={copyBillingToShipping}
-        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+        className="px-4 py-2 bg-[#ff006e] text-white rounded-md hover:bg-[#ff006e]/80 transition"
       >
         Usa lo stesso indirizzo per la spedizione
       </button>
+      <h3 className="text-xl font-semibold text-gray-800">Indirizzo di Spedizione</h3>
+
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Indirizzo</label>
