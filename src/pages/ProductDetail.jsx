@@ -3,16 +3,17 @@ import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
+import { useToast } from "../context/ToastContext";
 
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
   const { slug } = useParams();
+  const { showToast } = useToast();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [quantity, setQuantity] = useState(1);
-  const [showPopup, setShowPopup] = useState(false);
 
   const BACKEND = import.meta.env.VITE_BACKEND_URL
     ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
@@ -78,11 +79,14 @@ export default function ProductDetail() {
     };
     addToCart(productToAdd);
     setQuantity(1);
-    if (remainingStock - quantity > 0) {
-      setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 2000);
-    }
+
+    // ✅ sostituisce showPopup
+    showToast(`${product[0].name} aggiunto al carrello!`, {
+      link: "/carrello",
+      linkLabel: "Vai al carrello",
+    });
   };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-center gap-2 text-sm text-white">
@@ -192,11 +196,6 @@ export default function ProductDetail() {
           </div>
         </div>
       </section>
-      {showPopup && (
-        <div className="fixed bottom-6 right-6 bg-[#FFD21F] text-black px-4 py-3 rounded-xl shadow-lg font-bold animate-fade-in">
-          Prodotto aggiunto al carrello! 🛒
-        </div>
-      )}
     </div>
   );
 }
