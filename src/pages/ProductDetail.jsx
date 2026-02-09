@@ -1,108 +1,96 @@
 import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
-import Button from "../components/Button";
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
 
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
-
   const { slug } = useParams();
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [quantity, setQuantity] = useState(1);
+  const [showPopup, setShowPopup] = useState(false);
+
   const BACKEND = import.meta.env.VITE_BACKEND_URL
     ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
     : `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 3000}`;
 
-  useEffect(() => { console.log("Cart updated:", cart); }, [cart]);
-
   useEffect(() => {
     setLoading(true);
-    axios.get(`${BACKEND}/retro/api/products/${slug}`)
+    axios
+      .get(`${BACKEND}/retro/api/products/${slug}`)
       .then((response) => {
-        console.log('🔍 ProductDetail - Risposta API:', response);
-        console.log('🔍 ProductDetail - Prodotto ricevuto:', response.data.results || response.data.result);
-
-        setProduct(response.data.results || response.data.result || null);
+        const data = response.data.results || response.data.result;
+        setProduct(data || null);
       })
-      .catch((error) => {
-        console.error("Errore nel recupero prodotto", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch((error) => console.error("Errore nel recupero prodotto", error))
+      .finally(() => setLoading(false));
   }, [slug]);
 
-  // Gestione errore caricamento immagine
   const handleImageError = (e) => {
     e.target.src = "/images/placeholder_img.png";
   };
 
-  const handleAddToCart = () => {
-    if (!product || !product[0]) {
-      console.error('❌ Prodotto non disponibile');
-      return;
+  if (loading) return <div className="p-6">Loading...</div>;
+  if (!product) return <div className="p-6">Prodotto non trovato</div>;
+
+  const cartItem = cart.find((item) => item.id === product[0].id);
+  const cartQuantity = cartItem ? cartItem.quantity : 0;
+  const remainingStock = product[0].stock - cartQuantity;
+
+  const isOutOfStock = remainingStock <= 0;
+
+  const increaseQuantity = () => {
+    if (quantity < remainingStock) {
+      setQuantity(quantity + 1);
     }
+  };
 
-    const finalPrice = product[0].discounted_price !== null
-      ? product[0].price - product[0].discounted_price
-      : product[0].price;
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
-    // 🔍 DEBUG
-    console.log('🔍 ProductDetail - Prodotto da aggiungere:', product[0]);
-    console.log('🔍 ProductDetail - product[0].id:', product[0].id);
-    console.log('🔍 ProductDetail - finalPrice:', finalPrice);
-    console.log('🔍 ProductDetail - finalPrice type:', typeof finalPrice);
-
+  const handleAddToCart = () => {
+    if (isOutOfStock) return;
+    const finalPrice =
+      product[0].discounted_price !== null
+        ? product[0].price - product[0].discounted_price
+        : product[0].price;
     const productToAdd = {
       id: product[0].id,
       slug: product[0].slug,
       name: product[0].name,
-      price: parseFloat(finalPrice), // Converti sempre in numero
+      price: parseFloat(finalPrice),
       stock: product[0].stock,
       cover_image: product[0].cover_image,
+      quantity: quantity,
     };
-
-    console.log('🔍 ProductDetail - Oggetto inviato ad addToCart:', productToAdd);
-
-    if (!product[0].id) {
-      console.error('❌ ERRORE: Prodotto senza ID!', product[0]);
-      alert('Errore: Prodotto senza ID. Ricarica la pagina.');
-      return;
-    }
-
     addToCart(productToAdd);
+    setQuantity(1);
+    if (remainingStock - quantity > 0) {
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 2000);
+    }
   };
-
-  if (loading) {
-    return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Loading...</div>;
-  }
-
-  if (!product) {
-    return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Prodotto non trovato</div>;
-  }
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      {/* DETTAGLI PAGINA */}
-      <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-        <NavLink to="/" className="cursor-pointer hover:text-zinc-900 text-white">Ritorna alla Home</NavLink>
-        <span className="text-zinc-300 text-white">/</span>
-        <span className="cursor-pointer hover:text-zinc-900 text-white">{product[0].category}</span>
-        <span className="text-zinc-300 text-white">/</span>
-        <span className="font-medium text-zinc-900 text-white">
-          {product[0].name}
-        </span>
+      <div className="flex flex-wrap items-center gap-2 text-sm text-white">
+        <NavLink to="/" className="hover:text-zinc-300">Ritorna alla Home</NavLink>
+        <span>/</span>
+        <span>{product[0].category}</span>
+        <span>/</span>
+        <span className="font-medium">{product[0].name}</span>
       </div>
-
-      {/* LAYOUT PAGINA */}
       <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
-        {/* IMMAGINI */}
+        {/* IMAGE */}
         <div className="lg:col-span-7">
-          <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-            {/* Immagine principale */}
-            <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
+          <div className="rounded-2xl border bg-white p-4 shadow-sm">
+            <div className="overflow-hidden rounded-2xl border bg-zinc-100">
               <img
                 src={getProductImageUrl(product[0].cover_image)}
                 alt={product[0].name}
@@ -110,93 +98,78 @@ export default function ProductDetail() {
                 onError={handleImageError}
               />
             </div>
-
-            {/* IMMAGINI SOTTO */}
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
-                <img
-                  src={getProductImageUrl(product[0].cover_image)}
-                  alt={product[0].name}
-                  className="aspect-[4/3] w-full object-cover"
-                  onError={handleImageError}
-                />
-              </div>
-              <div className="flex items-center justify-center rounded-2xl border border-dashed border-zinc-300 bg-white text-sm text-zinc-500">
-                Slot immagine
-              </div>
-            </div>
           </div>
         </div>
-
-        {/* DETTAGLI PRODOTTO */}
+        {/* DETAILS */}
         <div className="lg:col-span-5">
-          <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-            {/* Titolo */}
-            <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#2a2f45]">
+          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <h1 className="mt-2 text-3xl font-extrabold text-[#2a2f45]">
               {product[0].name}
             </h1>
-
-            {/* Prezzo */}
-            <div className="mt-4 flex flex-wrap items-end gap-3">
-              <p>
-                {/* prezzo originale  */}
-                <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#ffe417] line-through" : "hidden"}>€ {product[0].price}</span><br />
-
-                <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>€ {product[0].price - product[0].discounted_price}</span>
-              </p>
+            {/* PRICE */}
+            <div className="mt-4">
+              {product[0].discounted_price !== null && (
+                <span className="text-lg font-bold text-[#ffe417] line-through">
+                  € {product[0].price}
+                </span>
+              )}
+              <br />
+              <span className="text-lg font-bold text-[#fe0000]">
+                € {product[0].price - product[0].discounted_price}
+              </span>
             </div>
-
-            {/* Stock */}
+            {/* STOCK */}
             <div className="mt-4 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-[#00D084]" />
               <p className="text-sm font-semibold text-[#00D084]">
-                {product[0].stock} in stock
+                {remainingStock} disponibili
               </p>
             </div>
-
-            {/* Descrizione */}
-            <p className="mt-4 text-sm leading-relaxed text-zinc-600">
-              {product[0].description}
-            </p>
-            <p className="">Stato: <span className="">{product[0].state}</span></p>
-            <p>{product[0].state_description}</p>
-            {/* Altre info */}
-            <div className="mt-4 grid grid-cols-2 gap-3 text-sm my-4">
-              <div className="rounded-xl border bg-zinc-50 px-3 py-2">
-                <p className="text-xs text-zinc-500">Piattaforma</p>
-                <p className="font-semibold text-zinc-900">{product[0].platform}</p>
-              </div>
-              <div className="rounded-xl border bg-zinc-50 px-3 py-2">
-                <p className="text-xs text-zinc-500">Brand</p>
-                <p className="font-semibold text-zinc-900">{product[0].brand}</p>
-              </div>
+           {/* DESCRIPTION */}
+            <p className="mt-4 text-sm text-zinc-600">{product[0].description}</p>
+            {/* QUANTITY SELECTOR */}
+            <div className="flex items-center my-4">
+              <button
+                onClick={decreaseQuantity}
+                disabled={quantity <= 1}
+                className={`h-10 w-10 flex items-center justify-center rounded-l-lg font-bold text-lg
+                  ${quantity <= 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}
+              >
+                -
+              </button>
+              <span className="h-10 min-w-10 flex items-center justify-center bg-zinc-100 px-3 text-xs font-bold text-zinc-700">
+                {quantity}
+              </span>
+              <button
+                onClick={increaseQuantity}
+                disabled={quantity >= remainingStock}
+                className={`h-10 w-10 flex items-center justify-center rounded-r-lg font-bold text-lg
+                  ${quantity >= remainingStock ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}
+              >
+                +
+              </button>
             </div>
-
-            {/* BOTTONI */}
-            {/* carrello */}
             <button
               type="button"
-              className="w-full my-2 rounded-2xl bg-[#FFD21F] px-5 py-4 text-sm font-extrabold tracking-wide text-[#1a1400] shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)] active:scale-[0.99]"
+              disabled={isOutOfStock}
               onClick={handleAddToCart}
+              className={`w-full my-2 rounded-2xl px-5 py-4 text-sm font-extrabold tracking-wide shadow-sm transition-all duration-300 active:scale-[0.99]
+                ${isOutOfStock
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-[#FFD21F] text-[#1a1400] hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)]"
+                }`}
             >
-              Aggiungilo al carrello! 🛒
+              {isOutOfStock ? "Non disponibile" : "Aggiungilo al carrello! 🛒"}
             </button>
 
-            {/*acquista */}
-            <button type="button" className=" w-full  my-2 rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold tracking-wide text-[#06251c] transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] active:scale-[0.99]">
-              ACQUISTALO ORA!
-            </button>
-
-            {/* wishlist - COMING SOON */}
-            <button
-              type="button"
-              disabled
-              className="w-full my-2 rounded-2xl border-2 border-gray-300 bg-gray-100 px-5 py-4 text-sm tracking-wide text-gray-400 cursor-not-allowed">
-              Wishlist - Coming Soon ♡
-            </button>
           </div>
         </div>
       </section>
+      {showPopup && (
+        <div className="fixed bottom-6 right-6 bg-[#FFD21F] text-black px-4 py-3 rounded-xl shadow-lg font-bold animate-fade-in">
+          Prodotto aggiunto al carrello! 🛒
+        </div>
+      )}
     </div>
   );
 }
