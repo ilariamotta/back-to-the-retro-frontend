@@ -29,8 +29,6 @@ export default function ProductCard({ product }) {
       cover_image: product.cover_image,
     };
 
-    console.log('🔍 ProductCard - Oggetto inviato ad addToCart:', productToAdd);
-
     if (!product.id) {
       console.error('❌ ERRORE: Prodotto senza ID!', product);
       alert('Errore: Prodotto senza ID. Ricarica la pagina.');
