@@ -9,7 +9,7 @@ export default function ProductsPage() {
         ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
         : "http://localhost:3000";
     const [products, setProducts] = useState([]);
-
+    const [brands, setBrands] = useState("")
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(400);
 
@@ -22,7 +22,16 @@ export default function ProductsPage() {
     }, [min, max])
 
 
-
+    function updateForm(event) {
+        event.preventDefault();
+        if(brands === "" || isNaN(brands)){
+            console.log(brands)
+        }
+        axios.get(`${BACKEND}/retro/api/products?brand=${brands}`).then((resp)=>{
+            const risposta = resp.data.results
+            setProducts(risposta)
+        })
+    }
 
     return (
         <>
@@ -44,20 +53,28 @@ export default function ProductsPage() {
                                 type="number"
                                 name="minimo"
                                 className="mb-2 rounded-xl border border-[#6320EE]/70 py-2 px-2 text-xs font-semibold text-[#6320EE] bg-transparent transition-all duration-300 hover:border-[#6320EE] hover:bg-[#6320EE]/10 hover:shadow-[0_0_16px_rgba(99,32,238,0.45)] hover:scale-[1.04] active:scale-[0.97]"
-                                onChange={(event) => { setMin(parseInt(event.target.value) < 0 ? 0 : parseInt(event.target.value)) }} />
+                                onChange={(event) => { setMin(parseInt(event.target.value) < 0 ? 0 : parseInt(event.target.value)) }}
+                            />
                             <input
                                 placeholder="MAX"
                                 id="minPrice"
                                 type="number"
                                 name="massimo"
                                 className="rounded-xl border border-[#6320EE]/70 py-2 px-2 text-xs font-semibold text-[#6320EE] bg-transparent transition-all duration-300 hover:border-[#6320EE] hover:bg-[#6320EE]/10 hover:shadow-[0_0_16px_rgba(99,32,238,0.45)] hover:scale-[1.04] active:scale-[0.97]"
-                                onChange={(event) => setMax(parseInt(event.target.value) < 0 ? 400 : parseInt(event.target.value))} />
-
-
-
+                                onChange={(event) => setMax(parseInt(event.target.value) < 0 ? 400 : parseInt(event.target.value))}
+                            />
                         </div>
                         <div className="flex flex-col">
                             <h2 className="text-3xl font-bold text-start text-[#ff006e] mb-3 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">Seleziona il tuo brand preferito</h2>
+                            <form onSubmit={updateForm}>
+                                <input
+                                    placeholder="Es: Nintendo"
+                                    className="rounded-xl border border-[#6320EE]/70 py-2 px-2 text-xs font-semibold text-[#6320EE] bg-transparent transition-all duration-300 hover:border-[#6320EE] hover:bg-[#6320EE]/10 hover:shadow-[0_0_16px_rgba(99,32,238,0.45)] hover:scale-[1.04] active:scale-[0.97]"
+                                    type="text"
+                                    onChange={(event) => setBrands(event.target.value)}
+                                />
+                                <button type="submit" className="ms-2 relative rounded-xl border border-[#00D084]/70 px-4 py-2 text-xs font-semibold text-[#00D084] bg-transparent transition-all duration-300 ease-out hover:border-[#00D084] hover:bg-[#00D084]/10 hover:shadow-[0_0_16px_rgba(0,208,132,0.45)] hover:scale-[1.04] active:scale-[0.97]">INVIA</button>
+                            </form>
                         </div>
 
 
