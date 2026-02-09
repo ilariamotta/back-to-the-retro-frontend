@@ -2,13 +2,23 @@ import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
+import { useToast } from "../context/ToastContext";
 
 export default function CartItemCard({ item }) {
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
+    const { showToast } = useToast();
 
     // Gestione errore caricamento immagine
     const handleImageError = (e) => {
         e.target.src = "/images/placeholder_img.png";
+    };
+
+    // Mostra solo il toast (la rimozione verrà chiamata separatamente)
+    const handleRemove = () => {
+        showToast(`${item.name} rimosso dal carrello`, {
+            link: "/products/" + item.slug,
+            linkLabel: "Vuoi rivedere il prodotto?",
+        });
     };
 
     return (
@@ -59,7 +69,8 @@ export default function CartItemCard({ item }) {
                     hover:shadow-[0_0_16px_rgba(255,0,110,0.35)]
                     active:scale-[0.99]
                     "
-                    onClick={() => removeFromCart(item.slug)}>
+                    onClick={() => { removeFromCart(item.slug); handleRemove(); }}
+                >
                     Rimuovi
                 </button>
             </div>
