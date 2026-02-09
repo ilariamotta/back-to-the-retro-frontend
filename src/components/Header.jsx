@@ -13,8 +13,8 @@ const navLinks = [
     { title: "Prodotti", path: "/products" },
     // { title: "Prodotti", path: "/products" },
     {
-        title: "Categorie",
-        path: "/categories",
+        title: "Videogiochi",
+        path: "/categories/videogames",
         // dropdown: [
         //     { title: "Videogiochi", path: "/categories/videogames" },
         //     { title: "Console", path: "/categories/consoles" },
@@ -22,8 +22,8 @@ const navLinks = [
         // ],
     },
     {
-        title: "Brand",
-        path: "/brands",
+        title: "Console",
+        path: "/categories/consoles",
         // dropdown: [
         //     { title: "Nintendo", path: "/brands/nintendo" },
         //     { title: "Sony", path: "/brands/sony" },
@@ -31,8 +31,8 @@ const navLinks = [
         // ],
     },
     {
-        title: "Piattaforma",
-        path: "/platforms",
+        title: "Accessori",
+        path: "/categories/accessories",
         // dropdown: [
         //     { title: "PC", path: "/platforms/pc" },
         //     { title: "PlayStation", path: "/platforms/playstation" },
