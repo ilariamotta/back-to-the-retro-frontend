@@ -8,8 +8,8 @@ import ProductCard from "../components/ProductCard";
 function normalize(text = "") {
   return String(text)
     .toLowerCase()
-    .normalize("NFD")                 // separa lettere e accenti
-    .replace(/[\u0300-\u036f]/g, "")  // rimuove accenti
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .trim();
 }
 

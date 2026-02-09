@@ -5,8 +5,8 @@ import StripePaymentForm from "../components/StripePaymentForm";
 import { useEffect, useState } from "react";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import axios from "axios";
 
-// Carica Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export default function CheckoutPage() {
@@ -19,7 +19,6 @@ export default function CheckoutPage() {
     const [clientSecret, setClientSecret] = useState(null);
     const [showPaymentForm, setShowPaymentForm] = useState(false);
 
-    // 🔍 DEBUG: Verifica carrello all'inizio
     useEffect(() => {
         console.log('🛒 CheckoutPage - CARRELLO CARICATO:', cart);
         cart.forEach((item, index) => {
@@ -56,9 +55,9 @@ export default function CheckoutPage() {
         setClientData(formData);
     };
 
-    const handleConfirmOrder = async () => {
+    const handleConfirmOrder = () => {
         if (!clientData) {
-            alert("⚠️ Compila tutti i campi del form prima di procedere!");
+            alert("Compila tutti i campi del form prima di procedere!");
             return;
         }
 
@@ -70,27 +69,28 @@ export default function CheckoutPage() {
 
         const missingFields = requiredFields.filter(field => !clientData[field]);
         if (missingFields.length > 0) {
-            alert("⚠️ Compila tutti i campi obbligatori!");
+            alert("Compila tutti i campi obbligatori!");
             return;
         }
 
         if (cart.length === 0) {
-            alert("⚠️ Il carrello è vuoto!");
+            alert("Il carrello è vuoto!");
             return;
         }
 
         setIsLoading(true);
 
+        console.log("Creazione Payment Intent...");
+        console.log("Carrello prima del mapping:", cart);
+
+        const BACKEND = import.meta.env.VITE_BACKEND_URL
+            ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
+            : "http://localhost:3000";
+
+        // Prepare cart
+        let cartForPayment;
         try {
-            console.log("📦 Creazione Payment Intent...");
-            console.log("🛒 Carrello prima del mapping:", cart);
-
-            const BACKEND = import.meta.env.VITE_BACKEND_URL
-                ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
-                : "http://localhost:3000";
-
-            // Prepara il carrello con verifica ID
-            const cartForPayment = cart.map((item, index) => {
+            cartForPayment = cart.map((item, index) => {
                 const productId = item.id || item.product_id;
 
                 if (!productId) {
@@ -106,38 +106,39 @@ export default function CheckoutPage() {
                     unit_price: Math.round(item.price * 100)
                 };
             });
-
-            console.log("📋 Carrello mappato per payment intent:", cartForPayment);
-
-            // Chiama la nuova route per creare payment intent
-            const response = await fetch(`${BACKEND}/retro/api/orders/create-payment-intent`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cart: cartForPayment,
-                    shipping_price: shippingCost
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.clientSecret) {
-                console.log("✅ Payment Intent creato:", data.paymentIntentId);
-                setClientSecret(data.clientSecret);
-                setShowPaymentForm(true);
-            } else {
-                console.error("❌ Errore dal backend:", data);
-                alert(`❌ Errore: ${data.error || 'Errore sconosciuto'}`);
-            }
-
-        } catch (error) {
-            console.error("❌ Errore durante la creazione del pagamento:", error);
-            alert(`❌ ${error.message || 'Errore di connessione. Verifica che il backend sia avviato e riprova.'}`);
-        } finally {
+        } catch (err) {
             setIsLoading(false);
+            alert(`❌ ${err.message}`);
+            return;
         }
+
+        console.log("📋 Carrello mappato per payment intent:", cartForPayment);
+
+        axios.post(`${BACKEND}/retro/api/orders/create-payment-intent`, {
+            cart: cartForPayment,
+            shipping_price: shippingCost
+        }, {
+            headers: { "Content-Type": "application/json" }
+        })
+            .then((response) => {
+                const data = response.data;
+
+                if (data.clientSecret) {
+                    console.log("✅ Payment Intent creato:", data.paymentIntentId);
+                    setClientSecret(data.clientSecret);
+                    setShowPaymentForm(true);
+                } else {
+                    console.error("❌ Errore dal backend:", data);
+                    alert(`❌ Errore: ${data.error || 'Errore sconosciuto'}`);
+                }
+            })
+            .catch((error) => {
+                console.error("❌ Errore durante la creazione del pagamento:", error);
+                alert(`❌ ${error.message || 'Errore di connessione. Verifica che il backend sia avviato e riprova.'}`);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const handlePaymentSuccess = (paymentIntent) => {
@@ -152,7 +153,6 @@ export default function CheckoutPage() {
         alert(`❌ Errore nel pagamento: ${errorMessage}`);
     };
 
-    // Check if all required fields are filled
     const isFormComplete = () => {
         if (!clientData) return false;
 
@@ -167,9 +167,9 @@ export default function CheckoutPage() {
 
     return (
         <>
-            {/* CONTAINER */}
             <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                {/* TITOLO PAGINA */}
+
+                {/* HEADER */}
                 <div className="flex flex-wrap items-end justify-between gap-3">
                     <div>
                         <h1 className="text-3xl font-extrabold tracking-tight text-[#6320EE] drop-shadow-[0_0_10px_rgba(99,32,238,0.65)]">Checkout</h1>
@@ -180,7 +180,7 @@ export default function CheckoutPage() {
                     </button>
                 </div>
 
-                {/* SHOW PAYMENT FORM IF CLIENT SECRET EXISTS */}
+                {/* PAYMENT FORM */}
                 {showPaymentForm && clientSecret ? (
                     <section className="mt-6">
                         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm max-w-2xl mx-auto">
@@ -188,7 +188,7 @@ export default function CheckoutPage() {
                                 💳 Completa il Pagamento
                             </h2>
 
-                            {console.log('🔍 Passaggio carrello a StripePaymentForm:', cart)}
+                            {console.log('Passaggio carrello a StripePaymentForm:', cart)}
 
                             <Elements stripe={stripePromise} options={{ clientSecret }}>
                                 <StripePaymentForm
@@ -208,7 +208,7 @@ export default function CheckoutPage() {
                                 ← Torna ai dati
                             </button>
 
-                            {/* RIEPILOGO A LATO */}
+                            {/* SUMMARY */}
                             <div className="mt-6 rounded-2xl bg-zinc-50 p-4">
                                 <h3 className="font-semibold text-zinc-900 mb-3">Riepilogo Ordine</h3>
 
@@ -216,7 +216,7 @@ export default function CheckoutPage() {
                                     {cart.map(item => (
                                         <div key={item.slug} className="flex justify-between text-sm">
                                             <span className="text-zinc-600">
-                                                {item.name} × {item.quantity}
+                                                {item.name} x {item.quantity}
                                             </span>
                                             <span className="font-medium">
                                                 €{(item.price * item.quantity).toFixed(2)}
@@ -249,8 +249,10 @@ export default function CheckoutPage() {
                         </div>
                     </section>
                 ) : (
-                    /* ORIGINAL CHECKOUT FORM LAYOUT */
+
+                    /* ORIGINAL CHECKOUT FORM */
                     <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
+
                         {/* FORM */}
                         <div className="lg:col-span-8">
                             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
@@ -259,24 +261,23 @@ export default function CheckoutPage() {
                                         Dati di spedizione
                                     </h2>
                                 </div>
-                                {/* CHECKOUT FORM - Passa la funzione handleFormChange */}
+
                                 <ClientDataForm onFormChange={handleFormChange} />
                             </div>
                         </div>
 
-                        {/* RIEPILOGO */}
+                        {/* SUMMARY */}
                         <div className="lg:col-span-4">
                             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                                 <h2 className="text-lg font-semibold text-zinc-900">
                                     Riepilogo ordine
                                 </h2>
 
-                                {/* PRODOTTI NEL CARRELLO */}
                                 <div className="mt-4 space-y-2">
                                     {cart.map(item => (
                                         <div key={item.slug} className="flex justify-between text-sm">
                                             <span className="text-zinc-600">
-                                                {item.name} × {item.quantity}
+                                                {item.name} x {item.quantity}
                                             </span>
                                             <span className="font-medium">
                                                 €{(item.price * item.quantity).toFixed(2)}
@@ -285,7 +286,6 @@ export default function CheckoutPage() {
                                     ))}
                                 </div>
 
-                                {/* RIGHE CALCOLI */}
                                 <div className="mt-4 space-y-3 text-sm border-t pt-4">
                                     <div className="flex justify-between">
                                         <span className="text-zinc-600">Subtotale</span>
@@ -307,7 +307,6 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
 
-                                {/* BOTTONE CONFERMA ORDINE */}
                                 <div className="mt-6 space-y-3">
                                     <button
                                         type="button"
@@ -325,20 +324,22 @@ export default function CheckoutPage() {
                                             }
                                         `}
                                     >
-                                        {isLoading ? '⏳ Caricamento...' : !isFormComplete() ? '⚠️ Completa il form' : '💳 Procedi al pagamento'}
+                                        {isLoading
+                                            ? '⏳ Caricamento...'
+                                            : !isFormComplete()
+                                                ? '⚠️ Completa il form'
+                                                : '💳 Procedi al pagamento'}
                                     </button>
                                 </div>
 
-                                {/* INFO SPEDIZIONE GRATUITA */}
                                 {totalAmount - shippingCost > 100 && (
                                     <div className="mt-4 rounded-2xl bg-green-50 p-4 text-xs text-green-800">
                                         <p className="font-semibold">🎉 Hai ottenuto la spedizione gratuita!</p>
                                     </div>
                                 )}
 
-                                {/* NOTE */}
                                 <div className="mt-6 rounded-2xl bg-zinc-50 p-4 text-xs text-zinc-600">
-                                    <p className="font-semibold mb-1">📧 Dopo l'ordine:</p>
+                                    <p className="font-semibold mb-1">Dopo l'ordine:</p>
                                     <p className="mt-1">
                                         Riceverai una email di conferma con tutti i dettagli dell'ordine.
                                     </p>
