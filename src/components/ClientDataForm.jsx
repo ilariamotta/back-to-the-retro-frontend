@@ -86,10 +86,38 @@ export default function ClientDataForm({ onFormChange }) {
     }));
   };
 
+  const copyBillingToShipping = () => {
+    const updated = {
+      ...formData,
+      shipping_address: formData.billing_address,
+      shipping_city: formData.billing_city,
+      shipping_postal_code: formData.billing_postal_code,
+    };
+
+    setFormData(updated);
+
+    setTouched((prev) => ({
+      ...prev,
+      shipping_address: true,
+      shipping_city: true,
+      shipping_postal_code: true,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      shipping_address: validateField("shipping_address", updated.shipping_address),
+      shipping_city: validateField("shipping_city", updated.shipping_city),
+      shipping_postal_code: validateField("shipping_postal_code", updated.shipping_postal_code),
+    }));
+
+    onFormChange?.(updated);
+  };
+
   const inputClass = (name) =>
-    `mt-1 w-full border rounded-md p-2 transition-colors ${touched[name] && errors[name]
-      ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500"
-      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+    `mt-1 w-full border rounded-md p-2 transition-colors ${
+      touched[name] && errors[name]
+        ? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500"
+        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
     }`;
 
   const errorMsg = (name) =>
@@ -99,10 +127,11 @@ export default function ClientDataForm({ onFormChange }) {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg space-y-6 border">
-      <h2 className="text-2xl font-semibold text-gray-800">Informazioni Cliente</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-0">Informazioni Cliente</h2>
+      <p className="text-sm text-gray-500 mt-0">Tutti i campi sono obbligatori</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Nome*</label>
+          <label className="block text-sm font-medium text-gray-700">Nome</label>
           <input
             name="client_name"
             value={formData.client_name}
@@ -114,7 +143,7 @@ export default function ClientDataForm({ onFormChange }) {
           {errorMsg("client_name")}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Cognome*</label>
+          <label className="block text-sm font-medium text-gray-700">Cognome</label>
           <input
             name="client_surname"
             value={formData.client_surname}
@@ -128,7 +157,7 @@ export default function ClientDataForm({ onFormChange }) {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">E-mail*</label>
+          <label className="block text-sm font-medium text-gray-700">E-mail</label>
           <input
             type="email"
             name="email"
@@ -141,7 +170,7 @@ export default function ClientDataForm({ onFormChange }) {
           {errorMsg("email")}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Telefono*</label>
+          <label className="block text-sm font-medium text-gray-700">Telefono</label>
           <input
             type="tel"
             name="phone_number"
@@ -156,7 +185,7 @@ export default function ClientDataForm({ onFormChange }) {
       </div>
       <h3 className="text-xl font-semibold text-gray-800">Indirizzo di Fatturazione</h3>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Indirizzo*</label>
+        <label className="block text-sm font-medium text-gray-700">Indirizzo</label>
         <input
           name="billing_address"
           type="text"
@@ -168,9 +197,10 @@ export default function ClientDataForm({ onFormChange }) {
         />
         {errorMsg("billing_address")}
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Città*</label>
+          <label className="block text-sm font-medium text-gray-700">Città</label>
           <input
             name="billing_city"
             type="text"
@@ -182,8 +212,9 @@ export default function ClientDataForm({ onFormChange }) {
           />
           {errorMsg("billing_city")}
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-gray-700">CAP*</label>
+          <label className="block text-sm font-medium text-gray-700">CAP</label>
           <input
             name="billing_postal_code"
             type="number"
@@ -196,9 +227,19 @@ export default function ClientDataForm({ onFormChange }) {
           {errorMsg("billing_postal_code")}
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={copyBillingToShipping}
+        className="px-4 py-2 bg-[#ff006e] text-white rounded-md hover:bg-[#ff006e]/80 transition"
+      >
+        Usa lo stesso indirizzo per la spedizione
+      </button>
       <h3 className="text-xl font-semibold text-gray-800">Indirizzo di Spedizione</h3>
+
+
       <div>
-        <label className="block text-sm font-medium text-gray-700">Indirizzo*</label>
+        <label className="block text-sm font-medium text-gray-700">Indirizzo</label>
         <input
           name="shipping_address"
           type="text"
@@ -210,9 +251,10 @@ export default function ClientDataForm({ onFormChange }) {
         />
         {errorMsg("shipping_address")}
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Città*</label>
+          <label className="block text-sm font-medium text-gray-700">Città</label>
           <input
             name="shipping_city"
             type="text"
@@ -224,8 +266,9 @@ export default function ClientDataForm({ onFormChange }) {
           />
           {errorMsg("shipping_city")}
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-gray-700">CAP*</label>
+          <label className="block text-sm font-medium text-gray-700">CAP</label>
           <input
             name="shipping_postal_code"
             type="number"
