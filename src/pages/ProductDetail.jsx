@@ -47,6 +47,9 @@ export default function ProductDetail() {
   if (!product) {
     return <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">Prodotto non trovato</div>;
   }
+  const prezzo = Number(product[0].price); // prezzo normale
+  const sconto = Number(product[0].discounted_price || 0); // sconto (0 se null)
+  const prezzoScontato = prezzo - sconto; // prezzo finale
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -106,9 +109,31 @@ export default function ProductDetail() {
               {/* <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product[0].price}</p> */}
               <p>
                 {/* prezzo originale  */}
-                <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#ffe417] line-through" : "hidden"}>€ {product[0].price}</span><br />
+                <p>
+                  {/* prezzo originale */}
+                  <span
+                    className={
+                      product[0].discounted_price !== null
+                        ? "text-lg font-bold text-[#ffe417] line-through"
+                        : "hidden"
+                    }
+                  >
+                    € {prezzo.toFixed(2)}
+                  </span>
+                  <br />
 
-                <span className={product[0].discounted_price !== null ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>€ {product[0].price - product[0].discounted_price}</span>
+                  {/* prezzo scontato (o normale se non c'è sconto) */}
+                  <span
+                    className={
+                      product[0].discounted_price !== null
+                        ? "text-lg font-bold text-[#fe0000]"
+                        : "text-lg font-bold text-[#ffe417]"
+                    }
+                  >
+                    € {prezzoScontato.toFixed(2)}
+                  </span>
+                </p>
+
               </p>
             </div>
 

@@ -63,7 +63,7 @@ export default function ProductCard({ product }) {
 
           {/* prezzo finale */}
           <span className={hasDiscount ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>
-            € {finalPrice}
+            € {finalPrice.toFixed(2)}
           </span>
 
           {/* BOTTONI: STESSA RIGA SOTTO IL PREZZO */}
