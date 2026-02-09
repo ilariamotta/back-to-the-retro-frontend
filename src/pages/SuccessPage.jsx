@@ -20,37 +20,25 @@ export default function SuccessPage() {
     const paymentId = paymentIntent?.id;
     const paymentStatus = paymentIntent?.status;
     const amount = paymentIntent?.amount;
+    const cart = orderData?.cart || [];
+    const shippingCost = orderData?.shippingCost || 0;
+    const subtotal = totalAmount ? totalAmount - shippingCost : 0;
 
     return (
         <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-center min-h-[60vh]">
-
-                {/* SUCCESS BADGE */}
-                <div className="mb-8">
-                    <div className="relative flex items-center justify-center">
-                        <div className="absolute inset-0 bg-green-400/40 blur-2xl rounded-full"></div>
-                        <div className="relative bg-green-500 text-white rounded-full p-5 shadow-xl text-5xl font-bold">
-                            ✓
-                        </div>
-                    </div>
-                </div>
-
-                {/* TITLE */}
-                <h1 className="text-4xl font-extrabold text-[#ff006e] mb-3 tracking-tight">
+                <h1 className="text-4xl font-extrabold text-[#ff006e] drop-shadow-[0_0_8px_rgba(255,0,110,0.75)] mb-3 tracking-tight">
                     Pagamento completato
                 </h1>
                 <p className="text-lg text-[#ffd21f] mb-10 max-w-xl text-center">
                     Grazie per il tuo acquisto! Il tuo ordine è stato confermato e riceverai una email con tutti i dettagli.
                 </p>
-
-                {/* ORDER DETAILS CARD */}
                 {orderData ? (
-                    <div className="bg-white shadow-xl border border-zinc-200 rounded-2xl p-8 mb-10 w-full max-w-md">
+                    <div className="bg-white shadow-xl border border-zinc-200 rounded-2xl p-8 mb-10 w-full max-w-2xl">
                         <h2 className="text-xl font-semibold text-[#2a2f45] mb-6">
                             Dettagli dell'ordine
                         </h2>
-
-                        <div className="space-y-5">
+                        <div className="space-y-5 mb-6 pb-6 border-b border-zinc-200">
                             {paymentId && (
                                 <div>
                                     <p className="text-sm text-zinc-500">ID Pagamento</p>
@@ -59,7 +47,6 @@ export default function SuccessPage() {
                                     </p>
                                 </div>
                             )}
-
                             {paymentStatus && (
                                 <div>
                                     <p className="text-sm text-zinc-500">Stato</p>
@@ -68,7 +55,6 @@ export default function SuccessPage() {
                                     </p>
                                 </div>
                             )}
-
                             {(amount || totalAmount) && (
                                 <div>
                                     <p className="text-sm text-zinc-500">Importo</p>
@@ -78,11 +64,45 @@ export default function SuccessPage() {
                                 </div>
                             )}
                         </div>
+                        {cart && cart.length > 0 && (
+                            <div>
+                                <h3 className="text-lg font-semibold text-[#2a2f45] mb-4">
+                                    Riepilogo ordine
+                                </h3>
+                                <div className="space-y-3 mb-6 pb-6 border-b border-zinc-200">
+                                    {cart.map((item) => (
+                                        <div key={item.slug} className="flex justify-between items-center">
+                                            <div>
+                                                <p className="font-medium text-[#2a2f45]">{item.name}</p>
+                                                <p className="text-sm text-zinc-600">Quantità: {item.quantity}</p>
+                                            </div>
+                                            <p className="font-semibold text-[#2a2f45]">
+                                                €{(item.price * item.quantity).toFixed(2)}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between text-zinc-600">
+                                        <span>Subtotale</span>
+                                        <span>€{subtotal.toFixed(2)}</span>
+                                    </div>
+                                    <div className="flex justify-between text-zinc-600">
+                                        <span>Spedizione</span>
+                                        <span>{shippingCost === 0 ? 'GRATIS' : `€${shippingCost.toFixed(2)}`}</span>
+                                    </div>
+                                    <div className="flex justify-between text-lg font-bold text-[#2a2f45] pt-3 border-t border-zinc-200">
+                                        <span>Totale</span>
+                                        <span className="text-[#6C2BD9]">€{totalAmount?.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 mb-10 max-w-md w-full">
                         <p className="text-sm text-yellow-800">
-                        Caricamento dettagli ordine... Verrai reindirizzato tra pochi secondi.
+                            Caricamento dettagli ordine, verrai reindirizzato tra pochi secondi.
                         </p>
                     </div>
                 )}
@@ -93,14 +113,14 @@ export default function SuccessPage() {
                         onClick={() => navigate('/')}
                         className="px-6 py-3 bg-[#ff006e] text-white font-semibold rounded-2xl shadow-md hover:brightness-110 transition-all"
                     >
-                    Torna alla home
+                        Torna alla home
                     </button>
 
                     <button
                         onClick={() => navigate('/products')}
                         className="px-6 py-3 bg-white border border-zinc-300 text-zinc-900 font-semibold rounded-2xl shadow-sm hover:bg-zinc-50 transition-all"
                     >
-                    Continua lo shopping
+                        Continua lo shopping
                     </button>
                 </div>
             </div>
