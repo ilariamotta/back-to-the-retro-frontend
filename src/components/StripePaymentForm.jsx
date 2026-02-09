@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 
 export default function StripePaymentForm({
+  clientSecret,
   clientData,
   cart,
   shippingCost,
@@ -23,22 +24,42 @@ export default function StripePaymentForm({
 
     console.log('💳 Starting Stripe payment confirmation...');
 
-    stripe
-      .confirmPayment({
-        elements,
-        redirect: 'if_required',
+    const cardElement = elements.getElement(CardElement);
+
+    // Create payment method
+    stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement
+    })
+      .then(({ error, paymentMethod }) => {
+        if (error) {
+          console.error('❌ Payment method error:', error);
+          onError(error.message);
+          setIsProcessing(false);
+          return Promise.reject(error);
+        }
+
+        console.log('✅ Payment method created:', paymentMethod.id);
+
+        // Confirm payment with client secret
+        return stripe.confirmCardPayment(clientSecret, {
+          payment_method: paymentMethod.id
+        });
       })
       .then(({ error, paymentIntent }) => {
         if (error) {
           console.error('❌ Stripe error:', error);
           onError(error.message);
           setIsProcessing(false);
-          return Promise.reject('Stripe error');
+          return Promise.reject(error);
         }
 
         if (!paymentIntent || paymentIntent.status !== 'succeeded') {
+          const errorMsg = 'Payment not completed';
+          console.error('❌', errorMsg);
+          onError(errorMsg);
           setIsProcessing(false);
-          return Promise.reject('Payment not completed');
+          return Promise.reject(errorMsg);
         }
 
         console.log('✅ Payment succeeded:', paymentIntent.id);
@@ -129,7 +150,29 @@ export default function StripePaymentForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <PaymentElement />
+      <div className="space-y-4">
+        <label className="block text-sm font-semibold text-zinc-900">
+          💳 Card Information
+        </label>
+        <div className="p-4 border border-zinc-200 rounded-xl bg-white">
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: '16px',
+                  color: '#2a2f45',
+                  '::placeholder': {
+                    color: '#cbd5e1',
+                  },
+                },
+                invalid: {
+                  color: '#ef4444',
+                },
+              },
+            }}
+          />
+        </div>
+      </div>
 
       <button
         type="submit"

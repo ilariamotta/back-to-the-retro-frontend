@@ -165,6 +165,72 @@ export default function CheckoutPage() {
         return requiredFields.every(field => clientData[field]);
     };
 
+
+    const validateField = (name, value) => {
+        const trimmed = value?.trim?.() ?? "";
+        if (!trimmed) {
+            return "Campo obbligatorio";
+        }
+        if (
+            name === "client_name" ||
+            name === "client_surname" ||
+            name === "billing_city" ||
+            name === "shipping_city"
+        ) {
+            if (trimmed.length < 2) return "Minimo 2 caratteri";
+            return "";
+        }
+        if (
+            name === "billing_address" ||
+            name === "shipping_address"
+        ) {
+            if (trimmed.length < 5) return "Indirizzo non valido";
+            return "";
+        }
+        if (name === "email") {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) return "Email non valida";
+            return "";
+        }
+        if (name === "phone_number") {
+            const phoneRegex = /^[\d\s\-\+\(\)]{9,}$/;
+            const cleaned = value.replace(/\s/g, "");
+            if (!phoneRegex.test(cleaned)) {
+                return "Telefono non valido (minimo 9 cifre)";
+            }
+            return "";
+        }
+        if (
+            name === "billing_postal_code" ||
+            name === "shipping_postal_code"
+        ) {
+            const capRegex = /^\d{5}$/;
+            const cleaned = value.replace(/\s/g, "");
+            if (!capRegex.test(cleaned)) {
+                return "CAP non valido (5 cifre)";
+            }
+            return "";
+        }
+        return "";
+    };
+
+    const isFormDataValid = () => {
+        if (!clientData) return false;
+
+        const requiredFields = [
+            'client_name', 'client_surname', 'email', 'phone_number',
+            'billing_address', 'billing_city', 'billing_postal_code',
+            'shipping_address', 'shipping_city', 'shipping_postal_code'
+        ];
+
+        // Check if all required fields are filled and valid
+        return requiredFields.every(field => {
+            const value = clientData[field];
+            const error = validateField(field, value);
+            return !error && value;
+        });
+    };
+
     return (
         <>
             <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -192,6 +258,7 @@ export default function CheckoutPage() {
 
                             <Elements stripe={stripePromise} options={{ clientSecret }}>
                                 <StripePaymentForm
+                                    clientSecret={clientSecret}
                                     clientData={clientData}
                                     cart={cart}
                                     shippingCost={shippingCost}
@@ -310,15 +377,21 @@ export default function CheckoutPage() {
                                 <div className="mt-6 space-y-3">
                                     <button
                                         type="button"
-                                        onClick={handleConfirmOrder}
-                                        disabled={!isFormComplete() || isLoading}
+                                        onClick={() => {
+                                            if (!isFormDataValid()) {
+                                                alert("⚠️ Per favore, verifica che tutti i dati siano validi prima di procedere!");
+                                                return;
+                                            }
+                                            handleConfirmOrder();
+                                        }}
+                                        disabled={!isFormDataValid() || isLoading}
                                         className={`
                                             w-full rounded-2xl
                                             px-5 py-4
                                             text-sm font-extrabold tracking-wide
                                             transition-all duration-300
                                             active:scale-[0.99]
-                                            ${!isFormComplete() || isLoading
+                                            ${!isFormDataValid() || isLoading
                                                 ? 'bg-gray-400 cursor-not-allowed text-gray-600'
                                                 : 'bg-[#00D084] hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,208,132,0.45)] text-[#06251c]'
                                             }
@@ -326,8 +399,8 @@ export default function CheckoutPage() {
                                     >
                                         {isLoading
                                             ? '⏳ Caricamento...'
-                                            : !isFormComplete()
-                                                ? '⚠️ Completa il form'
+                                            : !isFormDataValid()
+                                                ? '⚠️ Completa il form correttamente'
                                                 : '💳 Procedi al pagamento'}
                                     </button>
                                 </div>
