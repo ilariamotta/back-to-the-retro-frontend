@@ -13,11 +13,12 @@ import CheckoutPage from './pages/CheckoutPage'
 import SearchPage from './pages/SearchPage'
 import SuccessPage from './pages/SuccessPage'
 import ProductsPage from './pages/ProductsPage'
+import { ToastProvider } from './context/ToastContext'
 
 
 function App() {
   return (
-    <>
+    <ToastProvider>
       <CartProvider>
         <StripeProvider>
           <BrowserRouter>
@@ -38,7 +39,7 @@ function App() {
           </BrowserRouter>
         </StripeProvider>
       </CartProvider>
-    </>
+    </ToastProvider>
   )
 }
 
