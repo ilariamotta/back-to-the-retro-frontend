@@ -3,10 +3,12 @@ import { getProductImageUrl } from "../utils/imageUtils";
 import { useCart } from "../context/CartContext";
 import { FaRegHeart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
+import { useToast } from "../context/ToastContext";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   function details() {
     navigate(`/products/${product.slug}`);
@@ -29,6 +31,8 @@ export default function ProductCard({ product }) {
       cover_image: product.cover_image,
     };
 
+    
+
     if (!product.id) {
       console.error('❌ ERRORE: Prodotto senza ID!', product);
       alert('Errore: Prodotto senza ID. Ricarica la pagina.');
@@ -36,6 +40,7 @@ export default function ProductCard({ product }) {
     }
 
     addToCart(productToAdd);
+    showToast(`${product.name} aggiunto al carrello!`);
   };
 
   return (
@@ -95,7 +100,10 @@ export default function ProductCard({ product }) {
             </button>
 
             <button
-              onClick={handleAddToCart}
+              onClick={() => {
+                handleAddToCart();
+                showToast(`${product.name} aggiunto al carrello!`);
+              }}
               className="relative rounded-xl border border-[#00D084]/70 px-4 py-2 text-xs font-semibold text-[#00D084] bg-transparent transition-all duration-300 ease-out hover:border-[#00D084] hover:bg-[#00D084]/10 hover:shadow-[0_0_16px_rgba(0,208,132,0.45)] hover:scale-[1.04] active:scale-[0.97]"
             >
               Aggiungi al carrello

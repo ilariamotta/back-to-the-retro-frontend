@@ -18,13 +18,36 @@ export function ToastProvider({ children }) {
       {children}
 
       {message && (
-        <div className="fixed bottom-5 right-5 z-50">
-          <div className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-lg border">
-            <span className="text-green-600">✅</span>
-            <p className="text-sm text-zinc-700">{message}</p>
-          </div>
+  <div className="fixed bottom-6 right-6 z-50">
+    <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-xl border border-violet-300 min-w-[300px]">
+
+      {/* ICONA CERCHIO */}
+      <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-violet-500 bg-white">
+        <svg
+          className="h-5 w-5 text-violet-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="3"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+
+      {/* TESTO */}
+      <div>
+        {/* oggetto */}
+      <p className="text-sm font-semibold text-zinc-800">
+        {message}
+      </p>
+      {/* bottone */}
+      <button className="ml-2 text-violet-600 hover:text-violet-800">
+        Vedi il prodotto appena aggiunto 
+      </button>
         </div>
-      )}
+    </div>
+  </div>
+)}
     </ToastContext.Provider>
   );
 }
