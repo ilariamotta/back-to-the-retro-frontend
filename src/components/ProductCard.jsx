@@ -20,17 +20,11 @@ export default function ProductCard({ product }) {
   const finalPrice = hasDiscount ? product.price - product.discounted_price : product.price;
 
   const handleAddToCart = () => {
-    // 🔍 DEBUG: Verifica prodotto prima di aggiungere al carrello
-    console.log('🔍 ProductCard - Prodotto da aggiungere:', product);
-    console.log('🔍 ProductCard - product.id:', product.id);
-    console.log('🔍 ProductCard - finalPrice:', finalPrice);
-    console.log('🔍 ProductCard - finalPrice type:', typeof finalPrice);
-
     const productToAdd = {
       id: product.id,
       slug: product.slug,
       name: product.name,
-      price: finalPrice, // Converti sempre in numero
+      price: finalPrice,
       stock: product.stock,
       cover_image: product.cover_image,
     };
