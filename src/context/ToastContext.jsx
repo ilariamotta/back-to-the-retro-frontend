@@ -1,10 +1,12 @@
 import { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ToastContext = createContext();
 
 export function ToastProvider({ children }) {
 
   const [toast, setToast] = useState(null);
+  const navigate = useNavigate();
 
 // costruzione toast
   const showToast = (message, options = {}) => {
@@ -42,13 +44,12 @@ export function ToastProvider({ children }) {
               </p>
                 {/* link */}
               {toast.link && (
-                <a
-                  href={toast.link}
-                  className="text-violet-600 hover:text-violet-800 text-sm font-medium"
-                >
-                  {toast.linkLabel || "Apri"}
-                </a>
-              )}
+                <button
+                onClick={() => navigate(toast.link)}
+        className="text-violet-600 hover:text-violet-800 text-sm font-medium">
+    {toast.linkLabel || "Apri"}
+  </button>
+)}
             </div>
 
           </div>

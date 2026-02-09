@@ -18,10 +18,11 @@ import { ToastProvider } from './context/ToastContext'
 
 function App() {
   return (
-    <ToastProvider>
+    
       <CartProvider>
         <StripeProvider>
           <BrowserRouter>
+          <ToastProvider>
             <Routes>
               <Route element={<AppLayout />}>
                 <Route element={<Home />} path="/" />
@@ -36,10 +37,10 @@ function App() {
                 <Route element={<SuccessPage />} path="/success" />
               </Route>
             </Routes>
+            </ToastProvider>
           </BrowserRouter>
         </StripeProvider>
       </CartProvider>
-    </ToastProvider>
   )
 }
 
