@@ -17,9 +17,6 @@ export default function ClientDataForm({ onFormChange }) {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  // -----------------------------
-  // SIMPLE VALIDATION
-  // -----------------------------
   const validateField = (name, value) => {
     const trimmed = value.trim();
 
@@ -62,9 +59,6 @@ export default function ClientDataForm({ onFormChange }) {
     return "";
   };
 
-  // -----------------------------
-  // HANDLERS
-  // -----------------------------
   const handleChange = (e) => {
     const { name, value } = e.target;
 
