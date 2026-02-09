@@ -14,6 +14,8 @@ import SearchPage from './pages/SearchPage'
 import SuccessPage from './pages/SuccessPage'
 import ProductsPage from './pages/ProductsPage'
 import { ToastProvider } from './context/ToastContext'
+import Faq from './pages/Faq'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
                 <Route element={<CheckoutPage />} path="/checkout" />
                 <Route element={<SearchPage />} path="/search" />
                 <Route element={<SuccessPage />} path="/success" />
+                <Route element={<Faq />} path="/faq" />
+                <Route element={<PrivacyPolicy />} path='/privacy' />
               </Route>
             </Routes>
             </ToastProvider>
