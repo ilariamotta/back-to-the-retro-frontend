@@ -3,8 +3,6 @@ import axios from "axios";
 import SearchGames from "../components/SearchBar";
 import ProductCard from "../components/ProductCard";
 
-
-
 function normalize(text = "") {
   return String(text)
     .toLowerCase()
@@ -13,45 +11,42 @@ function normalize(text = "") {
     .trim();
 }
 
-
 export default function SearchPage() {
   const addressIndex = import.meta.env.VITE_BACKEND_URL;
 
   const [products, setProducts] = useState([]);
-  const [query, setQuery] = useState("");
-
+  const [query, setQuery] = useState(""); // cambia SOLO al click
 
   useEffect(() => {
     axios
       .get(`${addressIndex}retro/api/products`)
       .then((resp) => setProducts(resp.data.results))
       .catch(console.error);
-  }, []);
+  }, [addressIndex]);
 
-  const querySearch = query.trim().toLowerCase();
+  const querySearch = normalize(query);
 
   const filtered = querySearch
     ? products.filter((product) => {
-      const name = normalize((product?.name || "").toLowerCase());
-      const platform = normalize((product?.platform || product?.platforms || "").toLowerCase());
-      const category = normalize((product?.category || "").toLowerCase());
-      const brand = normalize((product?.brand || "").toLowerCase());
+        const name = normalize(product?.name || "");
+        const platform = normalize(product?.platform || product?.platforms || "");
+        const category = normalize(product?.category || "");
+        const brand = normalize(product?.brand || "");
 
-      return (
-        name.includes(querySearch) ||
-        platform.includes(querySearch) ||
-        category.includes(querySearch) ||
-        brand.includes(querySearch)
-      );
-    })
+        return (
+          name.includes(querySearch) ||
+          platform.includes(querySearch) ||
+          category.includes(querySearch) ||
+          brand.includes(querySearch)
+        );
+      })
     : products;
 
   return (
     <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* SEARCHBAR */}
-      <SearchGames query={query} setQuery={setQuery} />
 
-      {/* RISULTATI */}
+      <SearchGames onSearch={setQuery} />
+
       <div>
         {filtered.length === 0 ? (
           <h1 className="text-xl font-bold text-zinc-500">
