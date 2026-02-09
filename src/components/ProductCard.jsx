@@ -19,6 +19,33 @@ export default function ProductCard({ product }) {
   const hasDiscount = product.discounted_price !== null && product.discounted_price !== undefined;
   const finalPrice = hasDiscount ? product.price - product.discounted_price : product.price;
 
+  const handleAddToCart = () => {
+    // 🔍 DEBUG: Verifica prodotto prima di aggiungere al carrello
+    console.log('🔍 ProductCard - Prodotto da aggiungere:', product);
+    console.log('🔍 ProductCard - product.id:', product.id);
+    console.log('🔍 ProductCard - finalPrice:', finalPrice);
+    console.log('🔍 ProductCard - finalPrice type:', typeof finalPrice);
+
+    const productToAdd = {
+      id: product.id,
+      slug: product.slug,
+      name: product.name,
+      price: parseFloat(finalPrice), // Converti sempre in numero
+      stock: product.stock,
+      cover_image: product.cover_image,
+    };
+
+    console.log('🔍 ProductCard - Oggetto inviato ad addToCart:', productToAdd);
+
+    if (!product.id) {
+      console.error('❌ ERRORE: Prodotto senza ID!', product);
+      alert('Errore: Prodotto senza ID. Ricarica la pagina.');
+      return;
+    }
+
+    addToCart(productToAdd);
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#211a1d] shadow-sm transition hover:shadow-lg hover:scale-[1.01]">
       {/* IMMAGINE */}
@@ -76,16 +103,7 @@ export default function ProductCard({ product }) {
             </button>
 
             <button
-              onClick={() =>
-                addToCart({
-                  id: product.id,
-                  slug: product.slug,
-                  name: product.name,
-                  price: finalPrice,
-                  stock: product.stock,
-                  cover_image: product.cover_image,
-                })
-              }
+              onClick={handleAddToCart}
               className="relative rounded-xl border border-[#00D084]/70 px-4 py-2 text-xs font-semibold text-[#00D084] bg-transparent transition-all duration-300 ease-out hover:border-[#00D084] hover:bg-[#00D084]/10 hover:shadow-[0_0_16px_rgba(0,208,132,0.45)] hover:scale-[1.04] active:scale-[0.97]"
             >
               Aggiungi al carrello
