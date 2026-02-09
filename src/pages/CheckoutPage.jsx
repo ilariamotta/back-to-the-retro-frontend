@@ -145,7 +145,12 @@ export default function CheckoutPage() {
         console.log("✅ Pagamento riuscito:", paymentIntent);
         clearCart();
         alert("✅ Pagamento completato con successo! Controlla la tua email.");
-        navigate("/", { state: { paymentIntent } });
+        navigate("/success", { 
+            state: { 
+                paymentIntent,
+                totalAmount
+            } 
+        });
     };
 
     const handlePaymentError = (errorMessage) => {
