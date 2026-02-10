@@ -130,7 +130,7 @@ export default function Header() {
                             className="">
                             <img 
                                 className="h-8 sm:h-10 md:h-12 w-auto max-w-[120px] object-contain" 
-                                src={isHomePage ? "/images/logo-piccolo.png" : "/images/logo_piccolo_back_to_home.png"} 
+                                src={isHomePage ? "/images/logo-piccolo.png" : "/images/logo_piccolo_back_to_home_new.png"} 
                                 alt="backtoretro" 
                             />
                         </NavLink>
