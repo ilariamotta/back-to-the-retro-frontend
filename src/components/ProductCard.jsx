@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { FaRegHeart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
+import { useState } from "react";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
