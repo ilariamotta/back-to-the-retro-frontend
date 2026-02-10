@@ -86,8 +86,7 @@ export default function Wishlist() {
               <button
                 className="w-full rounded-2xl bg-[#bb1717] px-5 py-4 text-sm font-extrabold text-[#1a1400] hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
                 onClick={handleClearWish}
-                disabled={wish.length === 0}
-              >
+                disabled={wish.length === 0}>
                 Svuota la wishlist
               </button>
             </div>

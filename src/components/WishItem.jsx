@@ -1,5 +1,5 @@
 import { FaPlus, FaMinus } from "react-icons/fa";
-import { useWish } from "../context/WishContext"; // <-- cambia path se diverso
+import { useWish } from "../context/WishListContext"; 
 import { useToast } from "../context/ToastContext";
 import { getProductImageUrl } from "../utils/imageUtils";
 

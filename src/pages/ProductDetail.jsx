@@ -4,8 +4,10 @@ import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
 import { useToast } from "../context/ToastContext";
-import { FaPlus } from "react-icons/fa";
+import { FaHeart, FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
+
 
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
@@ -227,7 +229,10 @@ export default function ProductDetail() {
                   : "bg-[#FFD21F] text-[#1a1400] hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)]"
                 }`}
             >
-              {isOutOfStock ? "Non disponibile" : "Aggiungilo al carrello! 🛒"}
+              {isOutOfStock ? "Non disponibile" : <span>Aggiungilo al carrello! <FaShoppingCart className='ml-1 inline' /></span>}
+            </button>
+            <button className="w-full my-2 rounded-2xl px-5 py-4 text-sm font-extrabold tracking-wide shadow-sm transition-all duration-300 active:scale-[0.99] bg-[#FFD21F] text-[#1a1400] hover:brightness-110 hover:shadow-[0_0_20px_rgba(255,210,31,0.45)]">
+              Aggiungi alla wishlist <FaHeart className="ml-1 inline text-red-500" />
             </button>
 
           </div>
