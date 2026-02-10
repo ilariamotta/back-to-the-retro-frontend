@@ -12,37 +12,51 @@ export default function ProductsPage() {
 
   const initialMin = searchParams.get("min") ?? "0";
   const initialMax = searchParams.get("max") ?? "400";
+  const initialPlatform = searchParams.get("platform") ?? "";
 
   const [min, setMin] = useState(initialMin);
   const [max, setMax] = useState(initialMax);
-
+  const [platform, setPlatform] = useState(initialPlatform);
   const [products, setProducts] = useState([]);
-  
+  const [availablePlatforms, setAvailablePlatforms] = useState([]);
+
   const minNumber = Number(min) || 0;
   const maxNumber = Number(max) || 400;
 
   useEffect(() => {
+    axios
+      .get(`${BACKEND}/retro/api/platforms`)
+      .then((resp) => {
+        setAvailablePlatforms(resp.data.results || []);
+      })
+      .catch(console.error);
+  }, [BACKEND]);
+
+  useEffect(() => {
     const currentMin = searchParams.get("min") ?? "0";
     const currentMax = searchParams.get("max") ?? "400";
+    const currentPlatform = searchParams.get("platform") ?? "";
 
-    if (currentMin !== min || currentMax !== max) {
+    if (currentMin !== min || currentMax !== max || currentPlatform !== platform) {
       const params = new URLSearchParams();
       params.set("min", min === "" ? "0" : min);
       params.set("max", max === "" ? "400" : max);
+      if (platform) params.set("platform", platform);
       setSearchParams(params);
     }
-  }, [min, max, searchParams, setSearchParams]);
+  }, [min, max, platform, searchParams, setSearchParams]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      const platformParam = platform ? `&platform=${encodeURIComponent(platform)}` : "";
       axios
-        .get(`${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}`)
+        .get(`${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}${platformParam}`)
         .then((resp) => setProducts(resp.data.results))
         .catch(console.error);
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [minNumber, maxNumber, BACKEND]);
+  }, [minNumber, maxNumber, platform, BACKEND]);
 
   return (
     <>
@@ -57,7 +71,7 @@ export default function ProductsPage() {
               <div>
                 <h2 className="text-lg font-extrabold text-white">Filtri</h2>
                 <p className="text-sm text-zinc-300">
-                  Seleziona un range di prezzo e (in seguito) brand/categoria.
+                  Seleziona un range di prezzo e piattaforma.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
@@ -69,21 +83,20 @@ export default function ProductsPage() {
                   onClick={() => {
                     setMin("0");
                     setMax("400");
+                    setPlatform("");
                   }}
-                  className="rounded-xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]"
-                >
+                  className="rounded-xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
                   Reset
                 </button>
               </div>
             </div>
-
-            {/* FILTRO PREZZO */}
+            {/* FILTRO PREZZO + PIATTAFORMA */}
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
+              {/* PREZZO */}
               <div className="lg:col-span-7 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
                   FILTRO PREZZO
                 </p>
-
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {/* MIN */}
                   <div>
@@ -95,12 +108,9 @@ export default function ProductsPage() {
                       value={min}
                       min={0}
                       className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        setMin(v); 
-                      }}
-                    />
+                      onChange={(e) => setMin(e.target.value)} />
                   </div>
+                  {/* MAX */}
                   <div>
                     <label className="mb-1 block text-xs font-semibold text-zinc-300">
                       Max (€)
@@ -110,32 +120,61 @@ export default function ProductsPage() {
                       value={max}
                       min={0}
                       className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        setMax(v);
-                      }}
-                    />
+                      onChange={(e) => setMax(e.target.value)} />
                   </div>
                 </div>
-
                 <p className="mt-3 text-xs text-zinc-400">
                   Suggerimento: imposta un max più alto se aggiungi prodotti costosi.
                 </p>
               </div>
-
-              {/* BRAND placeholder */}
+              {/* PIATTAFORMA */}
               <div className="lg:col-span-5 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
-                  BRAND
+                  PIATTAFORMA
                 </p>
-
-                <div className="mt-3 rounded-2xl border border-dashed border-white/10 bg-transparent p-4 text-sm text-zinc-300">
-                  Qui ci mettiamo una select o chips dei brand (Nintendo, Sony, ecc.)
+                <div className="relative mt-3">
+                  <select
+                    value={platform}
+                    onChange={(e) => {
+                      setPlatform(e.target.value);
+                      console.log(e.target.value);
+                    }}
+                    className="
+                      w-full rounded-xl border border-white/10 
+                      bg-[#2b2427] text-white
+                      px-4 py-3 text-sm font-semibold
+                      outline-none transition-all duration-300
+                      focus:border-[#00D084] focus:bg-[#00D084]/10
+                      focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
+                      appearance-none">
+                    <option value="" className="bg-[#2b2427] text-white">
+                      Tutte le piattaforme
+                    </option>
+                    {availablePlatforms.map((p) => (
+                      <option
+                        key={p.name}
+                        value={p.name}
+                        className="bg-[#2b2427] text-white"
+                      >
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                    <svg
+                      width="18"
+                      height="18"
+                      fill="white"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="opacity-70">
+                      <path d="M5.516 7.548l4.484 4.484 4.484-4.484L16 8.548l-6 6-6-6z" />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
           {/* GRIGLIA PRODOTTI */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
             {products.map((p, index) => (
