@@ -26,9 +26,11 @@ export default function ProductCard({ product }) {
       id: product.id,
       slug: product.slug,
       name: product.name,
+      priceInitial: product.price,
       price: finalPrice,
       stock: product.stock,
       cover_image: product.cover_image,
+      discounted_price: product.discounted_price ?? null,
     };
 
     if (!product.id) {

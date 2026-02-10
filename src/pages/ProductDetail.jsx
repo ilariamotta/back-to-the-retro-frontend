@@ -4,6 +4,8 @@ import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
 import { useToast } from "../context/ToastContext";
+import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
 
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
@@ -119,7 +121,6 @@ export default function ProductDetail() {
 
             {/* Prezzo */}
             <div className="mt-4 flex flex-wrap items-end gap-3">
-              {/* <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product[0].price}</p> */}
               <p>
                 {/* prezzo originale  */}
                 <p>
@@ -151,12 +152,16 @@ export default function ProductDetail() {
             </div>
             {/* STOCK */}
             <div className="mt-4 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#00D084]" />
-              <p className="text-sm font-semibold text-[#00D084]">
-                {remainingStock} disponibili
+              <span
+                className={`h-2.5 w-2.5 rounded-full ${remainingStock <= 0 ? "bg-[#fe0000]" : "bg-[#00D084]"}`}
+              />
+              <p
+                className={`text-sm font-semibold ${remainingStock <= 0 ? "text-[#fe0000]" : "text-[#00D084]"}`}
+              >
+                {remainingStock <= 0 ? "Esaurito" : `${remainingStock} disponibili`}
               </p>
             </div>
-           {/* DESCRIPTION */}
+            {/* DESCRIPTION */}
             <p className="mt-4 text-sm text-zinc-600">{product[0].description}</p>
             {/* QUANTITY SELECTOR */}
             <div className="flex items-center my-4">
@@ -166,7 +171,7 @@ export default function ProductDetail() {
                 className={`h-10 w-10 flex items-center justify-center rounded-l-lg font-bold text-lg
                   ${quantity <= 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}
               >
-                -
+                <FaMinus className="text-xs" />
               </button>
               <span className="h-10 min-w-10 flex items-center justify-center bg-zinc-100 px-3 text-xs font-bold text-zinc-700">
                 {quantity}
@@ -177,7 +182,7 @@ export default function ProductDetail() {
                 className={`h-10 w-10 flex items-center justify-center rounded-r-lg font-bold text-lg
                   ${quantity >= remainingStock ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}
               >
-                +
+                <FaPlus className="text-xs" />
               </button>
             </div>
             <button

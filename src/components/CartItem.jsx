@@ -7,6 +7,15 @@ import { useToast } from "../context/ToastContext";
 export default function CartItemCard({ item }) {
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
     const { showToast } = useToast();
+    const originalPrice = Number(item.priceInitial ?? item.price ?? 0);
+    const discountValue = Number(item.discounted_price ?? 0);
+
+const hasDiscount =
+  item.discounted_price !== null &&
+  item.discounted_price !== undefined &&
+  discountValue > 0;
+
+const finalPrice = hasDiscount ? originalPrice - discountValue : originalPrice;
 
     // Gestione errore caricamento immagine
     const handleImageError = (e) => {
@@ -37,38 +46,49 @@ export default function CartItemCard({ item }) {
                 {/* Nome + prezzo */}
                 <div className="min-w-0 flex-1">
                     <p className="truncate text-base font-extrabold text-[#2a2f45]">{item.name}</p>
-                    <p className="mt-1 text-lg font-extrabold text-[#6C2BD9]">€ {Number(item.price).toFixed(2)}</p>
+                    
+
+                    
+                    <div className="mt-2">
+                        {/* prezzo originale (se scontato) */}
+                        {hasDiscount && (
+                            <span className="block text-sm text-gray-500 line-through">
+                                {/* € {parseFloat(item.price).toFixed(2)} */}
+                                € {Number(originalPrice).toFixed(2)}
+                            </span>
+                        )}
+
+                        {/* prezzo finale */}
+                        <span
+                            className={
+                                hasDiscount
+                                    ? "block text-lg font-bold text-[#fe0000]"
+                                    : "block text-lg font-bold text-[#ffe417]"
+                            }
+                        >
+                            € {parseFloat(finalPrice).toFixed(2)}
+                        </span>
+                    </div>
                 </div>
+
                 {/* QUANTITA' */}
                 <div className="flex items-center">
                     {/* bottone meno */}
-                    <button onClick={() => decreaseQuantity(item.slug)} className={`h-10 w-10 flex items-center justify-center rounded-l-lg font-bold text-lg
-                    ${item.quantity <= 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`} >
-                        <FaMinus className="text-xs" /></button>
+                    <button onClick={() => decreaseQuantity(item.slug)} className={`h-10 w-10 flex items-center justify-center rounded-l-lg font-bold text-lg ${item.quantity <= 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}>
+                        <FaMinus className="text-xs" />
+                    </button>
                     {/* quantità */}
-                    <span className="h-10 min-w-10 flex items-center justify-center bg-zinc-100 px-3 text-xs font-bold text-zinc-700">{item.quantity}</span>
+                    <span className="h-10 min-w-10 flex items-center justify-center bg-zinc-100 text-xs font-bold text-zinc-700">{item.quantity}</span>
                     {/* bottone più */}
-                    <button onClick={() => increaseQuantity(item.slug)} disabled={item.quantity >= item.stock} className={`h-10 w-10 flex items-center justify-center rounded-r-lg font-bold text-lg
-                    ${item.quantity >= item.stock ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}>
+                    <button onClick={() => increaseQuantity(item.slug)} disabled={item.quantity >= item.stock} className={`h-10 w-10 flex items-center justify-center rounded-r-lg font-bold text-lg ${item.quantity >= item.stock ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}>
                         <FaPlus className="text-xs" />
                     </button>
                 </div>
+
                 {/* Bottone rimuovi */}
                 <button
                     type="button"
-                    className="
-                    shrink-0
-                    rounded-2xl
-                    border-2 border-[#FF006E]
-                    bg-transparent
-                    px-4 py-3
-                    text-xs font-extrabold tracking-wide
-                    text-[#FF006E]
-                    transition-all duration-300
-                    hover:bg-[#FF006E]/10
-                    hover:shadow-[0_0_16px_rgba(255,0,110,0.35)]
-                    active:scale-[0.99]
-                    "
+                    className="shrink-0 rounded-2xl border-2 border-[#FF006E] bg-transparent px-4 py-3 text-xs font-extrabold tracking-wide text-[#FF006E] transition-all duration-300 hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.35)] active:scale-[0.99]"
                     onClick={() => { removeFromCart(item.slug); handleRemove(); }}
                 >
                     Rimuovi
