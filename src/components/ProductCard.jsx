@@ -5,6 +5,8 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
 import { useState } from "react";
+import { FaHeart } from "react-icons/fa";
+
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -23,7 +25,7 @@ export default function ProductCard({ product }) {
 
   const hasDiscount = product.discounted_price !== null && product.discounted_price !== undefined;
   const finalPrice = hasDiscount ? product.price - product.discounted_price : product.price;
-  
+
   const toggleFav = () => {
     setIsFav((prev) => !prev)
   }
@@ -61,22 +63,18 @@ export default function ProductCard({ product }) {
         <div className="pointer-events-none absolute inset-0 from-black/40 via-black/0 to-black/0" />
 
         {/* WISHLIST */}
-        <button
-          type="button"
-          className="absolute right-2 top-2 px-2 py-1"
-          onClick={toggleFav}
-        >
-          <FaRegHeart
-            className={
-              "text-lg font-semibold transition-all duration-200 " +
-              (isFav
-                ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
-                : "text-white/80 hover:text-[#ff0000] hover:scale-110")
-            }
-          />
-        </button>
 
-      </div>
+<button
+  type="button"
+  onClick={toggleFav}
+  className="absolute right-2 top-2 px-2 py-1 rounded-full">
+  {isFav ? (
+    <FaHeart className=" text-red-500 text-lg scale-110 drop-shadow-[0_0_6px_rgba(255,0,0,0.85)]"/>
+  ) : (
+    <FaRegHeart className="text-red-500 text-lg transition-transform duration-200 hover:scale-110"/>
+  )}
+</button>
+</div>
 
       {/* CONTENUTO */}
       <div className="p-4">

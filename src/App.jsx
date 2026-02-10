@@ -17,6 +17,7 @@ import { ToastProvider } from './context/ToastContext'
 import Faq from './pages/Faq'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import PageNotFound from './pages/PageNotFound'
+import Wishlist from './pages/Wishlist'
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
                 <Route element={<Faq />} path="/faq" />
                 <Route element={<PrivacyPolicy />} path='/privacy' />
                 <Route element={<PageNotFound />} path='*' />
+                <Route element={<Wishlist />} path='/wishlist' />
               </Route>
             </Routes>
           </ToastProvider>
