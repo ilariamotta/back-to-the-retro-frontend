@@ -140,7 +140,7 @@ export default function ProductDetail() {
                   <span
                     className={
                       product[0].discounted_price !== null
-                        ? "text-lg font-bold text-[#fe0000]"
+                        ? "text-lg font-bold text-[#6320EE]"
                         : "text-lg font-bold text-[#ffe417]"
                     }
                   >
@@ -162,9 +162,40 @@ export default function ProductDetail() {
               </p>
             </div>
             {/* DESCRIPTION */}
-            <p className="mt-4 text-sm text-zinc-600">{product[0].description}</p>
+            <p className="mt-4 text-sm text-zinc-600 italic">Descrizione:</p>
+            <p>{product[0].description}</p>
+
+            {/* ALTRE INFO */}
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+
+              {/* piattaforma */}
+              <div className="
+              rounded-xl border border-zinc-200
+               bg-zinc-50
+              px-3 py-2
+               ">
+                <p className="text-xs text-zinc-500">Piattaforma</p>
+                <p className="font-semibold text-zinc-900">
+                  {product[0].platform}
+                </p>
+              </div>
+
+              {/* brand */}
+              <div className="
+             rounded-xl border border-zinc-200
+              bg-zinc-50
+              px-3 py-2
+                ">
+                <p className="text-xs text-zinc-500">Brand</p>
+                <p className="font-semibold text-zinc-900">
+                  {product[0].brand}
+                </p>
+              </div>
+
+            </div>
+
             {/* QUANTITY SELECTOR */}
-            <div className="flex items-center my-4">
+            <div className="flex items-center my-4 justify-center py-2">
               <button
                 onClick={decreaseQuantity}
                 disabled={quantity <= 1}
