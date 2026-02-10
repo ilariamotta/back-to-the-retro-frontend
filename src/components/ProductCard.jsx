@@ -9,6 +9,8 @@ export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const [isFav, setIsFav] = useState(false);
+
 
   function details() {
     navigate(`/products/${product.slug}`);
@@ -20,7 +22,10 @@ export default function ProductCard({ product }) {
 
   const hasDiscount = product.discounted_price !== null && product.discounted_price !== undefined;
   const finalPrice = hasDiscount ? product.price - product.discounted_price : product.price;
-
+  
+  const toggleFav = () => {
+    setIsFav((prev) => !prev)
+  }
   const handleAddToCart = () => {
     const productToAdd = {
       id: product.id,
@@ -58,9 +63,18 @@ export default function ProductCard({ product }) {
         <button
           type="button"
           className="absolute right-2 top-2 px-2 py-1"
+          onClick={toggleFav}
         >
-          <FaRegHeart className="text-lg text-s font-semibold text-[#ff0000] bg-transparent transition-all duration-300 hover:border-[#ff0000] hover:bg-[#ff0000]/10 hover:shadow-[0_0_16px_rgba(255,0,0,0.45)] hover:scale-[1.04] active:scale-[0.97]" />
+          <FaRegHeart
+            className={
+              "text-lg font-semibold transition-all duration-200 " +
+              (isFav
+                ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
+                : "text-white/80 hover:text-[#ff0000] hover:scale-110")
+            }
+          />
         </button>
+
       </div>
 
       {/* CONTENUTO */}
