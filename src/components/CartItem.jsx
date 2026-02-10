@@ -3,6 +3,7 @@ import { getProductImageUrl } from "../utils/imageUtils";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
+import { VscActivateBreakpoints } from "react-icons/vsc";
 
 export default function CartItemCard({ item }) {
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
@@ -25,6 +26,7 @@ const finalPrice = hasDiscount ? originalPrice - discountValue : originalPrice;
     // Mostra solo il toast (la rimozione verrà chiamata separatamente)
     const handleRemove = () => {
         showToast(`${item.name} rimosso dal carrello`, {
+            variant: "error",
             link: "/products/" + item.slug,
             linkLabel: "Vuoi rivedere il prodotto?",
         });

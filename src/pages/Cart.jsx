@@ -13,6 +13,7 @@ export default function Cart() {
     const handleClearCart = () => {
     clearCart();
     showToast("Carrello vuoto", {
+    variant: "error",
     link: "/products",
     linkLabel: "Torna ai nostri prodotti!",
   });

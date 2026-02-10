@@ -120,7 +120,8 @@ export default function ProductCard({ product }) {
                   `${product.name} è stato aggiunto al carrello!`,
                   {
                     link: `/carrello`,
-                    linkLabel: "Clicca qui per vedere il carrello!"
+                    linkLabel: "Clicca qui per vedere il carrello!",
+                    image: getProductImageUrl(product.cover_image),
                   }
                 );
               }}
