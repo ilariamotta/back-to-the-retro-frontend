@@ -18,17 +18,19 @@ import Faq from './pages/Faq'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import PageNotFound from './pages/PageNotFound'
 import Wishlist from './pages/Wishlist'
+import { WishProvider } from './context/WishListContext'
 
 
 function App() {
   return (
 
     <CartProvider>
-      <StripeProvider>
-        <BrowserRouter>
-          <ToastProvider>
-            <Routes>
-              <Route element={<AppLayout />}>
+      <WishProvider>
+        <StripeProvider>
+          <BrowserRouter>
+            <ToastProvider>
+              <Routes>
+                <Route element={<AppLayout />}>
                 <Route element={<Home />} path="/" />
                 <Route element={<ProductsPage />} path="/products" />
                 <Route element={<ProductDetail />} path="/products/:slug" />
@@ -48,6 +50,7 @@ function App() {
           </ToastProvider>
         </BrowserRouter>
       </StripeProvider>
+    </WishProvider>
     </CartProvider>
   )
 }

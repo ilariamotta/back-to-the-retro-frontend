@@ -1,12 +1,12 @@
 import { createContext, useContext, useState } from "react";
 
-const WhishListContext = createContext();
+const WishListContext = createContext();
 
-export function WhishProvider({ children }) {
+export function WishProvider({ children }) {
 
     const [wish, setWish] = useState([]);
 
-    const addToWhisList = (product) => {
+    const addToWishList = (product) => {
         setWish((prev) => {
             const exists = prev.find((item) => item.slug === product.slug);
 
@@ -62,10 +62,10 @@ export function WhishProvider({ children }) {
   };
 
     return (
-        <WhishListContext.Provider value={{ wish, setWish, addToWhisList, removeFromWish, increaseQuantityWish, decreaseQuantityWish, clearWish }}>
+        <WishListContext.Provider value={{ wish, setWish, addToWishList, removeFromWish, increaseQuantityWish, decreaseQuantityWish, clearWish }}>
             {children}
-        </WhishListContext.Provider>
+        </WishListContext.Provider>
     )
 }
 
-export const useWish = () => useContext(WhishListContext)
+export const useWish = () => useContext(WishListContext)
