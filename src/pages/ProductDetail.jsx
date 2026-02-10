@@ -91,10 +91,11 @@ export default function ProductDetail() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap items-center gap-2 text-sm text-white">
-        <NavLink to="/" className="hover:text-zinc-300">Ritorna alla Home</NavLink>
+      <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
+        <NavLink to="/" className="cursor-pointer hover:text-[#ffd21f]">Ritorna alla Home</NavLink>
         <span>/</span>
-        <span>{product[0].category}</span>
+        <NavLink to={`/${product[0].category.toLowerCase()}`} className="cursor-pointer hover:text-[#ffd21f]">{product[0].category}</NavLink>
+        {/* <span>{product[0].category}</span> */}
         <span>/</span>
         <span className="font-medium">{product[0].name}</span>
       </div>
