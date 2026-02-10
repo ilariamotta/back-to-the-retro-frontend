@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
@@ -13,8 +13,8 @@ const navLinks = [
     { title: "Prodotti", path: "/products" },
     // { title: "Prodotti", path: "/products" },
     {
-        title: "Categorie",
-        path: "/categories",
+        title: "Videogiochi",
+        path: "/categories/videogames",
         // dropdown: [
         //     { title: "Videogiochi", path: "/categories/videogames" },
         //     { title: "Console", path: "/categories/consoles" },
@@ -22,8 +22,8 @@ const navLinks = [
         // ],
     },
     {
-        title: "Brand",
-        path: "/brands",
+        title: "Console",
+        path: "/categories/consoles",
         // dropdown: [
         //     { title: "Nintendo", path: "/brands/nintendo" },
         //     { title: "Sony", path: "/brands/sony" },
@@ -31,8 +31,8 @@ const navLinks = [
         // ],
     },
     {
-        title: "Piattaforma",
-        path: "/platforms",
+        title: "Accessori",
+        path: "/categories/accessories",
         // dropdown: [
         //     { title: "PC", path: "/platforms/pc" },
         //     { title: "PlayStation", path: "/platforms/playstation" },
@@ -112,9 +112,11 @@ function MobileNavButton({ to, label, onClick }) {
 
 export default function Header() {
     const [mobileOpen, setMobileOpen] = useState(false);
+    const location = useLocation();
 
     const { cart } = useCart();
     const cartCount = cart.reduce((total, item) => total + item.quantity, 0 || 0);
+    const isHomePage = location.pathname === "/";
 
     return (
         <header className="sticky top-0 z-50 bg-black">
@@ -126,7 +128,11 @@ export default function Header() {
                         <NavLink
                             to="/"
                             className="">
-                            <img className="h-8 sm:h-10 md:h-12 w-auto max-w-[120px] object-contain" src="/images/logo-piccolo.png" alt="backtoretro" />
+                            <img 
+                                className="h-8 sm:h-10 md:h-12 w-auto max-w-[120px] object-contain" 
+                                src={isHomePage ? "/images/logo-piccolo.png" : "/images/logo_piccolo_back_to_home.png"} 
+                                alt="backtoretro" 
+                            />
                         </NavLink>
                     </div>
 

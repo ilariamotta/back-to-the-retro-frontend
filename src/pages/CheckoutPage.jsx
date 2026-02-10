@@ -87,19 +87,15 @@ export default function CheckoutPage() {
             ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
             : "http://localhost:3000";
 
-        // Prepare cart
         let cartForPayment;
         try {
             cartForPayment = cart.map((item, index) => {
                 const productId = item.id || item.product_id;
-
                 if (!productId) {
                     console.error(`❌ ERRORE: Item ${index} senza ID!`, item);
                     throw new Error(`Prodotto "${item.name}" senza ID. Ricarica la pagina.`);
                 }
-
-                console.log(`✅ Item ${index} OK - ID: ${productId}, Nome: ${item.name}`);
-
+                console.log(` Item ${index} OK - ID: ${productId}, Nome: ${item.name}`);
                 return {
                     product_id: productId,
                     quantity: item.quantity,
@@ -111,9 +107,7 @@ export default function CheckoutPage() {
             alert(`❌ ${err.message}`);
             return;
         }
-
         console.log("📋 Carrello mappato per payment intent:", cartForPayment);
-
         axios.post(`${BACKEND}/retro/api/orders/create-payment-intent`, {
             cart: cartForPayment,
             shipping_price: shippingCost
@@ -144,8 +138,14 @@ export default function CheckoutPage() {
     const handlePaymentSuccess = (paymentIntent) => {
         console.log("✅ Pagamento riuscito:", paymentIntent);
         clearCart();
-        alert("✅ Pagamento completato con successo! Controlla la tua email.");
-        navigate("/", { state: { paymentIntent } });
+        navigate("/success", { 
+            state: { 
+                paymentIntent,
+                totalAmount,
+                cart,
+                shippingCost
+            } 
+        });
     };
 
     const handlePaymentError = (errorMessage) => {
@@ -223,7 +223,6 @@ export default function CheckoutPage() {
             'shipping_address', 'shipping_city', 'shipping_postal_code'
         ];
 
-        // Check if all required fields are filled and valid
         return requiredFields.every(field => {
             const value = clientData[field];
             const error = validateField(field, value);
@@ -245,7 +244,6 @@ export default function CheckoutPage() {
                         <NavLink to="/carrello">← Torna al carrello</NavLink>
                     </button>
                 </div>
-
                 {/* PAYMENT FORM */}
                 {showPaymentForm && clientSecret ? (
                     <section className="mt-6">
@@ -253,9 +251,6 @@ export default function CheckoutPage() {
                             <h2 className="text-lg font-semibold text-zinc-900 mb-4">
                                 💳 Completa il Pagamento
                             </h2>
-
-                            {console.log('Passaggio carrello a StripePaymentForm:', cart)}
-
                             <Elements stripe={stripePromise} options={{ clientSecret }}>
                                 <StripePaymentForm
                                     clientSecret={clientSecret}
@@ -267,18 +262,15 @@ export default function CheckoutPage() {
                                     onError={handlePaymentError}
                                 />
                             </Elements>
-
                             <button
                                 onClick={() => setShowPaymentForm(false)}
                                 className="mt-4 w-full text-sm text-zinc-600 hover:text-zinc-900 py-2 border-t"
                             >
                                 ← Torna ai dati
                             </button>
-
                             {/* SUMMARY */}
                             <div className="mt-6 rounded-2xl bg-zinc-50 p-4">
                                 <h3 className="font-semibold text-zinc-900 mb-3">Riepilogo Ordine</h3>
-
                                 <div className="space-y-2 mb-4">
                                     {cart.map(item => (
                                         <div key={item.slug} className="flex justify-between text-sm">
@@ -291,7 +283,6 @@ export default function CheckoutPage() {
                                         </div>
                                     ))}
                                 </div>
-
                                 <div className="border-t pt-3 space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span className="text-zinc-600">Subtotale</span>
@@ -316,11 +307,7 @@ export default function CheckoutPage() {
                         </div>
                     </section>
                 ) : (
-
-                    /* ORIGINAL CHECKOUT FORM */
                     <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
-
-                        {/* FORM */}
                         <div className="lg:col-span-8">
                             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                                 <div className="flex items-center justify-between gap-3">
@@ -328,18 +315,15 @@ export default function CheckoutPage() {
                                         Dati di spedizione
                                     </h2>
                                 </div>
-
                                 <ClientDataForm onFormChange={handleFormChange} />
                             </div>
                         </div>
-
                         {/* SUMMARY */}
                         <div className="lg:col-span-4">
                             <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
                                 <h2 className="text-lg font-semibold text-zinc-900">
                                     Riepilogo ordine
                                 </h2>
-
                                 <div className="mt-4 space-y-2">
                                     {cart.map(item => (
                                         <div key={item.slug} className="flex justify-between text-sm">
@@ -352,7 +336,6 @@ export default function CheckoutPage() {
                                         </div>
                                     ))}
                                 </div>
-
                                 <div className="mt-4 space-y-3 text-sm border-t pt-4">
                                     <div className="flex justify-between">
                                         <span className="text-zinc-600">Subtotale</span>
@@ -373,7 +356,6 @@ export default function CheckoutPage() {
                                         </span>
                                     </div>
                                 </div>
-
                                 <div className="mt-6 space-y-3">
                                     <button
                                         type="button"

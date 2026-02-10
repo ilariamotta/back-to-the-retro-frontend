@@ -13,14 +13,19 @@ import CheckoutPage from './pages/CheckoutPage'
 import SearchPage from './pages/SearchPage'
 import SuccessPage from './pages/SuccessPage'
 import ProductsPage from './pages/ProductsPage'
+import { ToastProvider } from './context/ToastContext'
+import Faq from './pages/Faq'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import PageNotFound from './pages/PageNotFound'
 
 
 function App() {
   return (
-    <>
-      <CartProvider>
-        <StripeProvider>
-          <BrowserRouter>
+
+    <CartProvider>
+      <StripeProvider>
+        <BrowserRouter>
+          <ToastProvider>
             <Routes>
               <Route element={<AppLayout />}>
                 <Route element={<Home />} path="/" />
@@ -33,12 +38,15 @@ function App() {
                 <Route element={<CheckoutPage />} path="/checkout" />
                 <Route element={<SearchPage />} path="/search" />
                 <Route element={<SuccessPage />} path="/success" />
+                <Route element={<Faq />} path="/faq" />
+                <Route element={<PrivacyPolicy />} path='/privacy' />
+                <Route element={<PageNotFound />} path='*' />
               </Route>
             </Routes>
-          </BrowserRouter>
-        </StripeProvider>
-      </CartProvider>
-    </>
+          </ToastProvider>
+        </BrowserRouter>
+      </StripeProvider>
+    </CartProvider>
   )
 }
 

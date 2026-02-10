@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SearchGames from "../components/SearchBar";
 import ProductCard from "../components/ProductCard";
+import { useSearchParams } from "react-router-dom";
 
 function normalize(text = "") {
   return String(text)
@@ -15,7 +16,9 @@ export default function SearchPage() {
   const addressIndex = import.meta.env.VITE_BACKEND_URL;
 
   const [products, setProducts] = useState([]);
-  const [query, setQuery] = useState(""); // cambia SOLO al click
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
 
   useEffect(() => {
     axios
@@ -28,24 +31,28 @@ export default function SearchPage() {
 
   const filtered = querySearch
     ? products.filter((product) => {
-        const name = normalize(product?.name || "");
-        const platform = normalize(product?.platform || product?.platforms || "");
-        const category = normalize(product?.category || "");
-        const brand = normalize(product?.brand || "");
+      const name = normalize(product?.name || "");
+      const platform = normalize(product?.platform || product?.platforms || "");
+      const category = normalize(product?.category || "");
+      const brand = normalize(product?.brand || "");
 
-        return (
-          name.includes(querySearch) ||
-          platform.includes(querySearch) ||
-          category.includes(querySearch) ||
-          brand.includes(querySearch)
-        );
-      })
+      return (
+        name.includes(querySearch) ||
+        platform.includes(querySearch) ||
+        category.includes(querySearch) ||
+        brand.includes(querySearch)
+      );
+    })
     : products;
+
+  function handleSearch(value) {
+    setSearchParams(value ? { q: value } : {});
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-8 space-y-6">
 
-      <SearchGames onSearch={setQuery} />
+      <SearchGames onSearch={handleSearch} initialValue={query} />
 
       <div>
         {filtered.length === 0 ? (

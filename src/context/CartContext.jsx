@@ -30,7 +30,7 @@ export function CartProvider({ children }) {
         );
       }
 
-      return [...prev, { ...product, quantity: product.quantity || 1, stock: product.stock }];
+      return [...prev, { ...product, quantity: product.quantity || 1, stock: product.stock, discounted_price: product.discounted_price || null }];
     });
   };
 

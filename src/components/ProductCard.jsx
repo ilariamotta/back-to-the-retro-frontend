@@ -4,7 +4,6 @@ import { useCart } from "../context/CartContext";
 import { FaRegHeart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
-import { useState } from "react";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -28,22 +27,16 @@ export default function ProductCard({ product }) {
     setIsFav((prev) => !prev)
   }
   const handleAddToCart = () => {
-    // 🔍 DEBUG: Verifica prodotto prima di aggiungere al carrello
-    console.log('🔍 ProductCard - Prodotto da aggiungere:', product);
-    console.log('🔍 ProductCard - product.id:', product.id);
-    console.log('🔍 ProductCard - finalPrice:', finalPrice);
-    console.log('🔍 ProductCard - finalPrice type:', typeof finalPrice);
-
     const productToAdd = {
       id: product.id,
       slug: product.slug,
       name: product.name,
-      price: parseFloat(finalPrice), // Converti sempre in numero
+      priceInitial: product.price,
+      price: finalPrice,
       stock: product.stock,
       cover_image: product.cover_image,
+      discounted_price: product.discounted_price ?? null,
     };
-
-    console.log('🔍 ProductCard - Oggetto inviato ad addToCart:', productToAdd);
 
     if (!product.id) {
       console.error('❌ ERRORE: Prodotto senza ID!', product);
@@ -107,7 +100,7 @@ export default function ProductCard({ product }) {
 
           {/* prezzo finale */}
           <span className={hasDiscount ? "text-lg font-bold text-[#fe0000]" : "text-lg font-bold text-[#ffe417]"}>
-            € {finalPrice.toFixed(2)}
+            € {parseFloat(finalPrice).toFixed(2)}
           </span>
 
           {/* BOTTONI: STESSA RIGA SOTTO IL PREZZO */}
@@ -120,9 +113,17 @@ export default function ProductCard({ product }) {
             </button>
 
             <button
-              onClick={handleAddToCart}
-              className="relative rounded-xl border border-[#00D084]/70 px-4 py-2 text-xs font-semibold text-[#00D084] bg-transparent transition-all duration-300 ease-out hover:border-[#00D084] hover:bg-[#00D084]/10 hover:shadow-[0_0_16px_rgba(0,208,132,0.45)] hover:scale-[1.04] active:scale-[0.97]"
-            >
+              onClick={() => {
+                handleAddToCart();
+                showToast(
+                  `${product.name} è stato aggiunto al carrello!`,
+                  {
+                    link: `/carrello`,
+                    linkLabel: "Clicca qui per vedere il carrello!"
+                  }
+                );
+              }}
+              className="relative rounded-xl border border-[#00D084]/70 px-4 py-2 text-xs font-semibold text-[#00D084] bg-transparent transition-all duration-300 ease-out hover:border-[#00D084] hover:bg-[#00D084]/10 hover:shadow-[0_0_16px_rgba(0,208,132,0.45)] hover:scale-[1.04] active:scale-[0.97]">
               Aggiungi al carrello
             </button>
           </div>
