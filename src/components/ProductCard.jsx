@@ -101,6 +101,7 @@ export default function ProductCard({ product }) {
               showToast(
                 `${product.name} è stato aggiunto alla wishlist!`,
                 {
+                  variant: "wishlistAdd",
                   link: `/wishlist`,
                   linkLabel: "Clicca qui per vedere la wishlist!",
                   image: getProductImageUrl(product.cover_image),
@@ -186,6 +187,7 @@ export default function ProductCard({ product }) {
                 showToast(
                   `${product.name} è stato aggiunto al carrello!`,
                   {
+                    variant: "cart",
                     link: `/carrello`,
                     linkLabel: "Clicca qui per vedere il carrello!",
                     image: getProductImageUrl(product.cover_image),

@@ -21,42 +21,47 @@ export function ToastProvider({ children }) {
     }, 4000);
   };
 
-  // classi per varianti
-  const variantMap = {
-    violet: {
-      border: "border-violet-400/60",
-      glow: "shadow-[0_0_22px_rgba(124,58,237,0.35)]",
-      iconRing: "border-violet-500",
-      iconBg: "bg-white",
-      iconColor: "text-violet-600",
-      text: "text-violet-700",
-      textGlow: "drop-shadow-[0_0_6px_rgba(124,58,237,0.45)]",
-      link: "text-violet-600 hover:text-violet-800",
-      linkGlow: "drop-shadow-[0_0_6px_rgba(124,58,237,0.45)]",
-    },
-    success: {
-      border: "border-emerald-400/60",
-      glow: "shadow-[0_0_22px_rgba(16,185,129,0.30)]",
-      iconRing: "border-emerald-500",
-      iconBg: "bg-white",
-      iconColor: "text-emerald-600",
-      text: "text-emerald-700",
-      textGlow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.40)]",
-      link: "text-emerald-600 hover:text-emerald-800",
-      linkGlow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.40)]",
-    },
-    error: {
-      border: "border-red-400/60",
-      glow: "shadow-[0_0_22px_rgba(239,68,68,0.30)]",
-      iconRing: "border-red-500",
-      iconBg: "bg-white",
-      iconColor: "text-red-600",
-      text: "text-red-700",
-      textGlow: "drop-shadow-[0_0_6px_rgba(239,68,68,0.40)]",
-      link: "text-red-600 hover:text-red-800",
-      linkGlow: "drop-shadow-[0_0_6px_rgba(239,68,68,0.40)]",
-    },
-  };
+  // COLORI VARIANTI
+const variantMap = {
+  // AZZURRO → CARRELLO
+  cart: {
+    border: "border-[#00BFFF]/60",
+    glow: "shadow-[0_0_22px_rgba(0,191,255,0.35)]",
+    iconRing: "border-[#00BFFF]",
+    iconBg: "bg-white",
+    iconColor: "text-[#00BFFF]",
+    text: "text-[#00BFFF]",
+    textGlow: "drop-shadow-[0_0_6px_rgba(0,191,255,0.45)]",
+    link: "text-[#00BFFF] hover:text-[#009acd]",
+    linkGlow: "drop-shadow-[0_0_6px_rgba(0,191,255,0.45)]",
+  },
+
+  // VIOLA → WISHLIST ADD
+  wishlistAdd: {
+    border: "border-[#6320EE]/60",
+    glow: "shadow-[0_0_22px_rgba(99,32,238,0.35)]",
+    iconRing: "border-[#6320EE]",
+    iconBg: "bg-white",
+    iconColor: "text-[#6320EE]",
+    text: "text-[#6320EE]",
+    textGlow: "drop-shadow-[0_0_6px_rgba(99,32,238,0.45)]",
+    link: "text-[#6320EE] hover:text-[#4c16b5]",
+    linkGlow: "drop-shadow-[0_0_6px_rgba(99,32,238,0.45)]",
+  },
+
+  // GIALLO → REMOVE
+  remove: {
+    border: "border-[#ffe417]/60",
+    glow: "shadow-[0_0_22px_rgba(255,228,23,0.35)]",
+    iconRing: "border-[#ffe417]",
+    iconBg: "bg-white",
+    iconColor: "text-[#b89c00]",
+    text: "text-[#b89c00]",
+    textGlow: "drop-shadow-[0_0_6px_rgba(255,228,23,0.45)]",
+    link: "text-[#b89c00] hover:text-[#8f7a00]",
+    linkGlow: "drop-shadow-[0_0_6px_rgba(255,228,23,0.45)]",
+  },
+};
 
   return (
     <ToastContext.Provider value={{ showToast }}>
