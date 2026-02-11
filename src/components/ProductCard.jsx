@@ -13,8 +13,8 @@ export default function ProductCard({ product }) {
   const { wish, addToWishList, removeToList } = useWishList();
   const navigate = useNavigate();
   const { showToast } = useToast();
-
-  const isFav = wish.some((item) => item.slug === product.slug);
+  
+  const isFav = wish.map(item => item.slug).includes(product.slug);
 
 
   function details() {
@@ -93,30 +93,30 @@ export default function ProductCard({ product }) {
           type="button"
           className="absolute right-2 top-2 px-2 py-1"
           onClick={() => {
-              if (isFav) {
-                removeToList(product.slug);
-                showToast(`${product.name} è stato rimosso dalla wishlist!`);
-              } else {
-                handleAddToWish();
-                showToast(
-                  `${product.name} è stato aggiunto alla wishlist!`,
-                  {
-                    link: `/wishlist`,
-                    linkLabel: "Clicca qui per vedere la wishlist!",
-                    image: getProductImageUrl(product.cover_image),
-                  }
-                );
-              }
-            }}
+            if (isFav) {
+              removeToList(product.slug);
+              showToast(`${product.name} è stato rimosso dalla wishlist!`);
+            } else {
+              handleAddToWish();
+              showToast(
+                `${product.name} è stato aggiunto alla wishlist!`,
+                {
+                  link: `/wishlist`,
+                  linkLabel: "Clicca qui per vedere la wishlist!",
+                  image: getProductImageUrl(product.cover_image),
+                }
+              );
+            }
+          }}
         >
-            <FaHeart
-              className={
-                "text-lg font-semibold transition-all duration-200 " +
-                (isFav
-                  ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
-                  : "text-white/80 hover:text-[#ff0000] hover:scale-110")
-              }
-            />
+          <FaHeart
+            className={
+              "text-lg font-semibold transition-all duration-200 " +
+              (isFav
+                ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
+                : "text-white/80 hover:text-[#ff0000] hover:scale-110")
+            }
+          />
         </button>
 
       </div>
@@ -138,7 +138,7 @@ export default function ProductCard({ product }) {
           {/* prezzo originale (se scontato) */}
           {hasDiscount && (
             <span className="block text-lg font-bold text-[#ffe417] line-through">
-              € { (product.priceInitial ?? product.price).toFixed ? (product.priceInitial ?? product.price).toFixed(2) : (product.priceInitial ?? product.price) }
+              € {(product.priceInitial ?? product.price).toFixed ? (product.priceInitial ?? product.price).toFixed(2) : (product.priceInitial ?? product.price)}
             </span>
           )}
 
