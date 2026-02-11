@@ -124,31 +124,27 @@ export default function ProductDetail() {
             <div className="mt-4 flex flex-wrap items-end gap-3">
               <p>
                 {/* prezzo originale  */}
-                <p>
-                  {/* prezzo originale */}
-                  <span
-                    className={
-                      product[0].discounted_price !== null
-                        ? "text-lg font-bold text-[#ffe417] line-through"
-                        : "hidden"
-                    }
-                  >
-                    € {prezzo.toFixed(2)}
-                  </span>
-                  <br />
 
-                  {/* prezzo scontato (o normale se non c'è sconto) */}
-                  <span
-                    className={
-                      product[0].discounted_price !== null
-                        ? "text-lg font-bold text-[#6320EE]"
-                        : "text-lg font-bold text-[#ffe417]"
-                    }
-                  >
-                    € {prezzoScontato.toFixed(2)}
-                  </span>
-                </p>
-
+                <span
+                  className={
+                    product[0].discounted_price !== null
+                      ? "text-lg font-bold text-[#ffe417] line-through"
+                      : "hidden"
+                  }
+                >
+                  € {prezzo.toFixed(2)}
+                </span>
+                <br />
+                {/* prezzo scontato (o normale se non c'è sconto) */}
+                <span
+                  className={
+                    product[0].discounted_price !== null
+                      ? "text-lg font-bold text-[#6320EE]"
+                      : "text-lg font-bold text-[#ffe417]"
+                  }
+                >
+                  € {prezzoScontato.toFixed(2)}
+                </span>
               </p>
             </div>
             {/* STOCK */}

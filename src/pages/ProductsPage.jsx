@@ -12,11 +12,13 @@ export default function ProductsPage() {
 
   const initialMin = searchParams.get("min") ?? "0";
   const initialMax = searchParams.get("max") ?? "400";
+  const initialSort = searchParams.get("sort") ?? "";
   const initialPlatform = searchParams.get("platform") ?? "";
   const initialBrand = searchParams.get("brand") ?? "";
 
   const [min, setMin] = useState(initialMin);
   const [max, setMax] = useState(initialMax);
+  const [sort, setSort] = useState(initialSort);
   const [platform, setPlatform] = useState(initialPlatform);
   const [brand, setBrand] = useState(initialBrand)
   const [products, setProducts] = useState([]);
@@ -25,6 +27,7 @@ export default function ProductsPage() {
   const minNumber = Number(min) || 0;
   const maxNumber = Number(max) || 400;
 
+  // URL
   useEffect(() => {
     axios
       .get(`${BACKEND}/retro/api/platforms`)
@@ -54,6 +57,7 @@ export default function ProductsPage() {
     }
   }, [min, max, platform, searchParams, setSearchParams, brand]);
 
+  // CHIAMATA
   useEffect(() => {
     const timeout = setTimeout(() => {
       const platformParam = platform ? `&platform=${encodeURIComponent(platform)}` : "";
@@ -78,19 +82,15 @@ export default function ProductsPage() {
           <h1 className="text-start text-3xl font-bold text-[#ff006e] mt-8 mb-6 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">
             I NOSTRI PRODOTTI
           </h1>
+
           {/* FILTRI */}
           <div className="rounded-2xl border border-white/10 bg-[#211a1d] p-5 shadow-sm">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <h2 className="text-lg font-extrabold text-white">Filtri</h2>
-                <p className="text-sm text-zinc-300">
-                  Seleziona un range di prezzo e piattaforma.
-                </p>
               </div>
+
               <div className="flex flex-wrap items-center gap-3">
-                <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-zinc-200">
-                  Prezzo: € {minNumber} - € {maxNumber}
-                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -104,15 +104,15 @@ export default function ProductsPage() {
                 </button>
               </div>
             </div>
-            {/* FILTRO PREZZO + PIATTAFORMA */}
+
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
               {/* PREZZO */}
-              <div className="lg:col-span-7 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-5 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
                   FILTRO PREZZO
                 </p>
+
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {/* MIN */}
                   <div>
                     <label className="mb-1 block text-xs font-semibold text-zinc-300">
                       Min (€)
@@ -122,9 +122,10 @@ export default function ProductsPage() {
                       value={min}
                       min={0}
                       className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
-                      onChange={(e) => setMin(e.target.value)} />
+                      onChange={(e) => setMin(e.target.value)}
+                    />
                   </div>
-                  {/* MAX */}
+
                   <div>
                     <label className="mb-1 block text-xs font-semibold text-zinc-300">
                       Max (€)
@@ -134,29 +135,26 @@ export default function ProductsPage() {
                       value={max}
                       min={0}
                       className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
-                      onChange={(e) => setMax(e.target.value)} />
+                      onChange={(e) => setMax(e.target.value)}
+                    />
                   </div>
                 </div>
-                <p className="mt-3 text-xs text-zinc-400">
-                  Suggerimento: imposta un max più alto se aggiungi prodotti costosi.
-                </p>
               </div>
+
               {/* PIATTAFORMA */}
-              <div className="lg:col-span-5 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
                   PIATTAFORMA
                 </p>
+
                 <div className="relative mt-3">
                   <select
                     value={platform}
-                    onChange={(e) => {
-                      setPlatform(e.target.value);
-                      console.log(e.target.value);
-                    }}
+                    onChange={(e) => setPlatform(e.target.value)}
                     className="
                       w-full rounded-xl border border-white/10 
                       bg-[#2b2427] text-white
-                      px-4 py-3 text-sm font-semibold
+                      px-4 pr-10 py-3 text-sm font-semibold
                       outline-none transition-all duration-300
                       focus:border-[#00D084] focus:bg-[#00D084]/10
                       focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
@@ -164,13 +162,10 @@ export default function ProductsPage() {
                     <option value="" className="bg-[#2b2427] text-white">
                       Tutte le piattaforme
                     </option>
-                    {availablePlatforms.map((p) => (
-                      <option
-                        key={p.name}
-                        value={p.name}
-                        className="bg-[#2b2427] text-white"
-                      >
-                        {p.name}
+
+                    {availablePlatforms.map((name) => (
+                      <option key={name} value={name} className="bg-[#2b2427] text-white">
+                        {name}
                       </option>
                     ))}
                   </select>
@@ -209,12 +204,14 @@ export default function ProductsPage() {
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
+
           {/* GRIGLIA PRODOTTI */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-            {products.map((p, index) => (
-              <ProductCard product={p} key={index} />
+            {sortedProducts.map((p) => (
+              <ProductCard product={p} key={p.id ?? p.slug} />
             ))}
           </div>
         </div>
