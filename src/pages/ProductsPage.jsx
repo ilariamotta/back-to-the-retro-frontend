@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import { useSearchParams } from "react-router-dom";
@@ -24,8 +24,12 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [availablePlatforms, setAvailablePlatforms] = useState([]);
   const [availableBrands, setAvailableBrands] = useState([])
+  const [discountedProducts, setDiscountedProducts] = useState([]);
+  const [showDiscounted, setShowDiscounted] = useState(false);
+
   const minNumber = Number(min) || 0;
   const maxNumber = Number(max) || 400;
+
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -33,8 +37,41 @@ export default function ProductsPage() {
     params.set("max", max === "" ? "400" : max);
     if (sort) params.set("sort", sort);
     if (platform) params.set("platform", platform);
+    if (brand) params.set("brand", brand);
     setSearchParams(params);
-  }, [min, max, sort, platform, setSearchParams]);
+  }, [min, max, sort, platform, brand, setSearchParams]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (showDiscounted) {
+        const url = `${BACKEND}/retro/api/products?min=0&max=10000`;
+        axios
+          .get(url)
+          .then((resp) => {
+            const allProducts = resp.data.results || [];
+            const discounted = allProducts.filter(p => p.discounted_price != null && p.discounted_price > 0);
+            setProducts(discounted);
+          })
+          .catch(console.error);
+        return;
+      }
+
+      const platformParam = platform ? `&platform=${encodeURIComponent(platform)}` : "";
+      const brandParam = brand ? `&brand=${encodeURIComponent(brand)}` : "";
+      const url = `${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}${platformParam}${brandParam}`;
+
+      axios
+        .get(url)
+        .then((resp) => {
+          setProducts(resp.data.results || []);
+        })
+        .catch((err) => {
+          console.error("Fetch error:", err);
+        });
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [minNumber, maxNumber, platform, brand, BACKEND, showDiscounted]);
 
   useEffect(() => {
     axios
@@ -48,32 +85,6 @@ export default function ProductsPage() {
       setAvailableBrands(resp.data.results || [])
     }).catch(console.error);
   }, [BACKEND]);
-
-  useEffect(() => {
-    const currentMin = searchParams.get("min") ?? "0";
-    const currentMax = searchParams.get("max") ?? "400";
-    const currentPlatform = searchParams.get("platform") ?? "";
-    const currentBrand = searchParams.get("brand") ?? "";
-
-    if (currentMin !== min) setMin(currentMin);
-    if (currentMax !== max) setMax(currentMax);
-    if (currentPlatform !== platform) setPlatform(currentPlatform);
-    if (currentBrand !== brand) setBrand(currentBrand);
-  }, [searchParams]);
-
-  // CHIAMATA
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const platformParam = platform ? `&platform=${encodeURIComponent(platform)}` : "";
-      const brandParam = brand ? `&brand=${encodeURI(brand)}` : "";
-      axios
-        .get(`${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}${platformParam}${brandParam}`)
-        .then((resp) => setProducts(resp.data.results || []))
-        .catch(console.error);
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [minNumber, maxNumber, platform, BACKEND, brand]);
 
   // SCONTI
   const getFinalPrice = (p) => {
@@ -108,6 +119,15 @@ export default function ProductsPage() {
               <div>
                 <h2 className="text-lg font-extrabold text-white">Filtri</h2>
               </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <button type="button" onClick={() => {
+                  setShowDiscounted((prev) => !prev);
+                }}
+                  className={` rounded-2xl px-4 py-2 text-xs font-extrabold transition-all duration-300 active:scale-[0.97] border 
+                  ${showDiscounted ? "border-[#FF006E] bg-[#FF006E]/20 text-[#FF006E] shadow-[0_0_16px_rgba(255,0,110,0.45)]" : "border-[#FF006E]/70 text-[#FF006E] bg-transparent hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)]"} `} >
+                  {showDiscounted ? "Mostra tutti" : "Scontati"} </button>
+              </div>
+
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
@@ -195,13 +215,13 @@ export default function ProductsPage() {
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
                     className="
-        w-full rounded-xl border border-white/10 
-        bg-[#2b2427] text-white
-        px-4 pr-10 py-3 text-sm font-semibold
-        outline-none transition-all duration-300
-        focus:border-[#FF006E] focus:bg-[#FF006E]/10
-        focus:shadow-[0_0_16px_rgba(255,0,110,0.45)]
-        appearance-none"
+                      w-full rounded-xl border border-white/10 
+                      bg-[#2b2427] text-white
+                      px-4 pr-10 py-3 text-sm font-semibold
+                      outline-none transition-all duration-300
+                      focus:border-[#FF006E] focus:bg-[#FF006E]/10
+                      focus:shadow-[0_0_16px_rgba(255,0,110,0.45)]
+                      appearance-none"
                   >
                     <option value="" className="bg-[#2b2427] text-white">
                       Scegli il brand
