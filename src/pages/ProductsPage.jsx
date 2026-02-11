@@ -185,27 +185,39 @@ export default function ProductsPage() {
                   </select>
                 </div>
               </div>
-              {/* BRANDS  */}
-              <p className="text-xs font-extrabold tracking-wider text-[#00D084] mt-3">BRANDS</p>
-              <div className="relative mt-3">
-                <select
-                  value={brand}
-                  onChange={(e) => { setBrand(e.target.value) }}
-                  className="
+              {/* BRANDS */}
+              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4 mt-3">
+                <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
+                  BRANDS
+                </p>
+                <div className="relative mt-3">
+                  <select
+                    value={brand}
+                    onChange={(e) => setBrand(e.target.value)}
+                    className="
                       w-full rounded-xl border border-white/10 
                       bg-[#2b2427] text-white
-                      px-4 py-3 text-sm font-semibold
+                      px-4 pr-10 py-3 text-sm font-semibold
                       outline-none transition-all duration-300
                       focus:border-[#00D084] focus:bg-[#00D084]/10
                       focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
-                      appearance-none"
-                >
-                  <option value="" className="bg-[#2b2427] text-white">TUTTI I BRAND</option>
-                  {availableBrands.map((p) => (
-                    <option key={p.brand} value={p.brand} className="bg-[#2b2427] text-white"> {p.brand}</option>
-                  ))}
-                </select>
+                      appearance-none">
+                    <option value="" className="bg-[#2b2427] text-white">
+                      TUTTI I BRAND
+                    </option>
+                    {availableBrands.map((b, index) => (
+                      <option
+                        key={index}
+                        value={b.brand}
+                        className="bg-[#2b2427] text-white"
+                      >
+                        {b.brand}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
 
               {/* ORDINAMENTO */}
               <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
