@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 
 
 export default function Wishlist() {
-    const { wish, removeToList, clearlist } = useWishList();
+    const { wish, removeToList, clearList } = useWishList();
     const [totalAmount, setTotalAmount] = useState(0);
 
     useEffect(() => {
@@ -77,7 +77,7 @@ export default function Wishlist() {
                         <div className="mt-6 space-y-3">
                             <button
                                 className="w-full rounded-2xl bg-[#bb1717] px-5 py-4 text-sm font-extrabold text-[#1a1400] hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
-                                onClick={clearlist}
+                                onClick={() => { clearList(); }}
                                 disabled={wish.length === 0}>
                                 Svuota la wishlist
                             </button>
