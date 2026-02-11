@@ -241,15 +241,6 @@ export default function ProductsPage() {
                   </select>
 
                   <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
-                    <svg
-                      width="18"
-                      height="18"
-                      fill="white"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="opacity-70">
-                      <path d="M5.516 7.548l4.484 4.484 4.484-4.484L16 8.548l-6 6-6-6z" />
-                    </svg>
                   </div>
                 </div>
               </div>

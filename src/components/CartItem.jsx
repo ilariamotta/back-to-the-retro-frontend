@@ -65,7 +65,7 @@ const finalPrice = hasDiscount ? originalPrice - discountValue : originalPrice;
                             className={
                                 hasDiscount
                                     ? "block text-lg font-bold text-[#fe0000]"
-                                    : "block text-lg font-bold text-[#ffe417]"
+                                    : "block text-lg font-bold text-[#6320EE]"
                             }
                         >
                             € {parseFloat(finalPrice).toFixed(2)}
