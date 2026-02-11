@@ -36,7 +36,6 @@ export default function ProductsPage() {
     setSearchParams(params);
   }, [min, max, sort, platform, setSearchParams]);
 
-  // URL
   useEffect(() => {
     axios
       .get(`${BACKEND}/retro/api/platforms`)
@@ -50,7 +49,6 @@ export default function ProductsPage() {
     }).catch(console.error);
   }, [BACKEND]);
 
-  // keep local state in sync with URL params (no longer write back to URL here)
   useEffect(() => {
     const currentMin = searchParams.get("min") ?? "0";
     const currentMax = searchParams.get("max") ?? "400";
@@ -63,7 +61,7 @@ export default function ProductsPage() {
     if (currentBrand !== brand) setBrand(currentBrand);
   }, [searchParams]);
 
-  // CHIAMATA: fetch products with debounce
+  // CHIAMATA
   useEffect(() => {
     const timeout = setTimeout(() => {
       const platformParam = platform ? `&platform=${encodeURIComponent(platform)}` : "";
@@ -77,7 +75,7 @@ export default function ProductsPage() {
     return () => clearTimeout(timeout);
   }, [minNumber, maxNumber, platform, BACKEND, brand]);
 
-  // SCONTI helper
+  // SCONTI
   const getFinalPrice = (p) => {
     const price = Number(p.price) || 0;
     const discount = p.discounted_price != null ? Number(p.discounted_price) : null;
@@ -95,9 +93,6 @@ export default function ProductsPage() {
     if (sort === "desc") return getFinalPrice(b) - getFinalPrice(a);
     return 0;
   });
-  
-
-
 
 
   return (
@@ -107,14 +102,12 @@ export default function ProductsPage() {
           <h1 className="text-start text-3xl font-bold text-[#ff006e] mt-8 mb-6 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">
             I NOSTRI PRODOTTI
           </h1>
-
           {/* FILTRI */}
           <div className="rounded-2xl border border-white/10 bg-[#211a1d] p-5 shadow-sm">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <h2 className="text-lg font-extrabold text-white">Filtri</h2>
               </div>
-
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
@@ -129,14 +122,12 @@ export default function ProductsPage() {
                 </button>
               </div>
             </div>
-
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
               {/* PREZZO */}
               <div className="lg:col-span-5 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
                   FILTRO PREZZO
                 </p>
-
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div>
                     <label className="mb-1 block text-xs font-semibold text-zinc-300">
@@ -150,7 +141,6 @@ export default function ProductsPage() {
                       onChange={(e) => setMin(e.target.value)}
                     />
                   </div>
-
                   <div>
                     <label className="mb-1 block text-xs font-semibold text-zinc-300">
                       Max (€)
@@ -165,13 +155,11 @@ export default function ProductsPage() {
                   </div>
                 </div>
               </div>
-
               {/* PIATTAFORMA */}
               <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
                   PIATTAFORMA
                 </p>
-
                 <div className="relative mt-3">
                   <select
                     value={platform}
@@ -187,13 +175,10 @@ export default function ProductsPage() {
                     <option value="" className="bg-[#2b2427] text-white">
                       Tutte le piattaforme
                     </option>
-
-                    {availablePlatforms.map((p) => {
-                      const plat = typeof p === "string" ? p : p?.name ?? p?.platform ?? JSON.stringify(p);
-                      const key = String(plat);
+                    {availablePlatforms.map((p, index) => {
                       return (
-                        <option key={key} value={plat} className="bg-[#2b2427] text-white">
-                          {plat}
+                        <option key={index} value={p.name} className="bg-[#2b2427] text-white">
+                          {p.name}
                         </option>
                       );
                     })}
