@@ -2,11 +2,23 @@ import CartItem from "../components/CartItem";
 import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
 
 export default function Cart() {
     const { cart, clearCart } = useCart();
     const [subTotal, setSubtotal] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
+    const { showToast } = useToast();
+
+    const handleClearCart = () => {
+    clearCart();
+    showToast("Carrello vuoto", {
+    variant: "error",
+    link: "/products",
+    linkLabel: "Torna ai nostri prodotti!",
+  });
+};
+
     useEffect(() => {
         let total = 0;
         const shippingCost = 6.0;
@@ -71,7 +83,7 @@ export default function Cart() {
                             </button>
                             <button
                                 className="w-full rounded-2xl bg-[#bb1717] px-5 py-4 text-sm font-extrabold text-[#1a1400] hover:brightness-110"
-                                onClick={() => { clearCart() }}
+                                onClick={() => { clearCart(); handleClearCart(); }}
                             >
                                 Svuota il carrello
                             </button>

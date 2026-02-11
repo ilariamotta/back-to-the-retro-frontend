@@ -3,10 +3,15 @@ import { getProductImageUrl } from "../utils/imageUtils";
 import { useCart } from "../context/CartContext";
 import { FaRegHeart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
+import { useToast } from "../context/ToastContext";
+import { useState } from "react";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const navigate = useNavigate();
+  const { showToast } = useToast();
+  const [isFav, setIsFav] = useState(false);
+
 
   function details() {
     navigate(`/products/${product.slug}`);
@@ -18,15 +23,20 @@ export default function ProductCard({ product }) {
 
   const hasDiscount = product.discounted_price !== null && product.discounted_price !== undefined;
   const finalPrice = hasDiscount ? product.price - product.discounted_price : product.price;
-
+  
+  const toggleFav = () => {
+    setIsFav((prev) => !prev)
+  }
   const handleAddToCart = () => {
     const productToAdd = {
       id: product.id,
       slug: product.slug,
       name: product.name,
+      priceInitial: product.price,
       price: finalPrice,
       stock: product.stock,
       cover_image: product.cover_image,
+      discounted_price: product.discounted_price ?? null,
     };
 
     if (!product.id) {
@@ -54,9 +64,18 @@ export default function ProductCard({ product }) {
         <button
           type="button"
           className="absolute right-2 top-2 px-2 py-1"
+          onClick={toggleFav}
         >
-          <FaRegHeart className="text-lg text-s font-semibold text-[#ff0000] bg-transparent transition-all duration-300 hover:border-[#ff0000] hover:bg-[#ff0000]/10 hover:shadow-[0_0_16px_rgba(255,0,0,0.45)] hover:scale-[1.04] active:scale-[0.97]" />
+          <FaRegHeart
+            className={
+              "text-lg font-semibold transition-all duration-200 " +
+              (isFav
+                ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
+                : "text-white/80 hover:text-[#ff0000] hover:scale-110")
+            }
+          />
         </button>
+
       </div>
 
       {/* CONTENUTO */}
@@ -95,9 +114,18 @@ export default function ProductCard({ product }) {
             </button>
 
             <button
-              onClick={handleAddToCart}
-              className="relative rounded-xl border border-[#00D084]/70 px-4 py-2 text-xs font-semibold text-[#00D084] bg-transparent transition-all duration-300 ease-out hover:border-[#00D084] hover:bg-[#00D084]/10 hover:shadow-[0_0_16px_rgba(0,208,132,0.45)] hover:scale-[1.04] active:scale-[0.97]"
-            >
+              onClick={() => {
+                handleAddToCart();
+                showToast(
+                  `${product.name} è stato aggiunto al carrello!`,
+                  {
+                    link: `/carrello`,
+                    linkLabel: "Clicca qui per vedere il carrello!",
+                    image: getProductImageUrl(product.cover_image),
+                  }
+                );
+              }}
+              className="relative rounded-xl border border-[#00D084]/70 px-4 py-2 text-xs font-semibold text-[#00D084] bg-transparent transition-all duration-300 ease-out hover:border-[#00D084] hover:bg-[#00D084]/10 hover:shadow-[0_0_16px_rgba(0,208,132,0.45)] hover:scale-[1.04] active:scale-[0.97]">
               Aggiungi al carrello
             </button>
           </div>

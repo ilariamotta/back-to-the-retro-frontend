@@ -8,7 +8,7 @@ export default function BentoHero({icon}) {
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-12">
             {/* VIDEO*/}
             <div className="lg:col-span-8">
-                <div className="h-full rounded-2xl border bg-white p-4 shadow-sm">
+                <div className="h-full rounded-2xl border bg-black p-4 shadow-sm">
                     <div className="overflow-hidden rounded-2xl border bg-zinc-900">
                           <img src="/images/hero.gif"alt="Hero Back to the Retro" className="w-full rounded-2xl object-cover"/>
                     </div>

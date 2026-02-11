@@ -25,7 +25,7 @@ export default function SearchGames({ onSearch }) {
             </span>
 
             <input
-              type="search"
+              type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder="Cerca quello che desideri..."

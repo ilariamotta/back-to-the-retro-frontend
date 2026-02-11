@@ -3,16 +3,19 @@ import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
+import { useToast } from "../context/ToastContext";
+import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
 
 export default function ProductDetail() {
   const { addToCart, cart } = useCart();
   const { slug } = useParams();
+  const { showToast } = useToast();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [quantity, setQuantity] = useState(1);
-  const [showPopup, setShowPopup] = useState(false);
 
   const BACKEND = import.meta.env.VITE_BACKEND_URL
     ? import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "")
@@ -78,17 +81,21 @@ export default function ProductDetail() {
     };
     addToCart(productToAdd);
     setQuantity(1);
-    if (remainingStock - quantity > 0) {
-      setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 2000);
-    }
+
+    // ✅ sostituisce showPopup
+    showToast(`${product[0].name} aggiunto al carrello!`, {
+      link: "/carrello",
+      linkLabel: "Vai al carrello",
+    });
   };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <div className="flex flex-wrap items-center gap-2 text-sm text-white">
-        <NavLink to="/" className="hover:text-zinc-300">Ritorna alla Home</NavLink>
+      <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
+        <NavLink to="/" className="cursor-pointer hover:text-[#ffd21f]">Ritorna alla Home</NavLink>
         <span>/</span>
-        <span>{product[0].category}</span>
+        <NavLink to={`/${product[0].category.toLowerCase()}`} className="cursor-pointer hover:text-[#ffd21f]">{product[0].category}</NavLink>
+        {/* <span>{product[0].category}</span> */}
         <span>/</span>
         <span className="font-medium">{product[0].name}</span>
       </div>
@@ -115,7 +122,6 @@ export default function ProductDetail() {
 
             {/* Prezzo */}
             <div className="mt-4 flex flex-wrap items-end gap-3">
-              {/* <p className="text-4xl font-extrabold text-[#6C2BD9]">€ {product[0].price}</p> */}
               <p>
                 {/* prezzo originale  */}
                 <p>
@@ -135,7 +141,7 @@ export default function ProductDetail() {
                   <span
                     className={
                       product[0].discounted_price !== null
-                        ? "text-lg font-bold text-[#fe0000]"
+                        ? "text-lg font-bold text-[#6320EE]"
                         : "text-lg font-bold text-[#ffe417]"
                     }
                   >
@@ -147,22 +153,57 @@ export default function ProductDetail() {
             </div>
             {/* STOCK */}
             <div className="mt-4 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#00D084]" />
-              <p className="text-sm font-semibold text-[#00D084]">
-                {remainingStock} disponibili
+              <span
+                className={`h-2.5 w-2.5 rounded-full ${remainingStock <= 0 ? "bg-[#fe0000]" : "bg-[#00D084]"}`}
+              />
+              <p
+                className={`text-sm font-semibold ${remainingStock <= 0 ? "text-[#fe0000]" : "text-[#00D084]"}`}
+              >
+                {remainingStock <= 0 ? "Esaurito" : `${remainingStock} disponibili`}
               </p>
             </div>
-           {/* DESCRIPTION */}
-            <p className="mt-4 text-sm text-zinc-600">{product[0].description}</p>
+            {/* DESCRIPTION */}
+            <p className="mt-4 text-sm text-zinc-600 italic">Descrizione:</p>
+            <p>{product[0].description}</p>
+
+            {/* ALTRE INFO */}
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+
+              {/* piattaforma */}
+              <div className="
+              rounded-xl border border-zinc-200
+               bg-zinc-50
+              px-3 py-2
+               ">
+                <p className="text-xs text-zinc-500">Piattaforma</p>
+                <p className="font-semibold text-zinc-900">
+                  {product[0].platform}
+                </p>
+              </div>
+
+              {/* brand */}
+              <div className="
+             rounded-xl border border-zinc-200
+              bg-zinc-50
+              px-3 py-2
+                ">
+                <p className="text-xs text-zinc-500">Brand</p>
+                <p className="font-semibold text-zinc-900">
+                  {product[0].brand}
+                </p>
+              </div>
+
+            </div>
+
             {/* QUANTITY SELECTOR */}
-            <div className="flex items-center my-4">
+            <div className="flex items-center my-4 justify-center py-2">
               <button
                 onClick={decreaseQuantity}
                 disabled={quantity <= 1}
                 className={`h-10 w-10 flex items-center justify-center rounded-l-lg font-bold text-lg
                   ${quantity <= 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}
               >
-                -
+                <FaMinus className="text-xs" />
               </button>
               <span className="h-10 min-w-10 flex items-center justify-center bg-zinc-100 px-3 text-xs font-bold text-zinc-700">
                 {quantity}
@@ -173,7 +214,7 @@ export default function ProductDetail() {
                 className={`h-10 w-10 flex items-center justify-center rounded-r-lg font-bold text-lg
                   ${quantity >= remainingStock ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#ffd21f] text-[#1a1400] hover:brightness-110"}`}
               >
-                +
+                <FaPlus className="text-xs" />
               </button>
             </div>
             <button
@@ -192,11 +233,6 @@ export default function ProductDetail() {
           </div>
         </div>
       </section>
-      {showPopup && (
-        <div className="fixed bottom-6 right-6 bg-[#FFD21F] text-black px-4 py-3 rounded-xl shadow-lg font-bold animate-fade-in">
-          Prodotto aggiunto al carrello! 🛒
-        </div>
-      )}
     </div>
   );
 }
