@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { getProductImageUrl } from "../utils/imageUtils";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import { FaPlus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
@@ -13,7 +13,7 @@ export default function ProductCard({ product }) {
   const { wish, addToWishList, removeToList } = useWishList();
   const navigate = useNavigate();
   const { showToast } = useToast();
-  
+
   const isFav = wish.map(item => item.slug).includes(product.slug);
 
 
@@ -109,14 +109,38 @@ export default function ProductCard({ product }) {
             }
           }}
         >
-          <FaHeart
+          {
+            isFav ? (
+              <FaHeart
+                className={
+                  "text-lg font-semibold transition-all duration-200 " +
+                  (isFav
+                    ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
+                    : "text-white/80 hover:text-[#ff0000] hover:scale-110")
+                }
+              />
+            ) : (
+              <div className="rounded-full bg-white/20 p-1">
+                <FaRegHeart
+                  className={
+                    "text-lg font-semibold transition-all duration-200 " +
+                    (isFav
+                      ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
+                      : "text-white/80 hover:text-[#ff0000] hover:scale-110")
+                  }
+                />
+              </div>
+            )
+          }
+
+          {/* <FaHeart
             className={
               "text-lg font-semibold transition-all duration-200 " +
               (isFav
                 ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
                 : "text-white/80 hover:text-[#ff0000] hover:scale-110")
             }
-          />
+          /> */}
         </button>
 
       </div>
