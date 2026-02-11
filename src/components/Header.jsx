@@ -5,6 +5,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSearch } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
+import { useWishList } from "../context/WhishListContext";
 
 
 // LINK PAGINE
@@ -116,6 +117,8 @@ export default function Header() {
 
     const { cart } = useCart();
     const cartCount = cart.reduce((total, item) => total + item.quantity, 0 || 0);
+    const { wish } = useWishList();
+    const wishCount = wish.length;
     const isHomePage = location.pathname === "/";
 
     return (
@@ -128,10 +131,10 @@ export default function Header() {
                         <NavLink
                             to="/"
                             className="">
-                            <img 
-                                className="h-8 sm:h-10 md:h-12 w-auto max-w-[120px] object-contain" 
-                                src={isHomePage ? "/images/logo-piccolo.png" : "/images/logo_piccolo_back_to_home_new.png"} 
-                                alt="backtoretro" 
+                            <img
+                                className="h-8 sm:h-10 md:h-12 w-auto max-w-[120px] object-contain"
+                                src={isHomePage ? "/images/logo-piccolo.png" : "/images/logo_piccolo_back_to_home_new.png"}
+                                alt="backtoretro"
                             />
                         </NavLink>
                     </div>
@@ -160,30 +163,42 @@ export default function Header() {
                         </NavLink>
                         <NavLink
                             to="/wishlist"
-                            className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
+                            className="relative rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
                             title="Wishlist"
                         >
                             <FaRegHeart size={16} />
-                        </NavLink>
-
-                        <NavLink
-                            to="/carrello"
-                            className="relative rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
-                            title="Carrello"
-                            >
-                            <FiShoppingCart size={16} />
-
-                             {cartCount > 0 && (
-                            <span className="
+                            {wishCount > 0 && (
+                                <span className="
                             absolute -right-1 -top-1
                             flex h-5 min-w-5 items-center justify-center
                             rounded-full bg-[#FF006E]
                             px-1 text-[11px] font-extrabold text-white
                             shadow-[0_0_12px_rgba(255,0,110,0.55)]
                             "
-                            >
-                            {cartCount}
-                            </span>
+                                >
+                                    {wishCount}
+                                </span>
+                            )}
+                        </NavLink>
+
+                        <NavLink
+                            to="/carrello"
+                            className="relative rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
+                            title="Carrello"
+                        >
+                            <FiShoppingCart size={16} />
+
+                            {cartCount > 0 && (
+                                <span className="
+                            absolute -right-1 -top-1
+                            flex h-5 min-w-5 items-center justify-center
+                            rounded-full bg-[#FF006E]
+                            px-1 text-[11px] font-extrabold text-white
+                            shadow-[0_0_12px_rgba(255,0,110,0.55)]
+                            "
+                                >
+                                    {cartCount}
+                                </span>
                             )}
                         </NavLink>
 
