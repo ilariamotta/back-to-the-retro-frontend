@@ -13,13 +13,15 @@ export default function ProductsPage() {
   const initialMin = searchParams.get("min") ?? "0";
   const initialMax = searchParams.get("max") ?? "400";
   const initialPlatform = searchParams.get("platform") ?? "";
+  const initialBrand = searchParams.get("brand") ?? "";
 
   const [min, setMin] = useState(initialMin);
   const [max, setMax] = useState(initialMax);
   const [platform, setPlatform] = useState(initialPlatform);
+  const [brand, setBrand] = useState(initialBrand)
   const [products, setProducts] = useState([]);
   const [availablePlatforms, setAvailablePlatforms] = useState([]);
-
+  const [availableBrands, setAvailableBrands] = useState([])
   const minNumber = Number(min) || 0;
   const maxNumber = Number(max) || 400;
 
@@ -30,33 +32,44 @@ export default function ProductsPage() {
         setAvailablePlatforms(resp.data.results || []);
       })
       .catch(console.error);
+
+    axios.get(`${BACKEND}/retro/api/platforms/brands`).then((resp)=>{
+      setAvailableBrands(resp.data.results || [])
+    }).catch(console.error);
   }, [BACKEND]);
 
   useEffect(() => {
     const currentMin = searchParams.get("min") ?? "0";
     const currentMax = searchParams.get("max") ?? "400";
     const currentPlatform = searchParams.get("platform") ?? "";
+    const currentBrand = searchParams.get("brand") ?? "";
 
-    if (currentMin !== min || currentMax !== max || currentPlatform !== platform) {
+    if (currentMin !== min || currentMax !== max || currentPlatform !== platform || currentBrand !== brand) {
       const params = new URLSearchParams();
       params.set("min", min === "" ? "0" : min);
       params.set("max", max === "" ? "400" : max);
       if (platform) params.set("platform", platform);
+      if(brand) params.set("brand", brand)
       setSearchParams(params);
     }
-  }, [min, max, platform, searchParams, setSearchParams]);
+  }, [min, max, platform, searchParams, setSearchParams, brand]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       const platformParam = platform ? `&platform=${encodeURIComponent(platform)}` : "";
+      const brandParam = brand ? `&brand=${encodeURI(brand)}` : "";
       axios
-        .get(`${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}${platformParam}`)
+        .get(`${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}${platformParam}${brandParam}`)
         .then((resp) => setProducts(resp.data.results))
         .catch(console.error);
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [minNumber, maxNumber, platform, BACKEND]);
+  }, [minNumber, maxNumber, platform, BACKEND, brand]);
+
+  useEffect(()=>{
+
+  })
 
   return (
     <>
@@ -160,6 +173,27 @@ export default function ProductsPage() {
                       </option>
                     ))}
                   </select>
+                  <p className="text-xs font-extrabold tracking-wider text-[#00D084] mt-3">BRANDS</p>
+                  <div className="relative mt-3">
+                    <select
+                      value={brand}
+                      onChange={(e) => { setBrand(e.target.value) }}
+                      className="
+                      w-full rounded-xl border border-white/10 
+                      bg-[#2b2427] text-white
+                      px-4 py-3 text-sm font-semibold
+                      outline-none transition-all duration-300
+                      focus:border-[#00D084] focus:bg-[#00D084]/10
+                      focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
+                      appearance-none"
+                    >
+                      <option value="" className="bg-[#2b2427] text-white">TUTTI I BRAND</option>
+                      {availableBrands.map((p)=>(
+                        <option key={p.brand} value={p.brand} className="bg-[#2b2427] text-white"> {p.brand}</option>
+                      ))}
+                    </select>
+                  </div>
+
                   <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
                     <svg
                       width="18"
