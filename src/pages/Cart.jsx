@@ -11,13 +11,13 @@ export default function Cart() {
     const { showToast } = useToast();
 
     const handleClearCart = () => {
-    clearCart();
-    showToast("Carrello vuoto", {
-    variant: "remove",
-    link: "/products",
-    linkLabel: "Torna ai nostri prodotti!",
-  });
-};
+        clearCart();
+        showToast("Carrello vuoto", {
+            variant: "remove",
+            link: "/products",
+            linkLabel: "Torna ai nostri prodotti!",
+        });
+    };
 
     useEffect(() => {
         let total = 0;
@@ -38,7 +38,7 @@ export default function Cart() {
             <div className="flex flex-wrap items-end justify-between gap-3">
                 <div>
                     <h1 className="text-3xl font-extrabold tracking-tight text-[#6320EE] drop-shadow-[0_0_10px_rgba(99,32,238,0.65)]">
-                    Carrello
+                        Carrello
                     </h1>
                     <p className="mt-1 text-sm text-white">
                         Riepilogo prodotti nel carrello:
@@ -56,9 +56,9 @@ export default function Cart() {
                 {/* RIEPILOGO */}
                 <div className="lg:col-span-4">
                     <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-                        
+
                         <h2 className="text-lg font-semibold mb-4">Riepilogo</h2>
-                        
+
                         <div className="space-y-3 text-sm">
                             <div className="flex justify-between">
                                 <span>Subtotale</span>
@@ -80,9 +80,14 @@ export default function Cart() {
                         </div>
                         {/* BOTTONI */}
                         <div className="mt-6 space-y-3">
-                            <button className="w-full rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold text-[#06251c] hover:brightness-110">
+                            {cart.length > 0 ? <button className="w-full rounded-2xl bg-[#00D084] px-5 py-4 text-sm font-extrabold text-[#06251c] hover:brightness-110">
                                 <NavLink to="/checkout">Procedi al checkout</NavLink>
-                            </button>
+                            </button> : <div className="w-full rounded-2xl bg-zinc-400 px-5 py-4 text-sm font-extrabold text-[#06251c]">
+                                <p className="text-sm text-center text-zinc-600">
+                                    Il tuo carrello è vuoto
+                                </p>
+                            </div>
+                            }
                             <button
                                 className="w-full rounded-2xl bg-[#bb1717] px-5 py-4 text-sm font-extrabold text-[#1a1400] hover:brightness-110"
                                 onClick={() => { clearCart(); handleClearCart(); }}

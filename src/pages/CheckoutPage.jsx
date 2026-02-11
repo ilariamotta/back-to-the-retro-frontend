@@ -35,7 +35,7 @@ export default function CheckoutPage() {
         function calculateTotal() {
             let subtotal = 0;
             const shipping = 6.00;
-
+            
             cart.forEach(item => {
                 subtotal += item.price * item.quantity;
             });
@@ -366,7 +366,7 @@ export default function CheckoutPage() {
                                             }
                                             handleConfirmOrder();
                                         }}
-                                        disabled={!isFormDataValid() || isLoading}
+                                        disabled={!isFormDataValid() || isLoading }
                                         className={`
                                             w-full rounded-2xl
                                             px-5 py-4
