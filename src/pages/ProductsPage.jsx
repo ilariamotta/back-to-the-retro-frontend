@@ -117,34 +117,30 @@ export default function ProductsPage() {
                     setPlatform("");
                     setBrand("")
                   }}
-                  className="rounded-xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
+                  className="rounded-2xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
                   Reset
                 </button>
               </div>
             </div>
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
               {/* PREZZO */}
-              <div className="lg:col-span-5 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-2 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
                   FILTRO PREZZO
                 </p>
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-zinc-300">
-                      Min (€)
-                    </label>
                     <input
                       type="number"
                       value={min}
                       min={0}
                       className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
-                      onChange={(e) => setMin(e.target.value)}
-                    />
+                      onChange={(e) => setMin(e.target.value)} />
+                    <label className="mb-1 block text-xs font-semibold text-zinc-300 text-center py-1">
+                      Min (€)
+                    </label>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-semibold text-zinc-300">
-                      Max (€)
-                    </label>
                     <input
                       type="number"
                       value={max}
@@ -152,11 +148,14 @@ export default function ProductsPage() {
                       className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
                       onChange={(e) => setMax(e.target.value)}
                     />
+                    <label className="mb-1 block text-xs font-semibold text-zinc-300 text-center py-1">
+                      Max (€)
+                    </label>
                   </div>
                 </div>
               </div>
               {/* PIATTAFORMA */}
-              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
                   PIATTAFORMA
                 </p>
@@ -186,25 +185,28 @@ export default function ProductsPage() {
                 </div>
               </div>
               {/* BRANDS */}
-              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4 mt-3">
-                <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
+              <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
+                <p className="text-xs font-extrabold tracking-wider text-[#FF006E]">
                   BRANDS
                 </p>
+
                 <div className="relative mt-3">
                   <select
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
                     className="
-                      w-full rounded-xl border border-white/10 
-                      bg-[#2b2427] text-white
-                      px-4 pr-10 py-3 text-sm font-semibold
-                      outline-none transition-all duration-300
-                      focus:border-[#00D084] focus:bg-[#00D084]/10
-                      focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
-                      appearance-none">
+        w-full rounded-xl border border-white/10 
+        bg-[#2b2427] text-white
+        px-4 pr-10 py-3 text-sm font-semibold
+        outline-none transition-all duration-300
+        focus:border-[#FF006E] focus:bg-[#FF006E]/10
+        focus:shadow-[0_0_16px_rgba(255,0,110,0.45)]
+        appearance-none"
+                  >
                     <option value="" className="bg-[#2b2427] text-white">
-                      TUTTI I BRAND
+                      Scegli il brand
                     </option>
+
                     {availableBrands.map((b, index) => (
                       <option
                         key={index}
