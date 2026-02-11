@@ -56,7 +56,9 @@ export default function Cart() {
                 {/* RIEPILOGO */}
                 <div className="lg:col-span-4">
                     <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+                        
                         <h2 className="text-lg font-semibold mb-4">Riepilogo</h2>
+                        
                         <div className="space-y-3 text-sm">
                             <div className="flex justify-between">
                                 <span>Subtotale</span>
@@ -87,6 +89,7 @@ export default function Cart() {
                             >
                                 Svuota il carrello
                             </button>
+                            <span className="text-sm text-gray-400">(La spedizione è gratuita per gli ordini sopra i €100)</span>
                         </div>
                     </div>
                 </div>
