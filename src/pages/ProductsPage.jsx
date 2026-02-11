@@ -120,15 +120,6 @@ export default function ProductsPage() {
                 <h2 className="text-lg font-extrabold text-white">Filtri</h2>
               </div>
               <div className="flex flex-wrap items-center gap-3">
-                <button type="button" onClick={() => {
-                  setShowDiscounted((prev) => !prev);
-                }}
-                  className={` rounded-2xl px-4 py-2 text-xs font-extrabold transition-all duration-300 active:scale-[0.97] border 
-                  ${showDiscounted ? "border-[#FF006E] bg-[#FF006E]/20 text-[#FF006E] shadow-[0_0_16px_rgba(255,0,110,0.45)]" : "border-[#FF006E]/70 text-[#FF006E] bg-transparent hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)]"} `} >
-                  {showDiscounted ? "Mostra tutti" : "Scontati"} </button>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -144,7 +135,7 @@ export default function ProductsPage() {
             </div>
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
               {/* PREZZO */}
-              <div className="lg:col-span-2 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
                   FILTRO PREZZO
                 </p>
@@ -175,7 +166,7 @@ export default function ProductsPage() {
                 </div>
               </div>
               {/* PIATTAFORMA */}
-              <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
                   PIATTAFORMA
                 </p>
@@ -205,7 +196,7 @@ export default function ProductsPage() {
                 </div>
               </div>
               {/* BRANDS */}
-              <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#FF006E]">
                   BRANDS
                 </p>
@@ -242,7 +233,7 @@ export default function ProductsPage() {
 
 
               {/* ORDINAMENTO */}
-              <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
+              <div className="lg:col-span-6 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#00BFFF]">
                   ORDINA
                 </p>
@@ -264,7 +255,25 @@ export default function ProductsPage() {
                   </div>
                 </div>
               </div>
-
+              {/* SCONTATI */}
+              <div className="lg:col-span-6 rounded-2xl border border-white/10 p-4">
+                <p className="text-xs font-extrabold tracking-wider text-[#ffd21f]">
+                  SCONTATI
+                </p>
+                <div className="mt-3 flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowDiscounted((prev) => !prev)}
+                    className={`
+                      rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-300 active:scale-[0.97]
+                      border w-full text-center bg-[#2b2427] text-white
+                      ${showDiscounted
+                        ? "border-[#ffd21f] "
+                        : "border-white/10"}`}>
+                    {showDiscounted ? "Mostra tutti" : "Mostra scontati"}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
