@@ -10,9 +10,11 @@ import { useWishList } from "../context/WhishListContext";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
-  const { addToWishList } = useWishList();
+  const { wish, addToWishList, removeToList } = useWishList();
   const navigate = useNavigate();
   const { showToast } = useToast();
+
+  const isFav = wish.some((item) => item.slug === product.slug);
 
 
   function details() {
@@ -91,18 +93,30 @@ export default function ProductCard({ product }) {
           type="button"
           className="absolute right-2 top-2 px-2 py-1"
           onClick={() => {
-            handleAddToWish();
-            showToast(
-              `${product.name} è stato aggiunto alla wishlist!`,
-              {
-                link: `/wishlist`,
-                linkLabel: "Clicca qui per vedere la wishlist!",
-                image: getProductImageUrl(product.cover_image),
+              if (isFav) {
+                removeToList(product.slug);
+                showToast(`${product.name} è stato rimosso dalla wishlist!`);
+              } else {
+                handleAddToWish();
+                showToast(
+                  `${product.name} è stato aggiunto alla wishlist!`,
+                  {
+                    link: `/wishlist`,
+                    linkLabel: "Clicca qui per vedere la wishlist!",
+                    image: getProductImageUrl(product.cover_image),
+                  }
+                );
               }
-            );
-          }}
+            }}
         >
-          <FaHeart className="text-[#ff006e] hover:text-[#ff006e]/80 transition-colors duration-300" />
+            <FaHeart
+              className={
+                "text-lg font-semibold transition-all duration-200 " +
+                (isFav
+                  ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
+                  : "text-white/80 hover:text-[#ff0000] hover:scale-110")
+              }
+            />
         </button>
 
       </div>
