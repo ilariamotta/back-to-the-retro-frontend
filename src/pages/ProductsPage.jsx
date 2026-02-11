@@ -161,8 +161,7 @@ export default function ProductsPage() {
                       outline-none transition-all duration-300
                       focus:border-[#00D084] focus:bg-[#00D084]/10
                       focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
-                      appearance-none"
-                  >
+                      appearance-none">
                     <option value="" className="bg-[#2b2427] text-white">
                       Tutte le piattaforme
                     </option>
@@ -174,43 +173,31 @@ export default function ProductsPage() {
                     ))}
                   </select>
 
-                
+
                 </div>
               </div>
 
               {/* ORDINAMENTO */}
               <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
-                <p className="text-xs font-extrabold tracking-wider text-[#FF006E]">
+                <p className="text-xs font-extrabold tracking-wider text-[#00BFFF]">
                   ORDINA
                 </p>
 
-                <div className="relative mt-3">
+                <div className="mt-3">
                   <select
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
-                    className="
-                      w-full rounded-xl border border-white/10 
-                      bg-[#2b2427] text-white
-                      px-4 pr-10 py-3 text-sm font-semibold
-                      outline-none transition-all duration-300
-                      focus:border-[#FF006E] focus:bg-[#FF006E]/10
-                      focus:shadow-[0_0_16px_rgba(255,0,110,0.45)]
-                      appearance-none"
-                  >
+                    className="w-full rounded-xl border border-white/10 bg-[#2b2427] text-white px-4 py-3 text-sm font-semibold outline-none transition-all duration-300 focus:border-[#00BFFF] focus:bg-[#00BFFF]/10 focus:shadow-[0_0_16px_rgba(0,191,255,0.45)]">
                     <option value="" className="bg-[#2b2427] text-white">
-                      Nessun ordine
-                    </option>
+                      Nessun ordine</option>
                     <option value="asc" className="bg-[#2b2427] text-white">
-                      Prezzo crescente
-                    </option>
+                      Prezzo crescente</option>
                     <option value="desc" className="bg-[#2b2427] text-white">
-                      Prezzo decrescente
-                    </option>
+                      Prezzo decrescente</option>
                   </select>
-
-                 
                 </div>
               </div>
+
             </div>
           </div>
 
