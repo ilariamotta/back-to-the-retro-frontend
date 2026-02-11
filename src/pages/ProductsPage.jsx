@@ -14,73 +14,66 @@ export default function ProductsPage() {
   const initialMax = searchParams.get("max") ?? "400";
   const initialSort = searchParams.get("sort") ?? "";
   const initialPlatform = searchParams.get("platform") ?? "";
+  const initialBrand = searchParams.get("brand") ?? "";
 
   const [min, setMin] = useState(initialMin);
   const [max, setMax] = useState(initialMax);
   const [sort, setSort] = useState(initialSort);
   const [platform, setPlatform] = useState(initialPlatform);
-
+  const [brand, setBrand] = useState(initialBrand)
   const [products, setProducts] = useState([]);
-
+  const [availablePlatforms, setAvailablePlatforms] = useState([]);
+  const [availableBrands, setAvailableBrands] = useState([])
   const minNumber = Number(min) || 0;
   const maxNumber = Number(max) || 400;
 
   // URL
   useEffect(() => {
-    const params = new URLSearchParams();
-    params.set("min", min === "" ? "0" : min);
-    params.set("max", max === "" ? "400" : max);
-    if (sort) params.set("sort", sort);
-    if (platform) params.set("platform", platform);
-    setSearchParams(params);
-  }, [min, max, sort, platform, setSearchParams]);
+    axios
+      .get(`${BACKEND}/retro/api/platforms`)
+      .then((resp) => {
+        setAvailablePlatforms(resp.data.results || []);
+      })
+      .catch(console.error);
+
+    axios.get(`${BACKEND}/retro/api/platforms/brands`).then((resp)=>{
+      setAvailableBrands(resp.data.results || [])
+    }).catch(console.error);
+  }, [BACKEND]);
+
+  useEffect(() => {
+    const currentMin = searchParams.get("min") ?? "0";
+    const currentMax = searchParams.get("max") ?? "400";
+    const currentPlatform = searchParams.get("platform") ?? "";
+    const currentBrand = searchParams.get("brand") ?? "";
+
+    if (currentMin !== min || currentMax !== max || currentPlatform !== platform || currentBrand !== brand) {
+      const params = new URLSearchParams();
+      params.set("min", min === "" ? "0" : min);
+      params.set("max", max === "" ? "400" : max);
+      if (platform) params.set("platform", platform);
+      if(brand) params.set("brand", brand)
+      setSearchParams(params);
+    }
+  }, [min, max, platform, searchParams, setSearchParams, brand]);
 
   // CHIAMATA
   useEffect(() => {
     const timeout = setTimeout(() => {
+      const platformParam = platform ? `&platform=${encodeURIComponent(platform)}` : "";
+      const brandParam = brand ? `&brand=${encodeURI(brand)}` : "";
       axios
-        .get(`${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}`)
-        .then((resp) => setProducts(resp.data.results || []))
+        .get(`${BACKEND}/retro/api/products?min=${minNumber}&max=${maxNumber}${platformParam}${brandParam}`)
+        .then((resp) => setProducts(resp.data.results))
         .catch(console.error);
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [minNumber, maxNumber, BACKEND]);
+  }, [minNumber, maxNumber, platform, BACKEND, brand]);
 
-  // SCONTI
-  const getFinalPrice = (p) => {
-    const price = Number(p.price) || 0;
-    const discount = p.discounted_price != null ? Number(p.discounted_price) : null;
-    return discount != null ? price - discount : price;
-  };
+  useEffect(()=>{
 
-  // PIATTAFORME DISPONIBILI
-  const availablePlatforms = Array.from(
-    new Set(
-      (products || [])
-        .map((p) => p.platform ?? p.platforms)
-        .filter((x) => typeof x === "string" && x.trim() !== "")
-    )
-  ).sort();
-
-  // FILTRO PIATTAFORMA
-  const filteredByPlatform = !platform
-    ? products
-    : products.filter((p) => (p.platform ?? p.platforms) === platform);
-
-  // ORDINAMENTO
-  const sortedProducts = [...filteredByPlatform].sort((a, b) => {
-    if (sort === "asc") return getFinalPrice(a) - getFinalPrice(b);
-    if (sort === "desc") return getFinalPrice(b) - getFinalPrice(a);
-    return 0;
-  });
-
-  const resetAll = () => {
-    setMin("0");
-    setMax("400");
-    setSort("");
-    setPlatform("");
-  };
+  })
 
   return (
     <>
@@ -100,9 +93,13 @@ export default function ProductsPage() {
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  onClick={resetAll}
-                  className="rounded-xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]"
-                >
+                  onClick={() => {
+                    setMin("0");
+                    setMax("400");
+                    setPlatform("");
+                    setBrand("")
+                  }}
+                  className="rounded-xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
                   Reset
                 </button>
               </div>
@@ -172,29 +169,39 @@ export default function ProductsPage() {
                       </option>
                     ))}
                   </select>
+                  {/* BRANDS  */}
+                  <p className="text-xs font-extrabold tracking-wider text-[#00D084] mt-3">BRANDS</p>
+                  <div className="relative mt-3">
+                    <select
+                      value={brand}
+                      onChange={(e) => { setBrand(e.target.value) }}
+                      className="
+                      w-full rounded-xl border border-white/10 
+                      bg-[#2b2427] text-white
+                      px-4 py-3 text-sm font-semibold
+                      outline-none transition-all duration-300
+                      focus:border-[#00D084] focus:bg-[#00D084]/10
+                      focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
+                      appearance-none"
+                    >
+                      <option value="" className="bg-[#2b2427] text-white">TUTTI I BRAND</option>
+                      {availableBrands.map((p)=>(
+                        <option key={p.brand} value={p.brand} className="bg-[#2b2427] text-white"> {p.brand}</option>
+                      ))}
+                    </select>
+                  </div>
 
-
-                </div>
-              </div>
-
-              {/* ORDINAMENTO */}
-              <div className="lg:col-span-3 rounded-2xl border border-white/10 p-4">
-                <p className="text-xs font-extrabold tracking-wider text-[#00BFFF]">
-                  ORDINA
-                </p>
-
-                <div className="mt-3">
-                  <select
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#2b2427] text-white px-4 py-3 text-sm font-semibold outline-none transition-all duration-300 focus:border-[#00BFFF] focus:bg-[#00BFFF]/10 focus:shadow-[0_0_16px_rgba(0,191,255,0.45)]">
-                    <option value="" className="bg-[#2b2427] text-white">
-                      Nessun ordine</option>
-                    <option value="asc" className="bg-[#2b2427] text-white">
-                      Prezzo crescente</option>
-                    <option value="desc" className="bg-[#2b2427] text-white">
-                      Prezzo decrescente</option>
-                  </select>
+                  <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                    <svg
+                      width="18"
+                      height="18"
+                      fill="white"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="opacity-70">
+                      <path d="M5.516 7.548l4.484 4.484 4.484-4.484L16 8.548l-6 6-6-6z" />
+                    </svg>
+                  </div>
                 </div>
               </div>
 
