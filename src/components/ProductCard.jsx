@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { getProductImageUrl } from "../utils/imageUtils";
+import { FaHeart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import { FaRegHeart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
-import { useState } from "react";
 import { useWishList } from "../context/WhishListContext";
 
 
@@ -14,7 +13,6 @@ export default function ProductCard({ product }) {
   const { addToWishList } = useWishList();
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const [isFav, setIsFav] = useState(false);
 
 
   function details() {
@@ -25,12 +23,10 @@ export default function ProductCard({ product }) {
     e.target.src = "/images/placeholder_img.png";
   };
 
+  const basePrice = product.priceInitial ?? product.price;
   const hasDiscount = product.discounted_price !== null && product.discounted_price !== undefined;
-  const finalPrice = hasDiscount ? product.price - product.discounted_price : product.price;
+  const finalPrice = hasDiscount ? basePrice - product.discounted_price : basePrice;
 
-  const toggleFav = () => {
-    setIsFav((prev) => !prev)
-  }
   const handleAddToCart = () => {
     const productToAdd = {
       id: product.id,
@@ -95,19 +91,18 @@ export default function ProductCard({ product }) {
           type="button"
           className="absolute right-2 top-2 px-2 py-1"
           onClick={() => {
-            toggleFav();
             handleAddToWish();
-
+            showToast(
+              `${product.name} è stato aggiunto alla wishlist!`,
+              {
+                link: `/wishlist`,
+                linkLabel: "Clicca qui per vedere la wishlist!",
+                image: getProductImageUrl(product.cover_image),
+              }
+            );
           }}
         >
-          <FaRegHeart
-            className={
-              "text-lg font-semibold transition-all duration-200 " +
-              (isFav
-                ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
-                : "text-white/80 hover:text-[#ff0000] hover:scale-110")
-            }
-          />
+          <FaHeart className="text-[#ff006e] hover:text-[#ff006e]/80 transition-colors duration-300" />
         </button>
 
       </div>
@@ -129,7 +124,7 @@ export default function ProductCard({ product }) {
           {/* prezzo originale (se scontato) */}
           {hasDiscount && (
             <span className="block text-lg font-bold text-[#ffe417] line-through">
-              € {product.price}
+              € { (product.priceInitial ?? product.price).toFixed ? (product.priceInitial ?? product.price).toFixed(2) : (product.priceInitial ?? product.price) }
             </span>
           )}
 
