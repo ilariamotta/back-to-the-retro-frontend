@@ -97,6 +97,7 @@ export default function ProductsPage() {
                     setMin("0");
                     setMax("400");
                     setPlatform("");
+                    setBrand("")
                   }}
                   className="rounded-xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
                   Reset
@@ -173,6 +174,7 @@ export default function ProductsPage() {
                       </option>
                     ))}
                   </select>
+                  {/* BRANDS  */}
                   <p className="text-xs font-extrabold tracking-wider text-[#00D084] mt-3">BRANDS</p>
                   <div className="relative mt-3">
                     <select
