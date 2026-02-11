@@ -17,35 +17,39 @@ import { ToastProvider } from './context/ToastContext'
 import Faq from './pages/Faq'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import PageNotFound from './pages/PageNotFound'
-
+import { WhishProvider } from './context/WhishListContext'
+import Wishlist from './pages/Wishlist'
 
 function App() {
   return (
 
     <CartProvider>
-      <StripeProvider>
-        <BrowserRouter>
-          <ToastProvider>
-            <Routes>
-              <Route element={<AppLayout />}>
-                <Route element={<Home />} path="/" />
-                <Route element={<ProductsPage />} path="/products" />
-                <Route element={<ProductDetail />} path="/products/:slug" />
-                <Route element={<Videogames />} path="/categories/videogames" />
-                <Route element={<Consoles />} path="/categories/consoles" />
-                <Route element={<Accessories />} path="/categories/accessories" />
-                <Route element={<Cart />} path="/carrello" />
-                <Route element={<CheckoutPage />} path="/checkout" />
-                <Route element={<SearchPage />} path="/search" />
-                <Route element={<SuccessPage />} path="/success" />
-                <Route element={<Faq />} path="/faq" />
-                <Route element={<PrivacyPolicy />} path='/privacy' />
-                <Route element={<PageNotFound />} path='*' />
-              </Route>
-            </Routes>
-          </ToastProvider>
-        </BrowserRouter>
-      </StripeProvider>
+      <WhishProvider>
+        <StripeProvider>
+          <BrowserRouter>
+            <ToastProvider>
+              <Routes>
+                <Route element={<AppLayout />}>
+                  <Route element={<Home />} path="/" />
+                  <Route element={<ProductsPage />} path="/products" />
+                  <Route element={<ProductDetail />} path="/products/:slug" />
+                  <Route element={<Videogames />} path="/categories/videogames" />
+                  <Route element={<Consoles />} path="/categories/consoles" />
+                  <Route element={<Accessories />} path="/categories/accessories" />
+                  <Route element={<Cart />} path="/carrello" />
+                  <Route element={<CheckoutPage />} path="/checkout" />
+                  <Route element={<SearchPage />} path="/search" />
+                  <Route element={<SuccessPage />} path="/success" />
+                  <Route element={<Faq />} path="/faq" />
+                  <Route element={<PrivacyPolicy />} path='/privacy' />
+                  <Route element={<Wishlist />} path='/wishlist' />
+                  <Route element={<PageNotFound />} path='*' />
+                </Route>
+              </Routes>
+            </ToastProvider>
+          </BrowserRouter>
+        </StripeProvider>
+      </WhishProvider>
     </CartProvider>
   )
 }

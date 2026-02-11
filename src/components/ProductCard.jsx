@@ -5,9 +5,13 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
 import { useState } from "react";
+import { useWishList } from "../context/WhishListContext";
+
+
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const { addToWishList } = useWishList();
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [isFav, setIsFav] = useState(false);
@@ -23,7 +27,7 @@ export default function ProductCard({ product }) {
 
   const hasDiscount = product.discounted_price !== null && product.discounted_price !== undefined;
   const finalPrice = hasDiscount ? product.price - product.discounted_price : product.price;
-  
+
   const toggleFav = () => {
     setIsFav((prev) => !prev)
   }
@@ -48,6 +52,32 @@ export default function ProductCard({ product }) {
     addToCart(productToAdd);
   };
 
+  const handleAddToWish = () => {
+    const productToAddWish = {
+      id: product.id,
+      slug: product.slug,
+      name: product.name,
+      priceInitial: product.price,
+      price: finalPrice,
+      stock: product.stock,
+      cover_image: product.cover_image,
+      discounted_price: product.discounted_price ?? null,
+    }
+    if (!product.id) {
+      console.error('❌ ERRORE: Prodotto senza ID!', product);
+      alert('Errore: Prodotto senza ID. Ricarica la pagina.');
+      return;
+    }
+
+
+    addToWishList(productToAddWish)
+
+  }
+
+
+
+
+
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#211a1d] shadow-sm transition hover:shadow-lg hover:scale-[1.01]">
       {/* IMMAGINE */}
@@ -64,7 +94,11 @@ export default function ProductCard({ product }) {
         <button
           type="button"
           className="absolute right-2 top-2 px-2 py-1"
-          onClick={toggleFav}
+          onClick={() => {
+            toggleFav();
+            handleAddToWish();
+
+          }}
         >
           <FaRegHeart
             className={
