@@ -9,9 +9,13 @@ export default function Footer() {
           <div>
             <h3 className="text-2xl font-bold text-[#ff006e] drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">Back To The Retro</h3>
             <p className="text-[#ffd21f] text-xs mb-4">Classic Games Revival</p>
-            <p className="text-sm text-gray mb-4">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate pariatur, labore sequi similique amet quas cumque repellendus ex possimus!
-            </p>
+            <p className="text-sm text-gray mb-4 pr-20">
+              Il nostro sito dà vita alle icone del passato nel mondo del retrogaming!<br />
+              Un luogo dove è possibile recuperare quei ricordi del passato.<br />
+              Una vetrina aperta sui grandi classici che hanno segnato intere generazioni.<br />
+             Sfoglia il catalogo e rendi il passato di nuovo giocabile!</p>
+
+            
             <p className="text-xs text-gray">
               Copyright © 2026 Back To The Retro
             </p>
