@@ -1,22 +1,27 @@
 import { useCart } from "../context/CartContext";
 import { getProductImageUrl } from "../utils/imageUtils";
-import { FaPlus } from "react-icons/fa";
-import { FaMinus } from "react-icons/fa";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import { useToast } from "../context/ToastContext";
 import { VscActivateBreakpoints } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
 
 export default function CartItemCard({ item }) {
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
     const { showToast } = useToast();
     const originalPrice = Number(item.priceInitial ?? item.price ?? 0);
     const discountValue = Number(item.discounted_price ?? 0);
+    const navigate = useNavigate();
 
-const hasDiscount =
-  item.discounted_price !== null &&
-  item.discounted_price !== undefined &&
-  discountValue > 0;
+    const hasDiscount =
+        item.discounted_price !== null &&
+        item.discounted_price !== undefined &&
+        discountValue > 0;
 
-const finalPrice = hasDiscount ? originalPrice - discountValue : originalPrice;
+    const finalPrice = hasDiscount ? originalPrice - discountValue : originalPrice;
+
+    function details() {
+        navigate(`/products/${item.slug}`);
+    }
 
     // Gestione errore caricamento immagine
     const handleImageError = (e) => {
@@ -48,9 +53,11 @@ const finalPrice = hasDiscount ? originalPrice - discountValue : originalPrice;
                 {/* Nome + prezzo */}
                 <div className="min-w-0 flex-1">
                     <p className="truncate text-base font-extrabold text-[#2a2f45]">{item.name}</p>
-                    
-
-                    
+                    <button
+                        onClick={details}
+                        className="py-2 px-2 text-xs font-semibold text-[#6320EE] bg-transparent transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]">
+                        Vai ai dettagli del prodotto
+                    </button>
                     <div className="mt-2">
                         {/* prezzo originale (se scontato) */}
                         {hasDiscount && (
