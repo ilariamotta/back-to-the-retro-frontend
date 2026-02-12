@@ -26,7 +26,7 @@ export default function Cart() {
             total += item.price * item.quantity;
         });
         setSubtotal(total);
-        if (total > 100) {
+        if (total >= 100) {
             setTotalAmount(total); // free shipping
         } else {
             setTotalAmount(total + shippingCost);
@@ -67,7 +67,7 @@ export default function Cart() {
                             <div className="flex justify-between">
                                 <span>Spedizione</span>
                                 <span className="font-bold">
-                                    {subTotal > 100 ? "Gratis" : "€ 6.00"}
+                                    {subTotal >= 100 ? "Gratis" : "€ 6.00"}
                                 </span>
                             </div>
                             <div className="h-px bg-zinc-200" />
