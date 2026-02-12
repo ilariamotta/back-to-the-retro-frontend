@@ -25,6 +25,7 @@ export default function ProductsPage() {
   const initialPlatform = searchParams.get("platform") ?? "";
   const initialBrand = searchParams.get("brand") ?? "";
   const initialQuery = searchParams.get("q") ?? "";
+  const openFiltersParam = searchParams.get("openFilters");
 
   const [min, setMin] = useState(initialMin);
   const [max, setMax] = useState(initialMax);
@@ -36,9 +37,18 @@ export default function ProductsPage() {
   const [availableBrands, setAvailableBrands] = useState([])
   const [showDiscounted, setShowDiscounted] = useState(false);
   const [query, setQuery] = useState(initialQuery);
+  const [filtersOpen, setFiltersOpen] = useState(openFiltersParam === "true");
 
   const minNumber = Number(min) || 0;
   const maxNumber = Number(max) || 400;
+
+  useEffect(() => {
+    if (openFiltersParam === "true") {
+      setFiltersOpen(true);
+    } else if (openFiltersParam === "false") {
+      setFiltersOpen(false);
+    }
+  }, [openFiltersParam]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -142,78 +152,87 @@ export default function ProductsPage() {
           <h1 className="text-start text-3xl font-bold text-[#ff006e] mt-8 mb-6 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">
             I NOSTRI PRODOTTI
           </h1>
-
-
+          <button
+            onClick={() => setFiltersOpen(prev => !prev)}
+            className="
+              mb-4 rounded-xl px-4 py-2 text-sm font-bold
+              border border-white/20 text-white
+              hover:bg-white/5 transition-all duration-300">
+            {filtersOpen ? "Nascondi filtri" : "Mostra filtri"}
+          </button>
           {/* FILTRI */}
-          <div className="rounded-2xl border border-white/10 bg-[#211a1d] p-5 shadow-sm">
-            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-              <div>
-                <h2 className="text-lg font-extrabold text-white">Filtri</h2>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMin("0");
-                    setMax("400");
-                    setPlatform("");
-                    setBrand("");
-                    setShowDiscounted(false);
-                    setQuery("");
-                  }}
-                  className="rounded-2xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
-                  Reset
-                </button>
-              </div>
-            </div>
-            <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
-              {/* SEARCH BAR */}
-              <div className="lg:col-span-12 rounded-2xl border border-white/10 p-4">
-                <div className="mb-1">
-                  <SearchGames onSearch={setQuery} initialValue={query} />
+
+          {filtersOpen && (
+            <div className="rounded-2xl border border-white/10 bg-[#211a1d] p-5 shadow-sm">
+
+              <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <h2 className="text-lg font-extrabold text-white">Filtri</h2>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMin("0");
+                      setMax("400");
+                      setPlatform("");
+                      setBrand("");
+                      setShowDiscounted(false);
+                      setQuery("");
+                    }}
+                    className="rounded-2xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
+                    Reset
+                  </button>
                 </div>
               </div>
-              {/* PREZZO */}
-              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
-                <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
-                  FILTRO PREZZO
-                </p>
-                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div>
-                    <input
-                      type="number"
-                      value={min}
-                      min={0}
-                      className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
-                      onChange={(e) => setMin(e.target.value)} />
-                    <label className="mb-1 block text-xs font-semibold text-zinc-300 text-center py-1">
-                      Min (€)
-                    </label>
-                  </div>
-                  <div>
-                    <input
-                      type="number"
-                      value={max}
-                      min={0}
-                      className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
-                      onChange={(e) => setMax(e.target.value)}
-                    />
-                    <label className="mb-1 block text-xs font-semibold text-zinc-300 text-center py-1">
-                      Max (€)
-                    </label>
+              <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
+                {/* SEARCH BAR */}
+                <div className="lg:col-span-12 rounded-2xl border border-white/10 p-4">
+                  <div className="mb-1">
+                    <SearchGames onSearch={setQuery} initialValue={query} />
                   </div>
                 </div>
-              </div>
-              {/* PIATTAFORMA */}
-              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
-                <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
-                  PIATTAFORMA
-                </p>
-                <div className="relative mt-3">
-                  <select
-                    value={platform}
-                    onChange={(e) => setPlatform(e.target.value)}
-                    className="
+                {/* PREZZO */}
+                <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
+                  <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
+                    FILTRO PREZZO
+                  </p>
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div>
+                      <input
+                        type="number"
+                        value={min}
+                        min={0}
+                        className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
+                        onChange={(e) => setMin(e.target.value)} />
+                      <label className="mb-1 block text-xs font-semibold text-zinc-300 text-center py-1">
+                        Min (€)
+                      </label>
+                    </div>
+                    <div>
+                      <input
+                        type="number"
+                        value={max}
+                        min={0}
+                        className="w-full rounded-xl border border-[#6320EE]/70 bg-transparent px-3 py-3 text-sm font-semibold text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-[#6320EE] focus:bg-[#6320EE]/10 focus:shadow-[0_0_16px_rgba(99,32,238,0.45)]"
+                        onChange={(e) => setMax(e.target.value)}
+                      />
+                      <label className="mb-1 block text-xs font-semibold text-zinc-300 text-center py-1">
+                        Max (€)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                {/* PIATTAFORMA */}
+                <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
+                  <p className="text-xs font-extrabold tracking-wider text-[#00D084]">
+                    PIATTAFORMA
+                  </p>
+                  <div className="relative mt-3">
+                    <select
+                      value={platform}
+                      onChange={(e) => setPlatform(e.target.value)}
+                      className="
                       w-full rounded-xl border border-white/10 
                       bg-[#2b2427] text-white
                       px-4 pr-10 py-3 text-sm font-semibold
@@ -221,30 +240,30 @@ export default function ProductsPage() {
                       focus:border-[#00D084] focus:bg-[#00D084]/10
                       focus:shadow-[0_0_16px_rgba(0,208,132,0.45)]
                       appearance-none">
-                    <option value="" className="bg-[#2b2427] text-white">
-                      Tutte le piattaforme
-                    </option>
-                    {availablePlatforms.map((p, index) => {
-                      return (
-                        <option key={index} value={p.name} className="bg-[#2b2427] text-white">
-                          {p.name}
-                        </option>
-                      );
-                    })}
-                  </select>
+                      <option value="" className="bg-[#2b2427] text-white">
+                        Tutte le piattaforme
+                      </option>
+                      {availablePlatforms.map((p, index) => {
+                        return (
+                          <option key={index} value={p.name} className="bg-[#2b2427] text-white">
+                            {p.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
                 </div>
-              </div>
-              {/* BRANDS */}
-              <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
-                <p className="text-xs font-extrabold tracking-wider text-[#FF006E]">
-                  BRANDS
-                </p>
+                {/* BRANDS */}
+                <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
+                  <p className="text-xs font-extrabold tracking-wider text-[#FF006E]">
+                    BRANDS
+                  </p>
 
-                <div className="relative mt-3">
-                  <select
-                    value={brand}
-                    onChange={(e) => setBrand(e.target.value)}
-                    className="
+                  <div className="relative mt-3">
+                    <select
+                      value={brand}
+                      onChange={(e) => setBrand(e.target.value)}
+                      className="
                       w-full rounded-xl border border-white/10 
                       bg-[#2b2427] text-white
                       px-4 pr-10 py-3 text-sm font-semibold
@@ -252,69 +271,72 @@ export default function ProductsPage() {
                       focus:border-[#FF006E] focus:bg-[#FF006E]/10
                       focus:shadow-[0_0_16px_rgba(255,0,110,0.45)]
                       appearance-none"
-                  >
-                    <option value="" className="bg-[#2b2427] text-white">
-                      Scegli il brand
-                    </option>
-
-                    {availableBrands.map((b, index) => (
-                      <option
-                        key={index}
-                        value={b.brand}
-                        className="bg-[#2b2427] text-white"
-                      >
-                        {b.brand}
+                    >
+                      <option value="" className="bg-[#2b2427] text-white">
+                        Scegli il brand
                       </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
 
-
-              {/* ORDINAMENTO */}
-              <div className="lg:col-span-6 rounded-2xl border border-white/10 p-4">
-                <p className="text-xs font-extrabold tracking-wider text-[#00BFFF]">
-                  ORDINA
-                </p>
-
-                <div className="mt-3">
-                  <select
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#2b2427] text-white px-4 py-3 text-sm font-semibold outline-none transition-all duration-300 focus:border-[#00BFFF] focus:bg-[#00BFFF]/10 focus:shadow-[0_0_16px_rgba(0,191,255,0.45)]">
-                    <option value="" className="bg-[#2b2427] text-white">
-                      Nessun ordine</option>
-                    <option value="asc" className="bg-[#2b2427] text-white">
-                      Prezzo crescente</option>
-                    <option value="desc" className="bg-[#2b2427] text-white">
-                      Prezzo decrescente</option>
-                  </select>
-
-                  <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                      {availableBrands.map((b, index) => (
+                        <option
+                          key={index}
+                          value={b.brand}
+                          className="bg-[#2b2427] text-white"
+                        >
+                          {b.brand}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
-              </div>
-              {/* SCONTATI */}
-              <div className="lg:col-span-6 rounded-2xl border border-white/10 p-4">
-                <p className="text-xs font-extrabold tracking-wider text-[#ffd21f]">
-                  SCONTATI
-                </p>
-                <div className="mt-3 flex items-center">
-                  <button
-                    type="button"
-                    onClick={() => setShowDiscounted((prev) => !prev)}
-                    className={`
+
+
+                {/* ORDINAMENTO */}
+                <div className="lg:col-span-6 rounded-2xl border border-white/10 p-4">
+                  <p className="text-xs font-extrabold tracking-wider text-[#00BFFF]">
+                    ORDINA
+                  </p>
+
+                  <div className="mt-3">
+                    <select
+                      value={sort}
+                      onChange={(e) => setSort(e.target.value)}
+                      className="w-full rounded-xl border border-white/10 bg-[#2b2427] text-white px-4 py-3 text-sm font-semibold outline-none transition-all duration-300 focus:border-[#00BFFF] focus:bg-[#00BFFF]/10 focus:shadow-[0_0_16px_rgba(0,191,255,0.45)]">
+                      <option value="" className="bg-[#2b2427] text-white">
+                        Nessun ordine</option>
+                      <option value="asc" className="bg-[#2b2427] text-white">
+                        Prezzo crescente</option>
+                      <option value="desc" className="bg-[#2b2427] text-white">
+                        Prezzo decrescente</option>
+                    </select>
+
+                    <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                    </div>
+                  </div>
+                </div>
+                {/* SCONTATI */}
+                <div className="lg:col-span-6 rounded-2xl border border-white/10 p-4">
+                  <p className="text-xs font-extrabold tracking-wider text-[#ffd21f]">
+                    SCONTATI
+                  </p>
+                  <div className="mt-3 flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => setShowDiscounted((prev) => !prev)}
+                      className={`
                       rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-300 active:scale-[0.97]
                       border w-full text-center bg-[#2b2427] text-white
                       ${showDiscounted
-                        ? "border-[#ffd21f] "
-                        : "border-white/10"}`}>
-                    {showDiscounted ? "Mostra tutti" : "Mostra scontati"}
-                  </button>
+                          ? "border-[#ffd21f] "
+                          : "border-white/10"}`}>
+                      {showDiscounted ? "Mostra tutti" : "Mostra scontati"}
+                    </button>
+                  </div>
                 </div>
               </div>
+
             </div>
-          </div>
+          )}
+
 
           {/* GRIGLIA PRODOTTI */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">

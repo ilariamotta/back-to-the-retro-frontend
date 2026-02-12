@@ -41,7 +41,7 @@ function App() {
                   <Route element={<Accessories />} path="/categories/accessories" />
                   <Route element={<Cart />} path="/carrello" />
                   <Route element={<CheckoutPage />} path="/checkout" />
-                  <Route element={<SearchPage />} path="/search" />
+                  {/* <Route element={<SearchPage />} path="/search" /> */}
                   <Route element={<SuccessPage />} path="/success" />
                   <Route element={<Faq />} path="/faq" />
                   <Route element={<PrivacyPolicy />} path='/privacy' />
