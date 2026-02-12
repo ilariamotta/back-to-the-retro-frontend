@@ -18,9 +18,9 @@ export default function SearchGames({ onSearch }) {
   return (
     <section>
       <form onSubmit={handleSubmit}>
-        <div className="w-full rounded-2xl border border-zinc-200 bg-white p-2 shadow-sm transition focus-within:border-[#6C2BD9] focus-within:shadow-[0_0_20px_rgba(108,43,217,0.35)]">
-          <div className="flex items-center gap-2 rounded-xl bg-zinc-50 px-3 py-3">
-            <span className="text-zinc-400">
+        <div className="w-full rounded-2xl border border-[#6320EE]/70 bg-[#211a1d] p-2 shadow-sm transition focus-within:border-[#6C2BD9] focus-within:shadow-[0_0_20px_rgba(108,43,217,0.35)]">
+          <div className="flex items-center gap-2 rounded-xl px-3 py-3 bg-[#211a1d]">
+            <span className="text-white">
               <FaSearch />
             </span>
 
@@ -29,8 +29,8 @@ export default function SearchGames({ onSearch }) {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder="Cerca quello che desideri..."
-              className="w-full bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 outline-none"
-            />
+              className="w-full bg-transparent text-sm text-white placeholder:text-zinc-400 outline-none"
+/>
 
             {value !== "" && (
               <button
