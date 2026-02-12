@@ -12,7 +12,7 @@ import { useWishList } from "../context/WhishListContext";
 const navLinks = [
     { title: "Home", path: "/" },
     { title: "Chi siamo", path: "/about" },
-    { title: "Prodotti", path: "/products" },
+    { title: "Prodotti", path: "/products?openFilters=false" },
     // { title: "Prodotti", path: "/products" },
     {
         title: "Videogiochi",
@@ -158,7 +158,7 @@ export default function Header() {
                     {/* RIGHT */}
                     <div className="flex items-center gap-2 ml-auto">
                         <NavLink
-                            to="/search"
+                            to="/products?openFilters=true"
                             className="rounded-xl bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
                             title="Cerca"
                         >
@@ -231,7 +231,7 @@ export default function Header() {
                                 ))}
                                 <div className="my-2 h-px bg-white/10" />
                                 <MobileNavButton
-                                    to="/search"
+                                    to="/products?openFilters=true"
                                     label="Cerca"
                                     onClick={() => setMobileOpen(false)}
                                 />
