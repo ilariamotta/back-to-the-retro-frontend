@@ -11,7 +11,7 @@ import { useWishList } from "../context/WhishListContext";
 // LINK PAGINE
 const navLinks = [
     { title: "Home", path: "/" },
-    { title: "Chi siamo", path: "/about" },
+
     { title: "Prodotti", path: "/products?openFilters=false" },
     // { title: "Prodotti", path: "/products" },
     {
@@ -42,7 +42,8 @@ const navLinks = [
         //     { title: "Nintendo", path: "/platforms/nintendo" },
         // ],
     },
-    
+    { title: "Chi siamo", path: "/about" },
+
 
 ];
 
