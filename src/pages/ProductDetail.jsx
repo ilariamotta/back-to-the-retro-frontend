@@ -94,7 +94,7 @@ export default function ProductDetail() {
       <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-500">
         <NavLink to="/" className="cursor-pointer hover:text-[#ffd21f]">Ritorna alla Home</NavLink>
         <span>/</span>
-        <NavLink to={`/${product[0].category.toLowerCase()}`} className="cursor-pointer hover:text-[#ffd21f]">{product[0].category}</NavLink>
+        <NavLink to={`/categories/${product[0].category.toLowerCase() === 'videogiochi' ? 'videogames' : product[0].category.toLowerCase() === 'accessori' ? 'accessories' : product[0].category.toLowerCase() === 'console' ? 'consoles' : product[0].category.toLowerCase()}`} className="cursor-pointer hover:text-[#ffd21f]">{product[0].category}</NavLink>
         {/* <span>{product[0].category}</span> */}
         <span>/</span>
         <span className="font-medium">{product[0].name}</span>
