@@ -19,6 +19,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import PageNotFound from './pages/PageNotFound'
 import { WhishProvider } from './context/WhishListContext'
 import Wishlist from './pages/Wishlist'
+import ScrollToTop from './components/ScrollToTop'
 import AboutUs from './pages/AboutUs'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <StripeProvider>
           <BrowserRouter>
             <ToastProvider>
+              <ScrollToTop />
               <Routes>
                 <Route element={<AppLayout />}>
                   <Route element={<Home />} path="/" />

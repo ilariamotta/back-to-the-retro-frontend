@@ -1,7 +1,16 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
+import SearchGames from "../components/SearchBar";
 import { useSearchParams } from "react-router-dom";
+
+function normalize(text = "") {
+  return String(text)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
 
 export default function ProductsPage() {
   const BACKEND = import.meta.env.VITE_BACKEND_URL
@@ -15,21 +24,21 @@ export default function ProductsPage() {
   const initialSort = searchParams.get("sort") ?? "";
   const initialPlatform = searchParams.get("platform") ?? "";
   const initialBrand = searchParams.get("brand") ?? "";
+  const initialQuery = searchParams.get("q") ?? "";
 
   const [min, setMin] = useState(initialMin);
   const [max, setMax] = useState(initialMax);
   const [sort, setSort] = useState(initialSort);
   const [platform, setPlatform] = useState(initialPlatform);
-  const [brand, setBrand] = useState(initialBrand)
+  const [brand, setBrand] = useState(initialBrand);
   const [products, setProducts] = useState([]);
   const [availablePlatforms, setAvailablePlatforms] = useState([]);
   const [availableBrands, setAvailableBrands] = useState([])
-  const [discountedProducts, setDiscountedProducts] = useState([]);
   const [showDiscounted, setShowDiscounted] = useState(false);
+  const [query, setQuery] = useState(initialQuery);
 
   const minNumber = Number(min) || 0;
   const maxNumber = Number(max) || 400;
-
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -39,8 +48,9 @@ export default function ProductsPage() {
     if (platform) params.set("platform", platform);
     if (brand) params.set("brand", brand);
     if (showDiscounted) params.set("filter", "discounted");
+    if (query) params.set("q", query);
     setSearchParams(params);
-  }, [min, max, sort, platform, brand, showDiscounted, setSearchParams]);
+  }, [min, max, sort, platform, brand, query, showDiscounted, setSearchParams]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -94,10 +104,28 @@ export default function ProductsPage() {
     return discount != null ? price - discount : price;
   };
 
+  // SEARCH FILTER
+  const querySearch = normalize(query);
+  const filteredBySearch = querySearch
+    ? (products || []).filter((product) => {
+      const name = normalize(product?.name || "");
+      const platform = normalize(product?.platform || product?.platforms || "");
+      const category = normalize(product?.category || "");
+      const brand = normalize(product?.brand || "");
+
+      return (
+        name.includes(querySearch) ||
+        platform.includes(querySearch) ||
+        category.includes(querySearch) ||
+        brand.includes(querySearch)
+      );
+    })
+    : products;
+
   // FILTRO PIATTAFORMA
   const filteredByPlatform = !platform
-    ? products
-    : (products || []).filter((p) => (p.platform ?? p.platforms) === platform);
+    ? filteredBySearch
+    : (filteredBySearch || []).filter((p) => (p.platform ?? p.platforms) === platform);
 
   // ORDINAMENTO
   const sortedProducts = [...(filteredByPlatform || [])].sort((a, b) => {
@@ -114,6 +142,8 @@ export default function ProductsPage() {
           <h1 className="text-start text-3xl font-bold text-[#ff006e] mt-8 mb-6 drop-shadow-[0_0_8px_rgba(255,0,110,0.75)]">
             I NOSTRI PRODOTTI
           </h1>
+
+
           {/* FILTRI */}
           <div className="rounded-2xl border border-white/10 bg-[#211a1d] p-5 shadow-sm">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -127,7 +157,9 @@ export default function ProductsPage() {
                     setMin("0");
                     setMax("400");
                     setPlatform("");
-                    setBrand("")
+                    setBrand("");
+                    setShowDiscounted(false);
+                    setQuery("");
                   }}
                   className="rounded-2xl border border-[#FF006E]/70 px-4 py-2 text-xs font-extrabold text-[#FF006E] bg-transparent transition-all duration-300 hover:border-[#FF006E] hover:bg-[#FF006E]/10 hover:shadow-[0_0_16px_rgba(255,0,110,0.45)] active:scale-[0.97]">
                   Reset
@@ -135,6 +167,12 @@ export default function ProductsPage() {
               </div>
             </div>
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
+              {/* SEARCH BAR */}
+              <div className="lg:col-span-12 rounded-2xl border border-white/10 p-4">
+                <div className="mb-1">
+                  <SearchGames onSearch={setQuery} initialValue={query} />
+                </div>
+              </div>
               {/* PREZZO */}
               <div className="lg:col-span-4 rounded-2xl border border-white/10 p-4">
                 <p className="text-xs font-extrabold tracking-wider text-[#6320EE]">
