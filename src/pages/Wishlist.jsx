@@ -8,16 +8,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Wishlist() {
     const { wish, removeToList, clearList } = useWishList();
-    const [totalAmount, setTotalAmount] = useState(0);
 
-    useEffect(() => {
-        let total = 0;
-        wish.forEach(item => {
-            total += item.price * item.quantity;
-        });
-        setTotalAmount(total);
-    }, [wish]);
-    
     return (
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             {/* TITOLO */}
@@ -58,13 +49,6 @@ export default function Wishlist() {
                             <div className="flex justify-between">
                                 <span>Articoli salvati</span>
                                 <span className="font-bold">{wish.length}</span>
-                            </div>
-                            <div className="h-px bg-zinc-200" />
-                            <div className="flex justify-between text-lg">
-                                <span>Totale</span>
-                                <span className="font-extrabold text-[#6C2BD9]">
-                                    € {totalAmount.toFixed(2)}
-                                </span>
                             </div>
                         </div>
                         <div className="mt-6 space-y-3">
