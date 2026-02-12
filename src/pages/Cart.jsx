@@ -1,7 +1,7 @@
 import CartItem from "../components/CartItem";
 import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
 
 export default function Cart() {
@@ -18,8 +18,10 @@ export default function Cart() {
             linkLabel: "Torna ai nostri prodotti!",
         });
     };
-
+    const pathname = useLocation()
     useEffect(() => {
+
+        window.scrollTo(0, 0)
         let total = 0;
         const shippingCost = 6.0;
         cart.forEach(item => {
@@ -31,8 +33,9 @@ export default function Cart() {
         } else {
             setTotalAmount(total + shippingCost);
         }
-    }, [cart]);
+    }, [cart, pathname]);
     return (
+
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             {/* HEADER */}
             <div className="flex flex-wrap items-end justify-between gap-3">

@@ -30,7 +30,6 @@ function App() {
         <StripeProvider>
           <BrowserRouter>
             <ToastProvider>
-              <ScrollToTop />
               <Routes>
                 <Route element={<AppLayout />}>
                   <Route element={<Home />} path="/" />
