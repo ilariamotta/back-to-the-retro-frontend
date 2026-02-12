@@ -95,7 +95,6 @@ export default function ProductDetail() {
         <NavLink to="/" className="cursor-pointer hover:text-[#ffd21f]">Ritorna alla Home</NavLink>
         <span>/</span>
         <NavLink to={`/categories/${product[0].category.toLowerCase() === 'videogiochi' ? 'videogames' : product[0].category.toLowerCase() === 'accessori' ? 'accessories' : product[0].category.toLowerCase() === 'console' ? 'consoles' : product[0].category.toLowerCase()}`} className="cursor-pointer hover:text-[#ffd21f]">{product[0].category}</NavLink>
-        {/* <span>{product[0].category}</span> */}
         <span>/</span>
         <span className="font-medium">{product[0].name}</span>
       </div>
@@ -157,6 +156,11 @@ export default function ProductDetail() {
               >
                 {remainingStock <= 0 ? "Esaurito" : `${remainingStock} disponibili`}
               </p>
+              {cart.map((item) => item.id).includes(product[0].id) && (
+                <p className="text-sm text-zinc-500">
+                  (Hai già {cartQuantity} unità di questo prodotto nel carrello)
+                </p>
+              )}
             </div>
             {/* DESCRIPTION */}
             <p className="mt-4 text-sm text-zinc-600 italic">Descrizione:</p>
@@ -168,9 +172,8 @@ export default function ProductDetail() {
               {/* piattaforma */}
               <div className="
               rounded-xl border border-zinc-200
-               bg-zinc-50
-              px-3 py-2
-               ">
+              bg-zinc-50
+              px-3 py-2">
                 <p className="text-xs text-zinc-500">Piattaforma</p>
                 <p className="font-semibold text-zinc-900">
                   {product[0].platform}
@@ -179,10 +182,9 @@ export default function ProductDetail() {
 
               {/* brand */}
               <div className="
-             rounded-xl border border-zinc-200
+              rounded-xl border border-zinc-200
               bg-zinc-50
-              px-3 py-2
-                ">
+              px-3 py-2">
                 <p className="text-xs text-zinc-500">Brand</p>
                 <p className="font-semibold text-zinc-900">
                   {product[0].brand}
