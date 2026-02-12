@@ -19,6 +19,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import PageNotFound from './pages/PageNotFound'
 import { WhishProvider } from './context/WhishListContext'
 import Wishlist from './pages/Wishlist'
+import AboutUs from './pages/AboutUs'
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
                   <Route element={<PrivacyPolicy />} path='/privacy' />
                   <Route element={<Wishlist />} path='/wishlist' />
                   <Route element={<PageNotFound />} path='*' />
+                  <Route element={<AboutUs />} path='/about' />
                 </Route>
               </Routes>
             </ToastProvider>
