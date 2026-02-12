@@ -40,7 +40,7 @@ export default function CheckoutPage() {
                 subtotal += item.price * item.quantity;
             });
 
-            if (subtotal > 100) {
+            if (subtotal >= 100) {
                 setShippingCost(0);
                 return subtotal;
             }
