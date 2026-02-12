@@ -108,40 +108,26 @@ export default function ProductCard({ product }) {
                 }
               );
             }
-          }}
-        >
-          {
-            isFav ? (
+          }}>
+          <div
+            className={`
+                rounded-full transition-all duration-200 backdrop-blur-sm
+                ${isFav
+                ? "bg-[#ff0000]/25 p-2 shadow-[0_0_10px_rgba(255,0,0,0.4)]"
+                : "bg-black/50 hover:bg-black/60 p-2"}`}>
+            {isFav ? (
               <FaHeart
-                className={
-                  "text-lg font-semibold transition-all duration-200 " +
-                  (isFav
-                    ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
-                    : "text-white/80 hover:text-[#ff0000] hover:scale-110")
-                }
-              />
+                className="
+                text-xl font-semibold text-[#ff0000]
+                scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]
+                transition-all duration-200"/>
             ) : (
-              <div className="rounded-full bg-white/20 p-1">
-                <FaRegHeart
-                  className={
-                    "text-lg font-semibold transition-all duration-200 " +
-                    (isFav
-                      ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
-                      : "text-white/80 hover:text-[#ff0000] hover:scale-110")
-                  }
-                />
-              </div>
-            )
-          }
-
-          {/* <FaHeart
-            className={
-              "text-lg font-semibold transition-all duration-200 " +
-              (isFav
-                ? "text-[#ff0000] scale-110 drop-shadow-[0_0_8px_rgba(255,0,0,0.7)]"
-                : "text-white/80 hover:text-[#ff0000] hover:scale-110")
-            }
-          /> */}
+              <FaRegHeart
+                className="
+                text-xl font-semibold text-white/90
+                hover:text-[#ff0000] hover:scale-110
+                transition-all duration-200"/>)}
+          </div>
         </button>
 
       </div>
