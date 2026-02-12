@@ -38,8 +38,9 @@ export default function ProductsPage() {
     if (sort) params.set("sort", sort);
     if (platform) params.set("platform", platform);
     if (brand) params.set("brand", brand);
+    if (showDiscounted) params.set("filter", "discounted");
     setSearchParams(params);
-  }, [min, max, sort, platform, brand, setSearchParams]);
+  }, [min, max, sort, platform, brand, showDiscounted, setSearchParams]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
